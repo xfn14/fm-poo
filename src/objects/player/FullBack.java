@@ -39,6 +39,8 @@ public class FullBack extends Player{
 
     @Override
     public String toString() {
-        return super.toString();
+        return "FullBack{" + '\n' +
+                super.toString() + "\n" +
+                '}' + '\n';
     }
 }

@@ -39,6 +39,8 @@ public class MidFielder extends Player{
 
     @Override
     public String toString() {
-        return super.toString();
+        return "MidFielder{" + '\n' +
+                super.toString() + "\n" +
+                '}' + '\n';
     }
 }

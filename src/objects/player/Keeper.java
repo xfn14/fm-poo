@@ -68,6 +68,7 @@ public class Keeper extends Player{
     @Override
     public String toString() {
         return "Keeper{" + '\n' +
+                super.toString() + "\n" +
                 "    elasticity=" + elasticity +'\n' +
                 '}' + '\n';
     }

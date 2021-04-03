@@ -39,6 +39,8 @@ public class Striker extends Player {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Striker{" + '\n' +
+                super.toString() + "\n" +
+                '}' + '\n';
     }
 }

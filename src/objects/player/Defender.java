@@ -39,6 +39,8 @@ public class Defender extends Player {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Defender{" + '\n' +
+                super.toString() + "\n" +
+                '}' + '\n';
     }
 }
