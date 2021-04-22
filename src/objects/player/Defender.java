@@ -7,10 +7,10 @@ import java.util.List;
 
 public class Defender extends Player {
     public Defender() {
-        super(null, null, 0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
+        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
     }
 
-    public Defender(String id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
+    public Defender(int id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
     }
 
@@ -23,8 +23,8 @@ public class Defender extends Player {
     }
 
     @Override
-    public Defender clone() throws CloneNotSupportedException {
-        return (Defender) super.clone();
+    public Defender clone() {
+        return new Defender(this);
     }
 
     @Override

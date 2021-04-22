@@ -7,10 +7,10 @@ import java.util.List;
 
 public class Striker extends Player {
     public Striker() {
-        super(null, null, 0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
+        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
     }
 
-    public Striker(String id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
+    public Striker(int id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
     }
 
@@ -23,8 +23,8 @@ public class Striker extends Player {
     }
 
     @Override
-    public Striker clone() throws CloneNotSupportedException {
-        return (Striker) super.clone();
+    public Striker clone() {
+        return new Striker(this);
     }
 
     @Override

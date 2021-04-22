@@ -19,7 +19,7 @@ public class Player extends Person {
     private int pass;
 
     public Player(){
-        super(null, null);
+        super();
         this.number = 0;
         this.teamHistory = new ArrayList<>();
         this.velocity = 0;
@@ -31,7 +31,22 @@ public class Player extends Person {
         this.pass = 0;
     }
 
-    public Player(String id, String name, int number, List<String> teamHistory,
+    public Player(int number, List<String> teamHistory, int velocity,
+                  int resistance, int dexterity, int thrust,
+                  int header, int finish, int pass) {
+        super();
+        this.number = number;
+        this.teamHistory = teamHistory;
+        this.velocity = velocity;
+        this.resistance = resistance;
+        this.dexterity = dexterity;
+        this.thrust = thrust;
+        this.header = header;
+        this.finish = finish;
+        this.pass = pass;
+    }
+
+    public Player(int id, String name, int number, List<String> teamHistory,
                   int velocity, int resistance, int dexterity, int thrust,
                   int header, int finish, int pass) {
         super(id, name);
@@ -152,10 +167,8 @@ public class Player extends Person {
     }
 
     @Override
-    public Player clone() throws CloneNotSupportedException {
-        Player player = (Player) super.clone();
-        setTeamHistory(player.getTeamHistory());
-        return player;
+    public Player clone() {
+        return new Player(this);
     }
 
     @Override
