@@ -1,15 +1,15 @@
 package objects;
 
 public class Person {
-    private String id;
+    private int id;
     private String name;
 
     public Person(){
-        this.id = null;
+        this.id = -1;
         this.name = null;
     }
 
-    public Person(String id, String name){
+    public Person(int id, String name){
         this.id = id;
         this.name = name;
     }
@@ -19,11 +19,11 @@ public class Person {
         this.name = person.getName();
     }
 
-    public String getId() {
+    public int getId() {
         return this.id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -36,8 +36,8 @@ public class Person {
     }
 
     @Override
-    public Person clone() throws CloneNotSupportedException {
-        return (Person) super.clone();
+    public Person clone() {
+        return new Person(this);
     }
 
     @Override
@@ -47,14 +47,14 @@ public class Person {
 
         Person person = (Person) o;
 
-        if (getId() != null ? !getId().equals(person.getId()) : person.getId() != null) return false;
-        return getName() != null ? getName().equals(person.getName()) : person.getName() == null;
+        if (id != person.id) return false;
+        return name != null ? name.equals(person.name) : person.name == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        int result = id;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 

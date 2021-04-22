@@ -7,10 +7,10 @@ import java.util.List;
 
 public class MidFielder extends Player{
     public MidFielder() {
-        super(null, null, 0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
+        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
     }
 
-    public MidFielder(String id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
+    public MidFielder(int id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
     }
 
@@ -23,8 +23,8 @@ public class MidFielder extends Player{
     }
 
     @Override
-    public MidFielder clone() throws CloneNotSupportedException {
-        return (MidFielder) super.clone();
+    public MidFielder clone() {
+        return new MidFielder(this);
     }
 
     @Override

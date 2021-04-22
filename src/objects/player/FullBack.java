@@ -7,10 +7,10 @@ import java.util.List;
 
 public class FullBack extends Player{
     public FullBack() {
-        super(null, null, 0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
+        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
     }
 
-    public FullBack(String id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
+    public FullBack(int id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
     }
 
@@ -23,8 +23,8 @@ public class FullBack extends Player{
     }
 
     @Override
-    public FullBack clone() throws CloneNotSupportedException {
-        return (FullBack) super.clone();
+    public FullBack clone() {
+        return new FullBack(this);
     }
 
     @Override

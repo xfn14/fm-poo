@@ -9,11 +9,11 @@ public class Keeper extends Player{
     private int elasticity;
 
     public Keeper() {
-        super(null, null, 0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
+        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
         this.elasticity = 0;
     }
 
-    public Keeper(String id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass, int elasticity) {
+    public Keeper(int id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass, int elasticity) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
         this.elasticity = elasticity;
     }
@@ -26,6 +26,11 @@ public class Keeper extends Player{
     public Keeper(Player player, int elasticity) {
         super(player);
         this.elasticity = elasticity;
+    }
+
+    public Keeper(Keeper keeper){
+        super(keeper.getId(), keeper.getName(), keeper.getNumber(), keeper.getTeamHistory(), keeper.getVelocity(), keeper.getResistance(), keeper.getDexterity(), keeper.getThrust(), keeper.getHeader(), keeper.getFinish(), keeper.getPass());
+        this.elasticity = keeper.getElasticity();
     }
 
     public int getElasticity() {
@@ -43,11 +48,6 @@ public class Keeper extends Player{
     }
 
     @Override
-    public Keeper clone() throws CloneNotSupportedException {
-        return (Keeper) super.clone();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -56,6 +56,11 @@ public class Keeper extends Player{
         Keeper keeper = (Keeper) o;
 
         return getElasticity() == keeper.getElasticity();
+    }
+
+    @Override
+    public Keeper clone() {
+        return new Keeper(this);
     }
 
     @Override
