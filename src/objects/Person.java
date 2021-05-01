@@ -1,5 +1,7 @@
 package objects;
 
+import java.util.Objects;
+
 public class Person {
     private int id;
     private String name;
@@ -48,7 +50,7 @@ public class Person {
         Person person = (Person) o;
 
         if (id != person.id) return false;
-        return name != null ? name.equals(person.name) : person.name == null;
+        return Objects.equals(name, person.name);
     }
 
     @Override

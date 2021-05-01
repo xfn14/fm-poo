@@ -62,7 +62,7 @@ public class Team {
 
     public void setTeamPlayers(List<Player> teamPlayers) {
         List<Player> newList = new ArrayList<>();
-        for(Player crt : this.teamPlayers)
+        for(Player crt : teamPlayers)
             newList.add(crt.clone());
         this.teamPlayers = newList;
     }

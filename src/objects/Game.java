@@ -117,7 +117,7 @@ public class Game {
 
     public void setInFieldHome(List<Player> inFieldHome) {
         List<Player> newArr = new ArrayList<>();
-        for(Player crt : this.inFieldHome)
+        for(Player crt : inFieldHome)
             newArr.add(crt.clone());
         this.inFieldHome = newArr;
     }
@@ -131,7 +131,7 @@ public class Game {
 
     public void setInFieldAway(List<Player> inFieldAway) {
         List<Player> newArr = new ArrayList<>();
-        for(Player crt : this.inFieldAway)
+        for(Player crt : inFieldAway)
             newArr.add(crt.clone());
         this.inFieldAway = newArr;
     }
@@ -139,15 +139,15 @@ public class Game {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Game{");
-        sb.append("id=").append(id);
-        sb.append(", homeTeam=").append(homeTeam);
-        sb.append(", awayTeam=").append(awayTeam);
-        sb.append(", gameState=").append(gameState);
-        sb.append(", time=").append(time);
-        sb.append(", goals=").append(goals);
-        sb.append(", inFieldHome=").append(inFieldHome);
-        sb.append(", inFieldAway=").append(inFieldAway);
-        sb.append('}');
+        sb.append("id=").append(id).append("\n");
+        sb.append(", homeTeam=").append(homeTeam).append("\n");
+        sb.append(", awayTeam=").append(awayTeam).append("\n");
+        sb.append(", gameState=").append(gameState).append("\n");
+        sb.append(", time=").append(time).append("\n");
+        sb.append(", goals=").append(goals).append("\n");
+        sb.append(", inFieldHome=").append(inFieldHome).append("\n");
+        sb.append(", inFieldAway=").append(inFieldAway).append("\n");
+        sb.append('}').append("\n");
         return sb.toString();
     }
 

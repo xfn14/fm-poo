@@ -31,6 +31,19 @@ public class Player extends Person {
         this.pass = 0;
     }
 
+    public Player(Person person){
+        super(person);
+        this.number = 0;
+        this.teamHistory = new ArrayList<>();
+        this.velocity = 0;
+        this.resistance = 0;
+        this.dexterity = 0;
+        this.thrust = 0;
+        this.header = 0;
+        this.finish = 0;
+        this.pass = 0;
+    }
+
     public Player(int number, List<String> teamHistory, int velocity,
                   int resistance, int dexterity, int thrust,
                   int header, int finish, int pass) {
@@ -179,14 +192,7 @@ public class Player extends Person {
 
         Player player = (Player) o;
 
-        if (getNumber() != player.getNumber()) return false;
-        if (getVelocity() != player.getVelocity()) return false;
-        if (getResistance() != player.getResistance()) return false;
-        if (getDexterity() != player.getDexterity()) return false;
-        if (getThrust() != player.getThrust()) return false;
-        if (getHeader() != player.getHeader()) return false;
-        if (getFinish() != player.getFinish()) return false;
-        if (getPass() != player.getPass()) return false;
+        if (getId() != player.getId()) return false;
         return getTeamHistory() != null ? getTeamHistory().equals(player.getTeamHistory()) : player.getTeamHistory() == null;
     }
 

@@ -27,13 +27,11 @@ public class Tuple<X,Y> {
         return new Tuple<>(this);
     }
 
-    @Override
-    public boolean equals(Object o) {
+    public boolean equals(Tuple<X, Y> o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Tuple<?, ?> tuple = (Tuple<?, ?>) o;
-        return getX().equals(tuple.getX()) &&
-                getY().equals(tuple.getY());
+        return getX().equals(o.getX()) &&
+                getY().equals(o.getY());
     }
 
     @Override
