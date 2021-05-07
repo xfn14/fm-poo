@@ -22,6 +22,27 @@ public class Striker extends Player {
         super(player);
     }
 
+    public static Striker parser(String input, int id){
+        String[] campos = input.split(",");
+        try{
+            return new Striker(
+                    id,
+                    campos[0],
+                    Integer.parseInt(campos[1]),
+                    new ArrayList<>(),
+                    Integer.parseInt(campos[2]),
+                    Integer.parseInt(campos[3]),
+                    Integer.parseInt(campos[4]),
+                    Integer.parseInt(campos[5]),
+                    Integer.parseInt(campos[6]),
+                    Integer.parseInt(campos[7]),
+                    Integer.parseInt(campos[8])
+            );
+        }catch (NumberFormatException e){
+            return null;
+        }
+    }
+
     @Override
     public Striker clone() {
         return new Striker(this);
@@ -30,11 +51,6 @@ public class Striker extends Player {
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
     }
 
     @Override

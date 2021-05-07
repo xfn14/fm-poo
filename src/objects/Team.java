@@ -7,22 +7,19 @@ import java.util.List;
 import java.util.Objects;
 
 public class Team {
-    private int id;
     private String name;
     private List<Player> teamPlayers;
     private int teamVictories;
     private List<Integer> passedGames; // List of game's ids played
 
     public Team(){
-        this.id = -1;
         this.name = "";
         this.teamPlayers = new ArrayList<>();
         this.teamVictories = 0;
         this.passedGames = new ArrayList<>();
     }
 
-    public Team(int id, String name, List<Player> teamPlayers, int teamVictories, List<Integer> passedGames) {
-        this.id = id;
+    public Team(String name, List<Player> teamPlayers, int teamVictories, List<Integer> passedGames) {
         this.name = name;
         setTeamPlayers(teamPlayers);
         this.teamVictories = teamVictories;
@@ -30,19 +27,21 @@ public class Team {
     }
 
     public Team(Team team){
-        this.id = team.getId();
         this.name = team.getName();
         this.teamPlayers = team.getTeamPlayers();
         this.teamVictories = team.getTeamVictories();
         this.passedGames = team.getPassedGames();
     }
 
-    public int getId() {
-        return this.id;
+    public static Team parse(String input){
+        String[] vars = input.split(",");
+        return new Team();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void addPlayer(Player player){
+        Player newPlayer = player.clone();
+        newPlayer.setCurrentTeam(this.name);
+        this.teamPlayers.add(player.clone());
     }
 
     public String getName() {
@@ -86,8 +85,7 @@ public class Team {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Team{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
+        sb.append("name='").append(name).append('\'');
         sb.append(", teamPlayers=").append(teamPlayers);
         sb.append(", teamVictories=").append(teamVictories);
         sb.append(", passedGames=").append(passedGames);
@@ -107,7 +105,6 @@ public class Team {
 
         Team team = (Team) o;
 
-        if (id != team.id) return false;
         if (teamVictories != team.teamVictories) return false;
         if (!Objects.equals(name, team.name)) return false;
         if (!Objects.equals(teamPlayers, team.teamPlayers)) return false;
@@ -116,10 +113,9 @@ public class Team {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = teamVictories;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (teamPlayers != null ? teamPlayers.hashCode() : 0);
-        result = 31 * result + teamVictories;
         result = 31 * result + (passedGames != null ? passedGames.hashCode() : 0);
         return result;
     }

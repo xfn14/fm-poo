@@ -33,18 +33,39 @@ public class Keeper extends Player{
         this.elasticity = keeper.getElasticity();
     }
 
+    @Override
+    public int calcAbility() {
+        return super.calcAbility() + this.elasticity;
+    }
+
+    public static Keeper parser(String input, int id){
+        String[] campos = input.split(",");
+        try{
+            return new Keeper(
+                    id,
+                    campos[0],
+                    Integer.parseInt(campos[1]),
+                    new ArrayList<>(),
+                    Integer.parseInt(campos[2]),
+                    Integer.parseInt(campos[3]),
+                    Integer.parseInt(campos[4]),
+                    Integer.parseInt(campos[5]),
+                    Integer.parseInt(campos[6]),
+                    Integer.parseInt(campos[7]),
+                    Integer.parseInt(campos[8]),
+                    Integer.parseInt(campos[9])
+            );
+        }catch (NumberFormatException e){
+            return null;
+        }
+    }
+
     public int getElasticity() {
         return this.elasticity;
     }
 
     public void setElasticity(int elasticity) {
         this.elasticity = elasticity;
-    }
-
-    // TODO: 3/31/2021 Temporary for testing
-    @Override
-    public int calcAbility() {
-        return super.calcAbility() + this.elasticity;
     }
 
     @Override
@@ -64,17 +85,10 @@ public class Keeper extends Player{
     }
 
     @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + getElasticity();
-        return result;
-    }
-
-    @Override
     public String toString() {
-        return "Keeper{" + '\n' +
-                super.toString() + "\n" +
-                "    elasticity=" + elasticity +'\n' +
-                '}' + '\n';
+        final StringBuilder sb = new StringBuilder("Keeper{");
+        sb.append("elasticity=").append(elasticity);
+        sb.append("} ").append(super.toString());
+        return sb.toString();
     }
 }

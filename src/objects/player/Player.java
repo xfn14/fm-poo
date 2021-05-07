@@ -107,6 +107,10 @@ public class Player extends Person {
         return this.velocity + this.resistance + this.dexterity + this.thrust + this.header + this.finish + this.pass;
     }
 
+    public void setCurrentTeam(String teamName){
+        this.teamHistory.add(teamName);
+    }
+
     public int getNumber() {
         return this.number;
     }
@@ -197,33 +201,18 @@ public class Player extends Person {
     }
 
     @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + getNumber();
-        result = 31 * result + (getTeamHistory() != null ? getTeamHistory().hashCode() : 0);
-        result = 31 * result + getVelocity();
-        result = 31 * result + getResistance();
-        result = 31 * result + getDexterity();
-        result = 31 * result + getThrust();
-        result = 31 * result + getHeader();
-        result = 31 * result + getFinish();
-        result = 31 * result + getPass();
-        return result;
-    }
-
-    @Override
     public String toString() {
-        return "Player{" + '\n' +
-                "    " + super.toString() + "" +
-                "     , number=" + number + '\n' +
-                "     , teamHistory=" + teamHistory + '\n' +
-                "     , velocity=" + velocity + '\n' +
-                "     , resistance=" + resistance + '\n' +
-                "     , dexterity=" + dexterity + '\n' +
-                "     , thrust=" + thrust + '\n' +
-                "     , header=" + header + '\n' +
-                "     , finish=" + finish + '\n' +
-                "     , pass=" + pass + '\n' +
-                '}' + '\n';
+        final StringBuilder sb = new StringBuilder("Player{");
+        sb.append("number=").append(number);
+        sb.append(", teamHistory=").append(teamHistory);
+        sb.append(", velocity=").append(velocity);
+        sb.append(", resistance=").append(resistance);
+        sb.append(", dexterity=").append(dexterity);
+        sb.append(", thrust=").append(thrust);
+        sb.append(", header=").append(header);
+        sb.append(", finish=").append(finish);
+        sb.append(", pass=").append(pass);
+        sb.append("} ").append(super.toString());
+        return sb.toString();
     }
 }

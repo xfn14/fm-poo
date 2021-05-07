@@ -52,14 +52,12 @@ public class Main {
 //        System.out.println(juventusPlayers);
 
         Team realMadrid = new Team(
-                0,
                 "Real Madrid CF",
                 realMadridPlayers,
                 66,
                 new ArrayList<>()
         );
         Team juventus = new Team(
-                1,
                 "Juventus",
                 juventusPlayers,
                 66,

@@ -54,17 +54,11 @@ public class Person {
     }
 
     @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
-        return "Person{" + '\n' +
-                "    id='" + id + '\'' + '\n' +
-                "    , name='" + name + '\'' + '\n' +
-                "}" + '\n';
+        final StringBuilder sb = new StringBuilder("Person{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
