@@ -1,13 +1,13 @@
 import objects.Game;
 import objects.Team;
-import objects.exceptions.FileIOException;
+import exceptions.FileIOException;
 import objects.player.*;
 import utils.FileUtils;
 
 import java.util.*;
 
 public class Parser {
-    public static Map<String, Team> loadLogFile(String path) throws FileIOException{
+    public static List<Game> loadLogFile(String path) throws FileIOException{
         List<String> lines = FileUtils.fileToList(path);
         String[] splitLine; int crtLine = 0;
         Team lastTeam = null; int lastTeamLine = 0;
@@ -16,7 +16,6 @@ public class Parser {
 //        Map<Integer, Player> playerMap = new HashMap<>();
         Map<String, Team> teamMap = new HashMap<>();
         List<Game> gameList = new ArrayList<>();
-
         for(String line : lines){
             splitLine = line.split(":", 2);
             switch (splitLine[0]){
@@ -27,7 +26,7 @@ public class Parser {
                     break;
                 case "Guarda-Redes":
                     try{
-                        player = Keeper.parser(splitLine[1], crtPlayerId++);
+                        player = Keeper.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null) lastTeam.addPlayer(player);
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -37,7 +36,7 @@ public class Parser {
                     break;
                 case "Defesa":
                     try{
-                        player = Defender.parser(splitLine[1], crtPlayerId++);
+                        player = Defender.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null) lastTeam.addPlayer(player);
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -47,7 +46,7 @@ public class Parser {
                     break;
                 case "Medio":
                     try{
-                        player = MidFielder.parser(splitLine[1], crtPlayerId++);
+                        player = MidFielder.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null) lastTeam.addPlayer(player);
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -57,7 +56,7 @@ public class Parser {
                     break;
                 case "Lateral":
                     try{
-                        player = FullBack.parser(splitLine[1], crtPlayerId++);
+                        player = FullBack.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null) lastTeam.addPlayer(player);
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -67,7 +66,7 @@ public class Parser {
                     break;
                 case "Avancado":
                     try{
-                        player = Striker.parser(splitLine[1], crtPlayerId++);
+                        player = Striker.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null) lastTeam.addPlayer(player);
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -76,13 +75,18 @@ public class Parser {
                     }
                     break;
                 case "Jogo":
-                    // TODO: 5/8/2021  
+                    try{
+                        Game game = Game.parser(splitLine[1].split(","), gameList.size(), teamMap);
+                        if(game != null) gameList.add(game);
+                    }catch (NumberFormatException e){
+                        System.out.println("Invalid fields in parse of Game. (line " + crtLine + ")");
+                    }
                     break;
                 default:
                     throw new FileIOException("Invalid type of player. (line " + crtLine + ")");
             }
             crtLine++;
         }
-        return teamMap;
+        return gameList;
     }
 }

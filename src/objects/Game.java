@@ -1,10 +1,13 @@
 package objects;
 
 import objects.player.Player;
+import utils.DateUtils;
 import utils.Tuple;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Game {
@@ -12,6 +15,7 @@ public class Game {
     private Team homeTeam;
     private Team awayTeam;
     private Tuple<Integer,Integer> goals;
+    private LocalDate date;
     private List<Player> inFieldHome;
     private List<Tuple<Integer,Integer>> homeSubs;
     private List<Player> inFieldAway;
@@ -22,19 +26,37 @@ public class Game {
         this.homeTeam = new Team();
         this.awayTeam = new Team();
         this.goals = new Tuple<>(0, 0);
+        this.date = LocalDate.MIN;
         this.inFieldHome = new ArrayList<>();
+        this.homeSubs = new ArrayList<>();
         this.inFieldAway = new ArrayList<>();
+        this.awaySubs = new ArrayList<>();
     }
 
-    public Game(int id, Team homeTeam, Team awayTeam, State gameState,
-                int time, Tuple<Integer, Integer> goals,
-                List<Player> inFieldHome, List<Player> inFieldAway) {
+    public Game(int id, Team homeTeam, Team awayTeam){
+        this.id = id;
+        this.homeTeam = homeTeam.clone();
+        this.awayTeam = awayTeam.clone();
+        this.goals = new Tuple<>(0, 0);
+        this.date = LocalDate.MIN;
+        this.inFieldHome = new ArrayList<>();
+        this.homeSubs = new ArrayList<>();
+        this.inFieldAway = new ArrayList<>();
+        this.awaySubs = new ArrayList<>();
+    }
+
+    public Game(int id, Team homeTeam, Team awayTeam, Tuple<Integer, Integer> goals,
+                LocalDate date, List<Player> inFieldHome, List<Player> inFieldAway,
+                List<Tuple<Integer,Integer>> homeSubs, List<Tuple<Integer,Integer>> awaySubs) {
         this.id = id;
         this.homeTeam = homeTeam.clone();
         this.awayTeam = awayTeam.clone();
         this.goals = goals.clone();
+        this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
         setInFieldHome(inFieldHome);
+        setHomeSubs(homeSubs);
         setInFieldAway(inFieldAway);
+        setAwaySubs(awaySubs);
     }
 
     public Game(Game game){
@@ -42,16 +64,40 @@ public class Game {
         this.homeTeam = game.getHomeTeam();
         this.awayTeam = game.getAwayTeam();
         this.goals = game.getGoals();
+        this.date = game.getDate();
         this.inFieldHome = game.getInFieldHome();
+        this.homeSubs = game.getHomeSubs();
         this.inFieldAway = game.getInFieldAway();
+        this.awaySubs = game.getAwaySubs();
     }
 
-    public enum State{
-        INIT,
-        FIRST_HALF,
-        HALF_TIME,
-        SECOND_HALF,
-        ENDED
+    public static Game parser(String[] args, int gameId, Map<String, Team> teamMap) throws NumberFormatException{
+        Team team1 = teamMap.get(args[0]), team2 = teamMap.get(args[1]);
+        if(team1 == null || team2 == null) return null;
+
+        Game game = new Game(gameId, team1, team2);
+        game.setGoals(new Tuple<>(
+                Integer.parseInt(args[2]),
+                Integer.parseInt(args[3])
+        ));
+        game.setDate(LocalDate.parse(args[4], DateUtils.dateFormatter));
+
+        int switchTeam = 0;
+        for(int i = 5; i < args.length; i++){
+            if(args[i].contains("->")){
+                switchTeam = 1;
+                game.subPlayers(
+                        i > 20 ? 1 : 0,
+                        Integer.parseInt(args[i].split("->")[0]),
+                        Integer.parseInt(args[i].split("->")[1])
+                );
+            }else
+                game.addPlayerToField(
+                        switchTeam,
+                        Integer.parseInt(args[i])
+                );
+        }
+        return game;
     }
 
     public boolean addPlayerToField(int team, int playerNumber){
@@ -76,10 +122,9 @@ public class Game {
         if(leave == stay) return false;
 
         Team wantedTeam = team == 0 ? this.homeTeam : this.awayTeam;
-        List<Player> wantedFieldPlayers = (team == 0) ? this.inFieldHome : this.inFieldAway;
         Player leavePlayer = null, stayPlayer = null;
 
-        for(Player player : wantedFieldPlayers)
+        for(Player player : (team == 0) ? this.inFieldHome : this.inFieldAway)
             if(player.getNumber() == leave)
                 leavePlayer = player;
 
@@ -88,8 +133,9 @@ public class Game {
                 stayPlayer = player;
 
         if(stayPlayer != null && leavePlayer != null){
-            wantedFieldPlayers.remove(leavePlayer);
-            wantedFieldPlayers.add(stayPlayer.clone());
+            ((team == 0) ? this.inFieldHome : this.inFieldAway).remove(leavePlayer);
+            ((team == 0) ? this.inFieldHome : this.inFieldAway).add(stayPlayer.clone());
+            ((team == 0) ? this.homeSubs : this.awaySubs).add(new Tuple<>(leave, stay));
             return true;
         }
         return false;
@@ -125,6 +171,22 @@ public class Game {
 
     public void setGoals(Tuple<Integer, Integer> goals) {
         this.goals = goals.clone();
+    }
+
+    public LocalDate getDate() {
+        return LocalDate.of(
+                this.date.getYear(),
+                this.date.getMonth(),
+                this.date.getDayOfMonth()
+        );
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = LocalDate.of(
+                date.getYear(),
+                date.getMonth(),
+                date.getDayOfMonth()
+        );
     }
 
     public List<Player> getInFieldHome() {
@@ -169,7 +231,7 @@ public class Game {
         this.inFieldAway = newArr;
     }
 
-    public List<Tuple<Integer, Integer>> setAwaySubs() {
+    public List<Tuple<Integer, Integer>> getAwaySubs() {
         List<Tuple<Integer,Integer>> newAwaySubs = new ArrayList<>();
         for(Tuple<Integer,Integer> tuple : this.awaySubs)
             newAwaySubs.add(tuple.clone());
@@ -180,18 +242,21 @@ public class Game {
         List<Tuple<Integer,Integer>> newAwaySubs = new ArrayList<>();
         for(Tuple<Integer,Integer> tuple : awaySubs)
             newAwaySubs.add(tuple.clone());
-        this.homeSubs = newAwaySubs;
+        this.awaySubs = newAwaySubs;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Game{");
         sb.append("id=").append(id);
-        sb.append(", homeTeam=").append(homeTeam);
-        sb.append(", awayTeam=").append(awayTeam);
+        sb.append(", homeTeam=").append(homeTeam.getName());
+        sb.append(", awayTeam=").append(awayTeam.getName());
         sb.append(", goals=").append(goals);
+        sb.append(", date=").append(date.toString());
         sb.append(", inFieldHome=").append(inFieldHome);
+        sb.append(", homeSubs=").append(homeSubs);
         sb.append(", inFieldAway=").append(inFieldAway);
+        sb.append(", awaySubs=").append(awaySubs);
         sb.append('}');
         return sb.toString();
     }

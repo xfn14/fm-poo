@@ -22,20 +22,19 @@ public class Defender extends Player {
         super(player);
     }
 
-    public static Defender parser(String input, int id) throws NumberFormatException{
-        String[] campos = input.split(",");
+    public static Defender parser(String[] args, int id) throws NumberFormatException{
         return new Defender(
                 id,
-                campos[0],
-                Integer.parseInt(campos[1]),
+                args[0],
+                Integer.parseInt(args[1]),
                 new ArrayList<>(),
-                Integer.parseInt(campos[2]),
-                Integer.parseInt(campos[3]),
-                Integer.parseInt(campos[4]),
-                Integer.parseInt(campos[5]),
-                Integer.parseInt(campos[6]),
-                Integer.parseInt(campos[7]),
-                Integer.parseInt(campos[8])
+                Integer.parseInt(args[2]),
+                Integer.parseInt(args[3]),
+                Integer.parseInt(args[4]),
+                Integer.parseInt(args[5]),
+                Integer.parseInt(args[6]),
+                Integer.parseInt(args[7]),
+                Integer.parseInt(args[8])
         );
     }
 

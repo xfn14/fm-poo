@@ -23,20 +23,19 @@ public class Striker extends Player {
         super(player);
     }
 
-    public static Striker parser(String input, int id) throws NumberFormatException{
-        String[] campos = input.split(",");
+    public static Striker parser(String[] args, int id) throws NumberFormatException{
         return new Striker(
                 id,
-                campos[0],
-                Integer.parseInt(campos[1]),
+                args[0],
+                Integer.parseInt(args[1]),
                 new ArrayList<>(),
-                Integer.parseInt(campos[2]),
-                Integer.parseInt(campos[3]),
-                Integer.parseInt(campos[4]),
-                Integer.parseInt(campos[5]),
-                Integer.parseInt(campos[6]),
-                Integer.parseInt(campos[7]),
-                Integer.parseInt(campos[8])
+                Integer.parseInt(args[2]),
+                Integer.parseInt(args[3]),
+                Integer.parseInt(args[4]),
+                Integer.parseInt(args[5]),
+                Integer.parseInt(args[6]),
+                Integer.parseInt(args[7]),
+                Integer.parseInt(args[8])
         );
     }
 
