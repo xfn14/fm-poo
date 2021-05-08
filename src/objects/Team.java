@@ -34,8 +34,12 @@ public class Team {
     }
 
     public static Team parse(String input){
-        String[] vars = input.split(",");
-        return new Team();
+        return new Team(
+                input,
+                new ArrayList<>(),
+                0,
+                new ArrayList<>()
+        );
     }
 
     public void addPlayer(Player player){
@@ -109,14 +113,5 @@ public class Team {
         if (!Objects.equals(name, team.name)) return false;
         if (!Objects.equals(teamPlayers, team.teamPlayers)) return false;
         return Objects.equals(passedGames, team.passedGames);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = teamVictories;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (teamPlayers != null ? teamPlayers.hashCode() : 0);
-        result = 31 * result + (passedGames != null ? passedGames.hashCode() : 0);
-        return result;
     }
 }

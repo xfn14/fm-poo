@@ -3,6 +3,7 @@ package objects.player;
 import objects.Person;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Striker extends Player {
@@ -22,25 +23,21 @@ public class Striker extends Player {
         super(player);
     }
 
-    public static Striker parser(String input, int id){
+    public static Striker parser(String input, int id) throws NumberFormatException{
         String[] campos = input.split(",");
-        try{
-            return new Striker(
-                    id,
-                    campos[0],
-                    Integer.parseInt(campos[1]),
-                    new ArrayList<>(),
-                    Integer.parseInt(campos[2]),
-                    Integer.parseInt(campos[3]),
-                    Integer.parseInt(campos[4]),
-                    Integer.parseInt(campos[5]),
-                    Integer.parseInt(campos[6]),
-                    Integer.parseInt(campos[7]),
-                    Integer.parseInt(campos[8])
-            );
-        }catch (NumberFormatException e){
-            return null;
-        }
+        return new Striker(
+                id,
+                campos[0],
+                Integer.parseInt(campos[1]),
+                new ArrayList<>(),
+                Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8])
+        );
     }
 
     @Override

@@ -11,18 +11,16 @@ public class Game {
     private int id;
     private Team homeTeam;
     private Team awayTeam;
-    private State gameState;
-    private int time;
     private Tuple<Integer,Integer> goals;
     private List<Player> inFieldHome;
+    private List<Tuple<Integer,Integer>> homeSubs;
     private List<Player> inFieldAway;
+    private List<Tuple<Integer,Integer>> awaySubs;
 
     public Game(){
         this.id = -1;
         this.homeTeam = new Team();
         this.awayTeam = new Team();
-        this.gameState = State.INIT;
-        this.time = 0;
         this.goals = new Tuple<>(0, 0);
         this.inFieldHome = new ArrayList<>();
         this.inFieldAway = new ArrayList<>();
@@ -34,8 +32,6 @@ public class Game {
         this.id = id;
         this.homeTeam = homeTeam.clone();
         this.awayTeam = awayTeam.clone();
-        this.gameState = gameState;
-        this.time = time;
         this.goals = goals.clone();
         setInFieldHome(inFieldHome);
         setInFieldAway(inFieldAway);
@@ -45,8 +41,6 @@ public class Game {
         this.id = game.getId();
         this.homeTeam = game.getHomeTeam();
         this.awayTeam = game.getAwayTeam();
-        this.gameState = game.getGameState();
-        this.time = game.getTime();
         this.goals = game.getGoals();
         this.inFieldHome = game.getInFieldHome();
         this.inFieldAway = game.getInFieldAway();
@@ -58,6 +52,47 @@ public class Game {
         HALF_TIME,
         SECOND_HALF,
         ENDED
+    }
+
+    public boolean addPlayerToField(int team, int playerNumber){
+        if((team == 0 ? this.inFieldHome : this.inFieldAway).size() >= 11)
+            return false;
+
+        Team wantedTeam = team == 0 ? this.homeTeam : this.awayTeam;
+        Player wantedPlayer = null;
+
+        for(Player player : wantedTeam.getTeamPlayers())
+            if(player.getNumber() == playerNumber)
+                wantedPlayer = player;
+
+        if(wantedPlayer != null){
+            (team == 0 ? this.inFieldHome : this.inFieldAway).add(wantedPlayer.clone());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean subPlayers(int team, int leave, int stay){
+        if(leave == stay) return false;
+
+        Team wantedTeam = team == 0 ? this.homeTeam : this.awayTeam;
+        List<Player> wantedFieldPlayers = (team == 0) ? this.inFieldHome : this.inFieldAway;
+        Player leavePlayer = null, stayPlayer = null;
+
+        for(Player player : wantedFieldPlayers)
+            if(player.getNumber() == leave)
+                leavePlayer = player;
+
+        for(Player player : wantedTeam.getTeamPlayers())
+            if(player.getNumber() == stay)
+                stayPlayer = player;
+
+        if(stayPlayer != null && leavePlayer != null){
+            wantedFieldPlayers.remove(leavePlayer);
+            wantedFieldPlayers.add(stayPlayer.clone());
+            return true;
+        }
+        return false;
     }
 
     public int getId() {
@@ -84,22 +119,6 @@ public class Game {
         this.awayTeam = awayTeam.clone();
     }
 
-    public State getGameState() {
-        return this.gameState;
-    }
-
-    public void setGameState(State gameState) {
-        this.gameState = gameState;
-    }
-
-    public int getTime() {
-        return this.time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
     public Tuple<Integer, Integer> getGoals() {
         return this.goals.clone();
     }
@@ -122,6 +141,20 @@ public class Game {
         this.inFieldHome = newArr;
     }
 
+    public List<Tuple<Integer, Integer>> getHomeSubs() {
+        List<Tuple<Integer,Integer>> newHomeSubs = new ArrayList<>();
+        for(Tuple<Integer,Integer> tuple : this.homeSubs)
+            newHomeSubs.add(tuple.clone());
+        return newHomeSubs;
+    }
+
+    public void setHomeSubs(List<Tuple<Integer, Integer>> homeSubs) {
+        List<Tuple<Integer,Integer>> newHomeSubs = new ArrayList<>();
+        for(Tuple<Integer,Integer> tuple : homeSubs)
+            newHomeSubs.add(tuple.clone());
+        this.homeSubs = newHomeSubs;
+    }
+
     public List<Player> getInFieldAway() {
         List<Player> newArr = new ArrayList<>();
         for(Player crt : this.inFieldAway)
@@ -136,14 +169,26 @@ public class Game {
         this.inFieldAway = newArr;
     }
 
+    public List<Tuple<Integer, Integer>> setAwaySubs() {
+        List<Tuple<Integer,Integer>> newAwaySubs = new ArrayList<>();
+        for(Tuple<Integer,Integer> tuple : this.awaySubs)
+            newAwaySubs.add(tuple.clone());
+        return newAwaySubs;
+    }
+
+    public void setAwaySubs(List<Tuple<Integer, Integer>> awaySubs) {
+        List<Tuple<Integer,Integer>> newAwaySubs = new ArrayList<>();
+        for(Tuple<Integer,Integer> tuple : awaySubs)
+            newAwaySubs.add(tuple.clone());
+        this.homeSubs = newAwaySubs;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Game{");
         sb.append("id=").append(id);
         sb.append(", homeTeam=").append(homeTeam);
         sb.append(", awayTeam=").append(awayTeam);
-        sb.append(", gameState=").append(gameState);
-        sb.append(", time=").append(time);
         sb.append(", goals=").append(goals);
         sb.append(", inFieldHome=").append(inFieldHome);
         sb.append(", inFieldAway=").append(inFieldAway);
@@ -159,26 +204,11 @@ public class Game {
         Game game = (Game) o;
 
         if (id != game.id) return false;
-        if (time != game.time) return false;
         if (!Objects.equals(homeTeam, game.homeTeam)) return false;
         if (!Objects.equals(awayTeam, game.awayTeam)) return false;
-        if (gameState != game.gameState) return false;
         if (!Objects.equals(goals, game.goals)) return false;
         if (!Objects.equals(inFieldHome, game.inFieldHome)) return false;
         return Objects.equals(inFieldAway, game.inFieldAway);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (homeTeam != null ? homeTeam.hashCode() : 0);
-        result = 31 * result + (awayTeam != null ? awayTeam.hashCode() : 0);
-        result = 31 * result + (gameState != null ? gameState.hashCode() : 0);
-        result = 31 * result + time;
-        result = 31 * result + (goals != null ? goals.hashCode() : 0);
-        result = 31 * result + (inFieldHome != null ? inFieldHome.hashCode() : 0);
-        result = 31 * result + (inFieldAway != null ? inFieldAway.hashCode() : 0);
-        return result;
     }
 
     @Override

@@ -3,6 +3,7 @@ package objects.player;
 import objects.Person;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Keeper extends Player{
@@ -38,26 +39,22 @@ public class Keeper extends Player{
         return super.calcAbility() + this.elasticity;
     }
 
-    public static Keeper parser(String input, int id){
+    public static Keeper parser(String input, int id) throws NumberFormatException{
         String[] campos = input.split(",");
-        try{
-            return new Keeper(
-                    id,
-                    campos[0],
-                    Integer.parseInt(campos[1]),
-                    new ArrayList<>(),
-                    Integer.parseInt(campos[2]),
-                    Integer.parseInt(campos[3]),
-                    Integer.parseInt(campos[4]),
-                    Integer.parseInt(campos[5]),
-                    Integer.parseInt(campos[6]),
-                    Integer.parseInt(campos[7]),
-                    Integer.parseInt(campos[8]),
-                    Integer.parseInt(campos[9])
-            );
-        }catch (NumberFormatException e){
-            return null;
-        }
+        return new Keeper(
+                id,
+                campos[0],
+                Integer.parseInt(campos[1]),
+                new ArrayList<>(),
+                Integer.parseInt(campos[2]),
+                Integer.parseInt(campos[3]),
+                Integer.parseInt(campos[4]),
+                Integer.parseInt(campos[5]),
+                Integer.parseInt(campos[6]),
+                Integer.parseInt(campos[7]),
+                Integer.parseInt(campos[8]),
+                Integer.parseInt(campos[9])
+        );
     }
 
     public int getElasticity() {
