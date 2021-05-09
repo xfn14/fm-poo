@@ -11,13 +11,10 @@ public class FileUtils {
         List<String> lines = new ArrayList<>();
         try{
             File file = new File(path);
-            System.out.println(file.getAbsolutePath());
             Scanner scanner = new Scanner(file);
-            while(scanner.hasNextLine()){
+            while(scanner.hasNextLine())
                 lines.add(scanner.nextLine());
-            }
             scanner.close();
-//            lines = Files.readAllLines(Paths.get(path), StandardCharsets.UTF_8);
         }catch (IOException e){
             System.out.println("Invalid path.");
             e.printStackTrace();

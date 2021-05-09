@@ -1,9 +1,6 @@
 package objects.player;
 
-import objects.Person;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Keeper extends Player{

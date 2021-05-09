@@ -1,7 +1,5 @@
 package objects.player;
 
-import objects.Person;
-
 import java.util.ArrayList;
 import java.util.List;
 
