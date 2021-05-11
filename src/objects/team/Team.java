@@ -1,4 +1,4 @@
-package objects;
+package objects.team;
 
 import objects.player.Player;
 

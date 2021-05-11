@@ -3,7 +3,7 @@ package objects.player;
 import java.util.Objects;
 
 public class Person {
-    private int id;
+    private final int id;
     private String name;
 
     public Person(){
@@ -23,10 +23,6 @@ public class Person {
 
     public int getId() {
         return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {

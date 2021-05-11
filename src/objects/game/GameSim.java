@@ -1,6 +1,8 @@
-package objects;
+package objects.game;
 
+import objects.team.Team;
 import objects.player.Player;
+import objects.team.TeamFormation;
 import utils.DateUtils;
 import utils.Tuple;
 
@@ -10,106 +12,116 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class Game {
-    private int id;
-    private Team homeTeam;
-    private Team awayTeam;
+public class GameSim extends GameInfo {
     private Tuple<Integer,Integer> goals;
-    private LocalDate date;
+
     private List<Player> inFieldHome;
     private List<Tuple<Integer,Integer>> homeSubs;
+    private TeamFormation homeFormation;
+
     private List<Player> inFieldAway;
     private List<Tuple<Integer,Integer>> awaySubs;
+    private TeamFormation awayFormation;
 
-    public Game(){
-        this.id = -1;
-        this.homeTeam = new Team();
-        this.awayTeam = new Team();
+    public GameSim(){
+        super();
+
         this.goals = new Tuple<>(0, 0);
-        this.date = LocalDate.MIN;
+
         this.inFieldHome = new ArrayList<>();
         this.homeSubs = new ArrayList<>();
+        this.homeFormation = TeamFormation.getRandomFormation();
+
         this.inFieldAway = new ArrayList<>();
         this.awaySubs = new ArrayList<>();
+        this.awayFormation = TeamFormation.getRandomFormation();
     }
 
-    public Game(int id, Team homeTeam, Team awayTeam){
-        this.id = id;
-        this.homeTeam = homeTeam.clone();
-        this.awayTeam = awayTeam.clone();
+    public GameSim(int id, Team homeTeam, Team awayTeam){
+        super(id, homeTeam.clone(), awayTeam.clone());
+
         this.goals = new Tuple<>(0, 0);
-        this.date = LocalDate.MIN;
+
         this.inFieldHome = new ArrayList<>();
         this.homeSubs = new ArrayList<>();
+        this.homeFormation = TeamFormation.getRandomFormation();
+
         this.inFieldAway = new ArrayList<>();
         this.awaySubs = new ArrayList<>();
+        this.awayFormation = TeamFormation.getRandomFormation();
     }
 
-    public Game(int id, Team homeTeam, Team awayTeam, Tuple<Integer, Integer> goals,
-                LocalDate date, List<Player> inFieldHome, List<Player> inFieldAway,
-                List<Tuple<Integer,Integer>> homeSubs, List<Tuple<Integer,Integer>> awaySubs) {
-        this.id = id;
-        this.homeTeam = homeTeam.clone();
-        this.awayTeam = awayTeam.clone();
-        this.goals = goals.clone();
-        this.date = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth());
+    public GameSim(int id, LocalDate date, Team homeTeam, Team awayTeam,
+                   Tuple<Integer, Integer> goals, List<Player> inFieldHome,
+                   List<Tuple<Integer, Integer>> homeSubs, TeamFormation homeFormation,
+                   List<Player> inFieldAway, List<Tuple<Integer, Integer>> awaySubs,
+                   TeamFormation awayFormation) {
+        super(id, date, homeTeam, awayTeam);
+
+        this.goals = goals;
+
         setInFieldHome(inFieldHome);
         setHomeSubs(homeSubs);
+        this.homeFormation = homeFormation;
+
         setInFieldAway(inFieldAway);
         setAwaySubs(awaySubs);
+        this.awayFormation = awayFormation;
     }
 
-    public Game(Game game){
-        this.id = game.getId();
-        this.homeTeam = game.getHomeTeam();
-        this.awayTeam = game.getAwayTeam();
-        this.goals = game.getGoals();
-        this.date = game.getDate();
-        this.inFieldHome = game.getInFieldHome();
-        this.homeSubs = game.getHomeSubs();
-        this.inFieldAway = game.getInFieldAway();
-        this.awaySubs = game.getAwaySubs();
+    public GameSim(GameSim gameSim){
+        super(gameSim.getId(), gameSim.getDate(), gameSim.getHomeTeam(), gameSim.getAwayTeam());
+
+        this.goals = gameSim.getGoals();
+
+        this.inFieldHome = gameSim.getInFieldHome();
+        this.homeSubs = gameSim.getHomeSubs();
+        this.homeFormation = gameSim.getHomeFormation();
+
+        this.inFieldAway = gameSim.getInFieldAway();
+        this.awaySubs = gameSim.getAwaySubs();
+        this.awayFormation = gameSim.getAwayFormation();
     }
 
-    public static Game parser(String[] args, int gameId, Map<String, Team> teamMap) throws NumberFormatException{
+    public static GameSim parser(String[] args, int gameId, Map<String, Team> teamMap) throws NumberFormatException{
         Team team1 = teamMap.get(args[0]), team2 = teamMap.get(args[1]);
         if(team1 == null || team2 == null) return null;
 
-        Game game = new Game(gameId, team1, team2);
-        game.setGoals(new Tuple<>(
+        GameSim gameSim = new GameSim(gameId, team1, team2);
+        gameSim.setGoals(new Tuple<>(
                 Integer.parseInt(args[2]),
                 Integer.parseInt(args[3])
         ));
-        game.setDate(LocalDate.parse(args[4], DateUtils.dateFormatter));
+        gameSim.setDate(LocalDate.parse(args[4], DateUtils.dateFormatter));
 
         int switchTeam = 0;
         for(int i = 5; i < args.length; i++){
             if(args[i].contains("->")){
                 switchTeam = 1;
-                game.subPlayers(
+                gameSim.subPlayers(
                         i > 20 ? 1 : 0,
                         Integer.parseInt(args[i].split("->")[0]),
                         Integer.parseInt(args[i].split("->")[1])
                 );
-            }else
-                game.addPlayerToField(
+            }else {
+                gameSim.addPlayerToField(
                         switchTeam,
                         Integer.parseInt(args[i])
                 );
+            }
         }
-        return game;
+        return gameSim;
     }
 
     public boolean addPlayerToField(int team, int playerNumber){
         if((team == 0 ? this.inFieldHome : this.inFieldAway).size() >= 11)
             return false;
 
-        Team wantedTeam = team == 0 ? this.homeTeam : this.awayTeam;
-        Player wantedPlayer = null;
-
-        for(Player player : wantedTeam.getTeamPlayers())
-            if(player.getNumber() == playerNumber)
-                wantedPlayer = player;
+        Player wantedPlayer = (team == 0 ? getHomeTeam() : getAwayTeam())
+                .getTeamPlayers().stream()
+                .filter(player -> playerNumber == player.getNumber())
+                .findAny()
+                .orElse(null);
 
         if(wantedPlayer != null){
             (team == 0 ? this.inFieldHome : this.inFieldAway).add(wantedPlayer.clone());
@@ -121,48 +133,24 @@ public class Game {
     public boolean subPlayers(int team, int leave, int stay){
         if(leave == stay) return false;
 
-        Team wantedTeam = team == 0 ? this.homeTeam : this.awayTeam;
-        Player leavePlayer = null, stayPlayer = null;
+        Player leavePlayer = (team == 0 ? this.inFieldHome : this.inFieldAway).stream()
+                .filter(player -> leave == player.getNumber())
+                .findAny()
+                .orElse(null);
 
-        for(Player player : (team == 0) ? this.inFieldHome : this.inFieldAway)
-            if(player.getNumber() == leave)
-                leavePlayer = player;
+        if(leavePlayer == null) return false;
 
-        for(Player player : wantedTeam.getTeamPlayers())
-            if(player.getNumber() == stay)
-                stayPlayer = player;
+        Player stayPlayer = (team == 0 ? getHomeTeam() : getAwayTeam()).getTeamPlayers().stream()
+                .filter(player -> stay == player.getNumber())
+                .findAny()
+                .orElse(null);
 
-        if(stayPlayer != null && leavePlayer != null){
+        if(stayPlayer != null){
             ((team == 0) ? this.inFieldHome : this.inFieldAway).remove(leavePlayer);
             ((team == 0) ? this.inFieldHome : this.inFieldAway).add(stayPlayer.clone());
             ((team == 0) ? this.homeSubs : this.awaySubs).add(new Tuple<>(leave, stay));
             return true;
-        }
-        return false;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Team getHomeTeam() {
-        return this.homeTeam.clone();
-    }
-
-    public void setHomeTeam(Team homeTeam) {
-        this.homeTeam = homeTeam.clone();
-    }
-
-    public Team getAwayTeam() {
-        return this.awayTeam.clone();
-    }
-
-    public void setAwayTeam(Team awayTeam) {
-        this.awayTeam = awayTeam.clone();
+        } return false;
     }
 
     public Tuple<Integer, Integer> getGoals() {
@@ -171,22 +159,6 @@ public class Game {
 
     public void setGoals(Tuple<Integer, Integer> goals) {
         this.goals = goals.clone();
-    }
-
-    public LocalDate getDate() {
-        return LocalDate.of(
-                this.date.getYear(),
-                this.date.getMonth(),
-                this.date.getDayOfMonth()
-        );
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = LocalDate.of(
-                date.getYear(),
-                date.getMonth(),
-                date.getDayOfMonth()
-        );
     }
 
     public List<Player> getInFieldHome() {
@@ -217,6 +189,14 @@ public class Game {
         this.homeSubs = newHomeSubs;
     }
 
+    public TeamFormation getHomeFormation() {
+        return this.homeFormation;
+    }
+
+    public void setHomeFormation(TeamFormation homeFormation) {
+        this.homeFormation = homeFormation;
+    }
+
     public List<Player> getInFieldAway() {
         List<Player> newArr = new ArrayList<>();
         for(Player crt : this.inFieldAway)
@@ -245,19 +225,25 @@ public class Game {
         this.awaySubs = newAwaySubs;
     }
 
+    public TeamFormation getAwayFormation() {
+        return awayFormation;
+    }
+
+    public void setAwayFormation(TeamFormation awayFormation) {
+        this.awayFormation = awayFormation;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Game{");
-        sb.append("id=").append(id);
-        sb.append(", homeTeam=").append(homeTeam.getName());
-        sb.append(", awayTeam=").append(awayTeam.getName());
-        sb.append(", goals=").append(goals);
-        sb.append(", date=").append(date.toString());
+        final StringBuilder sb = new StringBuilder("GameSim{");
+        sb.append("goals=").append(goals);
         sb.append(", inFieldHome=").append(inFieldHome);
         sb.append(", homeSubs=").append(homeSubs);
+        sb.append(", homeFormation=").append(homeFormation);
         sb.append(", inFieldAway=").append(inFieldAway);
         sb.append(", awaySubs=").append(awaySubs);
-        sb.append('}');
+        sb.append(", awayFormation=").append(awayFormation);
+        sb.append('}').append(super.toString());
         return sb.toString();
     }
 
@@ -265,19 +251,13 @@ public class Game {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        Game game = (Game) o;
-
-        if (id != game.id) return false;
-        if (!Objects.equals(homeTeam, game.homeTeam)) return false;
-        if (!Objects.equals(awayTeam, game.awayTeam)) return false;
-        if (!Objects.equals(goals, game.goals)) return false;
-        if (!Objects.equals(inFieldHome, game.inFieldHome)) return false;
-        return Objects.equals(inFieldAway, game.inFieldAway);
+        if (!super.equals(o)) return false;
+        GameSim gameSim = (GameSim) o;
+        return Objects.equals(goals, gameSim.goals) && Objects.equals(inFieldHome, gameSim.inFieldHome) && Objects.equals(homeSubs, gameSim.homeSubs) && homeFormation == gameSim.homeFormation && Objects.equals(inFieldAway, gameSim.inFieldAway) && Objects.equals(awaySubs, gameSim.awaySubs) && awayFormation == gameSim.awayFormation;
     }
 
     @Override
-    public Game clone(){
-        return new Game(this);
+    public GameSim clone(){
+        return new GameSim(this);
     }
 }

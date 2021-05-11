@@ -1,7 +1,6 @@
 package utils;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -15,11 +14,24 @@ public class FileUtils {
             while(scanner.hasNextLine())
                 lines.add(scanner.nextLine());
             scanner.close();
-        }catch (IOException e){
+        }catch (NullPointerException | FileNotFoundException e){
             System.out.println("Invalid path.");
             e.printStackTrace();
             lines = new ArrayList<>();
         }
         return lines;
+    }
+
+
+    public static void writeObjectToFile(Object o, String objName){
+        try{
+            FileOutputStream fileOutputStream = new FileOutputStream("resources/" + objName);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(o);
+            objectOutputStream.close();
+            System.out.println(o.toString() + "\n\nObject written to file.");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

@@ -1,23 +1,32 @@
 package utils;
 
-import objects.Game;
-import objects.Team;
+import objects.game.GameSim;
+import objects.team.Team;
 import exceptions.FileIOException;
 import objects.player.*;
-import utils.FileUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Parser {
-    public static List<Game> loadLogFile(String path) throws FileIOException{
+
+    // TODO: 5/11/2021 settings.txt 
+    
+    public static List<GameSim> loadGameSimFile(String path, List<GameSim> logGameSims){
+        List<String> lines = FileUtils.fileToList(path);
+        List<GameSim> gameSims = logGameSims.stream().map(GameSim::clone).collect(Collectors.toList());
+        // TODO: 5/11/2021 File format 
+        return gameSims;
+    }
+
+    public static List<GameSim> loadLogFile(String path) throws FileIOException{
         List<String> lines = FileUtils.fileToList(path);
         String[] splitLine; int crtLine = 0;
         Team lastTeam = null; int lastTeamLine = 0;
         Player player; int crtPlayerId = 0;
 
-//        Map<Integer, Player> playerMap = new HashMap<>();
         Map<String, Team> teamMap = new HashMap<>();
-        List<Game> gameList = new ArrayList<>();
+        List<GameSim> gameSimList = new ArrayList<>();
         for(String line : lines){
             splitLine = line.split(":", 2);
             switch (splitLine[0]){
@@ -78,8 +87,8 @@ public class Parser {
                     break;
                 case "Jogo":
                     try{
-                        Game game = Game.parser(splitLine[1].split(","), gameList.size(), teamMap);
-                        if(game != null) gameList.add(game);
+                        GameSim gameSim = GameSim.parser(splitLine[1].split(","), gameSimList.size(), teamMap);
+                        if(gameSim != null) gameSimList.add(gameSim);
                     }catch (NumberFormatException e){
                         System.out.println("Invalid fields in parse of Game. (line " + crtLine + ")");
                     }
@@ -89,7 +98,6 @@ public class Parser {
             }
             crtLine++;
         }
-//        System.out.println(teamMap.get("Bartok F. C."));
-        return gameList;
+        return gameSimList;
     }
 }
