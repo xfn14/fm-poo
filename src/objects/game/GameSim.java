@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class GameSim extends GameInfo {
     private Tuple<Integer,Integer> goals;
@@ -162,31 +163,27 @@ public class GameSim extends GameInfo {
     }
 
     public List<Player> getInFieldHome() {
-        List<Player> newArr = new ArrayList<>();
-        for(Player crt : this.inFieldHome)
-            newArr.add(crt.clone());
-        return newArr;
+        return this.inFieldHome.stream()
+                .map(Player::clone)
+                .collect(Collectors.toList());
     }
 
     public void setInFieldHome(List<Player> inFieldHome) {
-        List<Player> newArr = new ArrayList<>();
-        for(Player crt : inFieldHome)
-            newArr.add(crt.clone());
-        this.inFieldHome = newArr;
+        this.inFieldHome = inFieldHome.stream()
+                .map(Player::clone)
+                .collect(Collectors.toList());
     }
 
     public List<Tuple<Integer, Integer>> getHomeSubs() {
-        List<Tuple<Integer,Integer>> newHomeSubs = new ArrayList<>();
-        for(Tuple<Integer,Integer> tuple : this.homeSubs)
-            newHomeSubs.add(tuple.clone());
-        return newHomeSubs;
+        return this.homeSubs.stream()
+                .map(Tuple::clone)
+                .collect(Collectors.toList());
     }
 
     public void setHomeSubs(List<Tuple<Integer, Integer>> homeSubs) {
-        List<Tuple<Integer,Integer>> newHomeSubs = new ArrayList<>();
-        for(Tuple<Integer,Integer> tuple : homeSubs)
-            newHomeSubs.add(tuple.clone());
-        this.homeSubs = newHomeSubs;
+        this.homeSubs = homeSubs.stream()
+                .map(Tuple::clone)
+                .collect(Collectors.toList());
     }
 
     public TeamFormation getHomeFormation() {
@@ -198,31 +195,27 @@ public class GameSim extends GameInfo {
     }
 
     public List<Player> getInFieldAway() {
-        List<Player> newArr = new ArrayList<>();
-        for(Player crt : this.inFieldAway)
-            newArr.add(crt.clone());
-        return newArr;
+        return this.inFieldAway.stream()
+                .map(Player::clone)
+                .collect(Collectors.toList());
     }
 
     public void setInFieldAway(List<Player> inFieldAway) {
-        List<Player> newArr = new ArrayList<>();
-        for(Player crt : inFieldAway)
-            newArr.add(crt.clone());
-        this.inFieldAway = newArr;
+        this.inFieldAway = inFieldAway.stream()
+                .map(Player::clone)
+                .collect(Collectors.toList());
     }
 
     public List<Tuple<Integer, Integer>> getAwaySubs() {
-        List<Tuple<Integer,Integer>> newAwaySubs = new ArrayList<>();
-        for(Tuple<Integer,Integer> tuple : this.awaySubs)
-            newAwaySubs.add(tuple.clone());
-        return newAwaySubs;
+        return this.awaySubs.stream()
+                .map(Tuple::clone)
+                .collect(Collectors.toList());
     }
 
     public void setAwaySubs(List<Tuple<Integer, Integer>> awaySubs) {
-        List<Tuple<Integer,Integer>> newAwaySubs = new ArrayList<>();
-        for(Tuple<Integer,Integer> tuple : awaySubs)
-            newAwaySubs.add(tuple.clone());
-        this.awaySubs = newAwaySubs;
+        this.awaySubs = awaySubs.stream()
+                .map(Tuple::clone)
+                .collect(Collectors.toList());
     }
 
     public TeamFormation getAwayFormation() {

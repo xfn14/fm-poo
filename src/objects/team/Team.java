@@ -5,6 +5,7 @@ import objects.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Team {
     private String name;
@@ -57,17 +58,15 @@ public class Team {
     }
 
     public List<Player> getTeamPlayers() {
-        List<Player> newList = new ArrayList<>();
-        for(Player crt : this.teamPlayers)
-            newList.add(crt.clone());
-        return newList;
+        return this.teamPlayers.stream()
+                .map(Player::clone)
+                .collect(Collectors.toList());
     }
 
     public void setTeamPlayers(List<Player> teamPlayers) {
-        List<Player> newList = new ArrayList<>();
-        for(Player crt : teamPlayers)
-            newList.add(crt.clone());
-        this.teamPlayers = newList;
+        this.teamPlayers = teamPlayers.stream()
+                .map(Player::clone)
+                .collect(Collectors.toList());
     }
 
     public int getTeamVictories() {
