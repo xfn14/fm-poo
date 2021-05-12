@@ -4,7 +4,6 @@ import exceptions.FileIOException;
 import objects.game.GameSim;
 import utils.ColorUtils;
 import utils.FileUtils;
-import utils.Parser;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -24,8 +23,9 @@ public class StartMenu {
                     System.out.println(ColorUtils.GREEN_UNDERLINED + "Thank you for playing!" + ColorUtils.RESET);
                     quit = true;
                 }else if(option == 1){
-                    List<GameSim> gameSims = Parser.loadLogFile("resources/logs.txt");
-                    System.out.println(gameSims.get(0));
+                    List<GameSim> gameSims = FileUtils.loadLogFile("resources/logs.txt");
+                    List<GameSim> newGameSims = FileUtils.loadGameSimFile("resources/gameSims.txt", gameSims);
+                    System.out.println(newGameSims);
                     quit = true;
                 }else{
                     System.out.println(ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET);
@@ -34,7 +34,7 @@ public class StartMenu {
                 System.out.println(ColorUtils.RED_BOLD + "Please input a number!" + ColorUtils.RESET);
                 scanner.next();
             }catch (FileIOException e){
-                System.out.println(e.getMessage());
+                System.out.println(e.getLocalizedMessage());
                 quit = true;
             }
         } while (!quit);

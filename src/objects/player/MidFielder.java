@@ -71,7 +71,7 @@ public class MidFielder extends Player{
     public String toString() {
         final StringBuilder sb = new StringBuilder("MidFielder{");
         sb.append("recover=").append(recover);
-        sb.append("} ").append(super.toString());
+        sb.append("} ").append(super.toString()).append('\n');
         return sb.toString();
     }
 }

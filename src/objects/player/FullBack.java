@@ -74,7 +74,7 @@ public class FullBack extends Player{
     public String toString() {
         final StringBuilder sb = new StringBuilder("FullBack{");
         sb.append("crossing=").append(crossing);
-        sb.append("} ").append(super.toString());
+        sb.append("} ").append(super.toString()).append('\n');
         return sb.toString();
     }
 }

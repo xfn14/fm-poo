@@ -48,8 +48,8 @@ public class Striker extends Player {
 
     @Override
     public String toString() {
-        return "Striker{" + '\n' +
-                super.toString() + "\n" +
-                '}' + '\n';
+        final StringBuilder sb = new StringBuilder("Striker{");
+        sb.append(super.toString()).append("}").append('\n');
+        return sb.toString();
     }
 }

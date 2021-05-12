@@ -53,9 +53,9 @@ public class GameInfo {
 
     public void setDate(LocalDate date) {
         this.date = LocalDate.of(
-                this.date.getYear(),
-                this.date.getMonth(),
-                this.date.getDayOfMonth()
+                date.getYear(),
+                date.getMonth(),
+                date.getDayOfMonth()
         );
     }
 

@@ -46,10 +46,11 @@ public class Defender extends Player {
         return super.equals(o);
     }
 
+
     @Override
     public String toString() {
-        return "Defender{" + '\n' +
-                super.toString() + "\n" +
-                '}' + '\n';
+        final StringBuilder sb = new StringBuilder("Defender{");
+        sb.append("} ").append(super.toString()).append('\n');
+        return sb.toString();
     }
 }

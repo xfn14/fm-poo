@@ -81,7 +81,7 @@ public class Keeper extends Player{
     public String toString() {
         final StringBuilder sb = new StringBuilder("Keeper{");
         sb.append("elasticity=").append(elasticity);
-        sb.append("} ").append(super.toString());
+        sb.append("} ").append(super.toString()).append('\n');
         return sb.toString();
     }
 }

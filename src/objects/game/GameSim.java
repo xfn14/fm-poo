@@ -14,6 +14,9 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class GameSim extends GameInfo {
+    private GameState gameState;
+    private int time;
+    private int extraTime;
     private Tuple<Integer,Integer> goals;
 
     private List<Player> inFieldHome;
@@ -27,6 +30,9 @@ public class GameSim extends GameInfo {
     public GameSim(){
         super();
 
+        this.gameState = GameState.INIT_GAME;
+        this.time = 0;
+        this.extraTime = 0;
         this.goals = new Tuple<>(0, 0);
 
         this.inFieldHome = new ArrayList<>();
@@ -41,6 +47,9 @@ public class GameSim extends GameInfo {
     public GameSim(int id, Team homeTeam, Team awayTeam){
         super(id, homeTeam.clone(), awayTeam.clone());
 
+        this.gameState = GameState.INIT_GAME;
+        this.time = 0;
+        this.extraTime = 0;
         this.goals = new Tuple<>(0, 0);
 
         this.inFieldHome = new ArrayList<>();
@@ -52,13 +61,16 @@ public class GameSim extends GameInfo {
         this.awayFormation = TeamFormation.getRandomFormation();
     }
 
-    public GameSim(int id, LocalDate date, Team homeTeam, Team awayTeam,
-                   Tuple<Integer, Integer> goals, List<Player> inFieldHome,
+    public GameSim(int id, LocalDate date, Team homeTeam, Team awayTeam, GameState gameState,
+                   int time, int extraTime, Tuple<Integer, Integer> goals, List<Player> inFieldHome,
                    List<Tuple<Integer, Integer>> homeSubs, TeamFormation homeFormation,
                    List<Player> inFieldAway, List<Tuple<Integer, Integer>> awaySubs,
                    TeamFormation awayFormation) {
         super(id, date, homeTeam, awayTeam);
 
+        this.gameState = gameState;
+        this.time = time;
+        this.extraTime = extraTime;
         this.goals = goals;
 
         setInFieldHome(inFieldHome);
@@ -73,6 +85,9 @@ public class GameSim extends GameInfo {
     public GameSim(GameSim gameSim){
         super(gameSim.getId(), gameSim.getDate(), gameSim.getHomeTeam(), gameSim.getAwayTeam());
 
+        this.gameState = gameSim.getGameState();
+        this.time = gameSim.getTime();
+        this.extraTime = gameSim.getExtraTime();
         this.goals = gameSim.getGoals();
 
         this.inFieldHome = gameSim.getInFieldHome();
@@ -82,6 +97,19 @@ public class GameSim extends GameInfo {
         this.inFieldAway = gameSim.getInFieldAway();
         this.awaySubs = gameSim.getAwaySubs();
         this.awayFormation = gameSim.getAwayFormation();
+    }
+
+    public void parseCustom(String[] args) throws IllegalArgumentException {
+        setHomeFormation(args[1] != null ? TeamFormation.valueOf(args[1]) : null);
+        setAwayFormation(args[2] != null ? TeamFormation.valueOf(args[2]) : null);
+
+        setGameState(args[3] != null ? GameState.valueOf(args[3]) : null);
+
+        try{
+            setTime(Integer.parseInt(args[4]));
+        }catch (NumberFormatException e){
+            System.out.println("GameSim_Time must be a number");
+        }
     }
 
     public static GameSim parser(String[] args, int gameId, Map<String, Team> teamMap) throws NumberFormatException{
@@ -133,6 +161,7 @@ public class GameSim extends GameInfo {
 
     public boolean subPlayers(int team, int leave, int stay){
         if(leave == stay) return false;
+        if((team == 0 ? this.homeSubs : this.awaySubs).size() >= 3) return false;
 
         Player leavePlayer = (team == 0 ? this.inFieldHome : this.inFieldAway).stream()
                 .filter(player -> leave == player.getNumber())
@@ -152,6 +181,33 @@ public class GameSim extends GameInfo {
             ((team == 0) ? this.homeSubs : this.awaySubs).add(new Tuple<>(leave, stay));
             return true;
         } return false;
+    }
+
+    public GameState getGameState() {
+        return this.gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        if(gameState != null)
+            this.gameState = gameState;
+    }
+
+    public int getTime() {
+        return this.time;
+    }
+
+    public void setTime(int time) {
+        if(0 <= time && time <= 90 + GameConstants.MAX_EXTRA_TIME)
+            this.time = time;
+    }
+
+    public int getExtraTime() {
+        return this.extraTime;
+    }
+
+    public void setExtraTime(int extraTime) {
+        if(extraTime <= GameConstants.MAX_EXTRA_TIME)
+            this.extraTime = extraTime;
     }
 
     public Tuple<Integer, Integer> getGoals() {
@@ -191,7 +247,8 @@ public class GameSim extends GameInfo {
     }
 
     public void setHomeFormation(TeamFormation homeFormation) {
-        this.homeFormation = homeFormation;
+        if(homeFormation != null)
+            this.homeFormation = homeFormation;
     }
 
     public List<Player> getInFieldAway() {
@@ -219,24 +276,28 @@ public class GameSim extends GameInfo {
     }
 
     public TeamFormation getAwayFormation() {
-        return awayFormation;
+        return this.awayFormation;
     }
 
     public void setAwayFormation(TeamFormation awayFormation) {
-        this.awayFormation = awayFormation;
+        if(awayFormation != null)
+            this.awayFormation = awayFormation;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("GameSim{");
-        sb.append("goals=").append(goals);
-        sb.append(", inFieldHome=").append(inFieldHome);
+        sb.append("gameState=").append(gameState);
+        sb.append(", time=").append(time);
+        sb.append(", extraTime=").append(extraTime);
+        sb.append(", goals=").append(goals);
+        sb.append(", inFieldHome=").append(inFieldHome.stream().map(Player::getNumber).collect(Collectors.toList()));
         sb.append(", homeSubs=").append(homeSubs);
         sb.append(", homeFormation=").append(homeFormation);
-        sb.append(", inFieldAway=").append(inFieldAway);
+        sb.append(", inFieldAway=").append(inFieldAway.stream().map(Player::getNumber).collect(Collectors.toList()));
         sb.append(", awaySubs=").append(awaySubs);
         sb.append(", awayFormation=").append(awayFormation);
-        sb.append('}').append(super.toString());
+        sb.append('}').append(super.toString()).append('\n');
         return sb.toString();
     }
 
