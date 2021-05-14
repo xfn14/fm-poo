@@ -36,9 +36,16 @@ public class GameManager {
 
     public void updateTeamVictoriesHistory(){
         for(GameSim gameSim : this.gameList){
+            Team team1 = this.teamMap.get(gameSim.getHomeTeam().getName()),
+                 team2 = this.teamMap.get(gameSim.getAwayTeam().getName());
+
+            gameSim.getHomeTeam().setPassedGames(team1.getPassedGames());
+            gameSim.getHomeTeam().setTeamVictories(team1.getTeamVictories());
+
+            gameSim.getAwayTeam().setPassedGames(team2.getPassedGames());
+            gameSim.getAwayTeam().setTeamVictories(team2.getTeamVictories());
+
             if(gameSim.getGameState() == GameState.END_GAME){
-                Team team1 = this.teamMap.get(gameSim.getHomeTeam().getName()),
-                     team2 = this.teamMap.get(gameSim.getAwayTeam().getName());
                 team1.addPassedGame(gameSim.getId());
                 team2.addPassedGame(gameSim.getId());
                 (gameSim.getWinner() == 0 ? team1 : team2).incrementTeamVictories();

@@ -8,6 +8,5 @@ public class Main {
         StartMenu startMenu = new StartMenu();
         startMenu.startMenuLoop();
 
-        System.out.println(startMenu.getGameManager().getTeamMap());
     }
 }
