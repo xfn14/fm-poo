@@ -14,6 +14,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class GameSim extends GameInfo {
+    // TODO: 5/14/2021 Count team victories and passed games
+    
     private GameState gameState;
     private int time;
     private int extraTime;
@@ -140,6 +142,15 @@ public class GameSim extends GameInfo {
             }
         }
         return gameSim;
+    }
+
+    public int getWinner(){
+        if(this.gameState == GameState.END_GAME)
+            if(this.goals.getX() > this.goals.getY())
+                return 0;
+            else if(this.goals.getX() < this.goals.getY())
+                return 1;
+        return -1;
     }
 
     public boolean addPlayerToField(int team, int playerNumber){

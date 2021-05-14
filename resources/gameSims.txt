@@ -1,4 +1,4 @@
-# GameSim:id,homeFormation,awayFormation
+# GameSim:id,homeFormation,awayFormation,gameState,time
 GameSim:0,ONE_FOUR_FOUR_TWO,ONE_FOUR_FOUR_TWO,END_GAME,90
 GameSim:1,ONE_FOUR_FOUR_TWO,ONE_FOUR_FOUR_TWO,END_GAME,90
 GameSim:2,ONE_FOUR_FOUR_TWO,ONE_FOUR_FOUR_TWO,END_GAME,90

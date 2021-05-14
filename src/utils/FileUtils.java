@@ -1,5 +1,6 @@
 package utils;
 
+import objects.game.GameManager;
 import objects.game.GameSim;
 import objects.team.Team;
 import exceptions.FileIOException;
@@ -11,8 +12,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class FileUtils {
-    // TODO: 5/11/2021 settings.txt
-    
     public static List<GameSim> loadGameSimFile(String path, List<GameSim> logGameSims) throws FileIOException {
         List<String> lines = fileToList(path);
         List<GameSim> gameSims = logGameSims.stream().map(GameSim::clone).collect(Collectors.toList());
@@ -52,7 +51,8 @@ public class FileUtils {
         return gameSims;
     }
 
-    public static List<GameSim> loadLogFile(String path) throws FileIOException {
+    public static GameManager loadLogFile(String path) throws FileIOException {
+        GameManager gameManager = new GameManager();
         List<String> lines = fileToList(path);
         String[] splitLine; int crtLine = 0;
         Team lastTeam = null; int lastTeamLine = 0;
@@ -73,7 +73,10 @@ public class FileUtils {
                 case "Guarda-Redes":
                     try{
                         player = Keeper.parser(splitLine[1].split(","), crtPlayerId++);
-                        if(lastTeam != null) lastTeam.addPlayer(player);
+                        if(lastTeam != null){
+                            player.changePlayerTeam(lastTeam.getName());
+                            lastTeam.addPlayer(player);
+                        }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
@@ -83,7 +86,10 @@ public class FileUtils {
                 case "Defesa":
                     try{
                         player = Defender.parser(splitLine[1].split(","), crtPlayerId++);
-                        if(lastTeam != null) lastTeam.addPlayer(player);
+                        if(lastTeam != null){
+                            player.changePlayerTeam(lastTeam.getName());
+                            lastTeam.addPlayer(player);
+                        }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
@@ -93,7 +99,10 @@ public class FileUtils {
                 case "Medio":
                     try{
                         player = MidFielder.parser(splitLine[1].split(","), crtPlayerId++);
-                        if(lastTeam != null) lastTeam.addPlayer(player);
+                        if(lastTeam != null){
+                            player.changePlayerTeam(lastTeam.getName());
+                            lastTeam.addPlayer(player);
+                        }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
@@ -103,7 +112,10 @@ public class FileUtils {
                 case "Lateral":
                     try{
                         player = FullBack.parser(splitLine[1].split(","), crtPlayerId++);
-                        if(lastTeam != null) lastTeam.addPlayer(player);
+                        if(lastTeam != null){
+                            player.changePlayerTeam(lastTeam.getName());
+                            lastTeam.addPlayer(player);
+                        }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
@@ -113,7 +125,10 @@ public class FileUtils {
                 case "Avancado":
                     try{
                         player = Striker.parser(splitLine[1].split(","), crtPlayerId++);
-                        if(lastTeam != null) lastTeam.addPlayer(player);
+                        if(lastTeam != null){
+                            player.changePlayerTeam(lastTeam.getName());
+                            lastTeam.addPlayer(player);
+                        }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
@@ -133,7 +148,9 @@ public class FileUtils {
             }
             crtLine++;
         }
-        return gameSimList;
+        gameManager.setTeamMap(teamMap);
+        gameManager.setGameList(gameSimList);
+        return gameManager;
     }
 
     public static List<String> fileToList(String path) {

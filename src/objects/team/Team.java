@@ -49,6 +49,14 @@ public class Team {
         this.teamPlayers.add(player.clone());
     }
 
+    public void incrementTeamVictories(){
+        this.teamVictories++;
+    }
+
+    public void addPassedGame(int gameId){
+        this.passedGames.add(gameId);
+    }
+
     public String getName() {
         return this.name;
     }

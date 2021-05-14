@@ -100,6 +100,10 @@ public class Player extends Person {
         setPass(player.getPass());
     }
 
+    public void changePlayerTeam(String teamName){
+        this.teamHistory.add(teamName);
+    }
+
     // TODO: 3/31/2021 Temporary for testing
     public int calcAbility(){
         return this.velocity + this.resistance + this.dexterity + this.thrust + this.header + this.finish + this.pass;
