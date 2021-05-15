@@ -58,6 +58,7 @@ public class FileUtils {
         Team lastTeam = null; int lastTeamLine = 0;
         Player player; int crtPlayerId = 0;
 
+        Map<Integer, Player> playerMap = new HashMap<>();
         Map<String, Team> teamMap = new HashMap<>();
         List<GameSim> gameSimList = new ArrayList<>();
         for(String line : lines){
@@ -75,6 +76,7 @@ public class FileUtils {
                         player = Keeper.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
+                            playerMap.put(player.getId(), player);
                             lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
@@ -88,6 +90,7 @@ public class FileUtils {
                         player = Defender.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
+                            playerMap.put(player.getId(), player);
                             lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
@@ -101,6 +104,7 @@ public class FileUtils {
                         player = MidFielder.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
+                            playerMap.put(player.getId(), player);
                             lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
@@ -114,6 +118,7 @@ public class FileUtils {
                         player = FullBack.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
+                            playerMap.put(player.getId(), player);
                             lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
@@ -127,6 +132,7 @@ public class FileUtils {
                         player = Striker.parser(splitLine[1].split(","), crtPlayerId++);
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
+                            playerMap.put(player.getId(), player);
                             lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
@@ -148,6 +154,7 @@ public class FileUtils {
             }
             crtLine++;
         }
+        gameManager.setPlayerMap(playerMap);
         gameManager.setTeamMap(teamMap);
         gameManager.setGameList(gameSimList);
         return gameManager;

@@ -36,13 +36,16 @@ public class StartMenu {
                 if(option == 0){
                     System.out.println(ColorUtils.GREEN_UNDERLINED + "Thank you for playing!" + ColorUtils.RESET);
                     quit = true;
-                }else if(option == 1){
+                }else if(option == 1) {
                     GameManager tempGameManager = FileUtils.loadLogFile("resources/logs.txt");
                     tempGameManager.setGameList(FileUtils.loadGameSimFile("resources/gameSims.txt", tempGameManager.getGameList()));
                     tempGameManager.updateTeamVictoriesHistory();
                     this.gameManager = tempGameManager.clone();
-                    System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!");
-                    System.out.println(gameManager);
+                    System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!" + ColorUtils.RESET);
+                    printStartMenu();
+                }else if(!this.gameManager.getGameList().isEmpty() && option == 3){
+                    GameListMenu gameListMenu = new GameListMenu(gameManager);
+                    gameListMenu.gameListLoop();
                     quit = true;
                 }else{
                     System.out.println(ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET);
@@ -55,7 +58,7 @@ public class StartMenu {
                 quit = true;
             }
         } while (!quit);
-            scanner.close();
+        scanner.close();
     }
 
     public void printStartMenu(){

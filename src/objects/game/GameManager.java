@@ -1,25 +1,30 @@
 package objects.game;
 
+import objects.player.Player;
 import objects.team.Team;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class GameManager {
+    private Map<Integer, Player> playerMap;
     private Map<String, Team> teamMap;
     private List<GameSim> gameList;
 
     public GameManager(){
+        this.playerMap = new HashMap<>();
         this.teamMap = new HashMap<>();
         this.gameList = new ArrayList<>();
     }
 
-    public GameManager(Map<String, Team> teamMap, List<GameSim> gameList){
+    public GameManager(Map<Integer, Player> playerMap, Map<String, Team> teamMap, List<GameSim> gameList){
+        setPlayerMap(playerMap);
         setTeamMap(teamMap);
         setGameList(gameList);
     }
 
     public GameManager(GameManager gameManager){
+        this.playerMap = gameManager.getPlayerMap();
         this.teamMap = gameManager.getTeamMap();
         this.gameList = gameManager.getGameList();
     }
@@ -53,6 +58,20 @@ public class GameManager {
         }
     }
 
+    public Map<Integer, Player> getPlayerMap(){
+        Map<Integer, Player> newPlayerMap = new HashMap<>();
+        for(Player player : this.playerMap.values())
+            newPlayerMap.put(player.getId(), player.clone());
+        return newPlayerMap;
+    }
+
+    public void setPlayerMap(Map<Integer, Player> playerMap){
+        Map<Integer, Player> newPlayerMap = new HashMap<>();
+        for(Player player : playerMap.values())
+            newPlayerMap.put(player.getId(), player.clone());
+        this.playerMap = newPlayerMap;
+    }
+
     public Map<String, Team> getTeamMap() {
         Map<String, Team> newTeamMap = new HashMap<>();
         for(Team team : this.teamMap.values())
@@ -82,7 +101,8 @@ public class GameManager {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("GameManager{");
-        sb.append("teamMap=").append(teamMap);
+        sb.append("playerMap=").append(playerMap);
+        sb.append(", teamMap=").append(teamMap);
         sb.append(", gameList=").append(gameList);
         sb.append('}');
         return sb.toString();
