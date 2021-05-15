@@ -104,6 +104,12 @@ public class Player extends Person {
         this.teamHistory.add(teamName);
     }
 
+    public String getFstLstName(){
+        String[] names = this.getName().split(" ");
+        if(names.length != 1) return names[0] + " " + names[names.length-1];
+        return names[0];
+    }
+
     // TODO: 3/31/2021 Temporary for testing
     public int calcAbility(){
         return this.velocity + this.resistance + this.dexterity + this.thrust + this.header + this.finish + this.pass;

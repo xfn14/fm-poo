@@ -53,7 +53,9 @@ public class GameManager {
             if(gameSim.getGameState() == GameState.END_GAME){
                 team1.addPassedGame(gameSim.getId());
                 team2.addPassedGame(gameSim.getId());
-                (gameSim.getWinner() == 0 ? team1 : team2).incrementTeamVictories();
+                int winner = gameSim.getWinner();
+                if (winner == 1) team1.incrementTeamVictories();
+                else if (winner == 2) team2.incrementTeamVictories();
             }
         }
     }

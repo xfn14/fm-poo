@@ -1,5 +1,6 @@
-package menus;
+package menus.manager;
 
+import menus.ManagerMenu;
 import objects.game.GameManager;
 import objects.game.GameSim;
 import utils.ColorUtils;
@@ -7,25 +8,25 @@ import utils.ColorUtils;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class GameListMenu {
+public class ManageGamesMenu {
     private GameManager gameManager;
     private final int maxPage;
 
     public static final int ITEMS_PER_PAGE = 10;
 
-    public GameListMenu(){
+    public ManageGamesMenu(){
         this.gameManager = new GameManager();
         this.maxPage = 1;
     }
 
-    public GameListMenu(GameManager gameManager){
+    public ManageGamesMenu(GameManager gameManager){
         setGameManager(gameManager);
         this.maxPage = (int) Math.ceil((double) this.gameManager.getGameList().size() / ITEMS_PER_PAGE);
     }
 
-    public GameListMenu(GameListMenu gameListMenu){
-        this.gameManager = gameListMenu.getGameManager();
-        this.maxPage = gameListMenu.getMaxPage();
+    public ManageGamesMenu(ManageGamesMenu manageGamesMenu){
+        this.gameManager = manageGamesMenu.getGameManager();
+        this.maxPage = manageGamesMenu.getMaxPage();
     }
 
     public void gameListLoop(){
@@ -34,25 +35,20 @@ public class GameListMenu {
 
         int page = 1;
         printPage(page);
-        System.out.println(ColorUtils.BLUE + "[0] - Previous Page; [1] - Next Page; [-1] - Go Back" + ColorUtils.RESET);
 
         do{
             try{
                 int option = scanner.nextInt();
-                if(option == -1) {
-                    StartMenu startMenu = new StartMenu(gameManager);
-                    startMenu.startMenuLoop();
+                if(option == 0) {
+                    ManagerMenu managerMenu = new ManagerMenu(this.gameManager);
+                    managerMenu.manageGamesLoop();
                     quit = true;
-                }else if(option == 0) {
-                    if(page <= 1)
-                        System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
-                    else
-                        printPage(--page);
                 }else if(option == 1) {
-                    if(page >= maxPage)
-                        System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
-                    else
-                        printPage(++page);
+                    if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
+                    else printPage(--page);
+                }else if(option == 2) {
+                    if(page >= maxPage) System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
+                    else printPage(++page);
                 }else{
                     System.out.println(ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET);
                 }
@@ -64,12 +60,16 @@ public class GameListMenu {
         scanner.close();
     }
 
-    public void printPage(int page){
-        for(int i = (page-1)*ITEMS_PER_PAGE;
-            i < Math.min(this.gameManager.getGameList().size(), (page-1)*ITEMS_PER_PAGE + ITEMS_PER_PAGE);
-            i++){
+    private void printControls(){
+        System.out.println(ColorUtils.BLUE + "[1] - Previous Page; [2] - Next Page; [0] - Go Back" + ColorUtils.RESET);
+    }
+
+    private void printPage(int page){
+        int fstIndex = (page - 1) * ITEMS_PER_PAGE;
+        int gameListLen = this.gameManager.getGameList().size();
+        for(int i = fstIndex; i < Math.min(gameListLen, fstIndex + ITEMS_PER_PAGE); ++i)
             System.out.println(gameSimpleInfo(this.gameManager.getGameList().get(i)));
-        }
+        printControls();
     }
 
     public String gameSimpleInfo(GameSim gameSim){

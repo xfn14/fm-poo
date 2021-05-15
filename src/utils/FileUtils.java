@@ -6,9 +6,11 @@ import objects.team.Team;
 import exceptions.FileIOException;
 import objects.player.*;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class FileUtils {
@@ -51,7 +53,7 @@ public class FileUtils {
         return gameSims;
     }
 
-    public static GameManager loadLogFile(String path) throws FileIOException {
+    public static GameManager loadLogFile(String path) throws FileIOException, FileNotFoundException {
         GameManager gameManager = new GameManager();
         List<String> lines = fileToList(path);
         String[] splitLine; int crtLine = 0;
@@ -172,8 +174,7 @@ public class FileUtils {
             }
             scanner.close();
         }catch (NullPointerException | FileNotFoundException e){
-            System.out.println("Invalid path.");
-            e.printStackTrace();
+            System.out.println(ColorUtils.YELLOW + path + ColorUtils.RED_BOLD + " path is invalid." + ColorUtils.RESET);
             lines = new ArrayList<>();
         }
         return lines;

@@ -1,12 +1,13 @@
 package menus;
 
 import exceptions.FileIOException;
+import menus.manager.ManageGamesMenu;
 import objects.game.GameManager;
 import utils.ColorUtils;
 import utils.FileUtils;
 
+import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class StartMenu {
@@ -44,8 +45,10 @@ public class StartMenu {
                     System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!" + ColorUtils.RESET);
                     printStartMenu();
                 }else if(!this.gameManager.getGameList().isEmpty() && option == 3){
-                    GameListMenu gameListMenu = new GameListMenu(gameManager);
-                    gameListMenu.gameListLoop();
+                    ManagerMenu managerMenu = new ManagerMenu(gameManager);
+                    managerMenu.manageGamesLoop();
+//                    ManageGamesMenu manageGamesMenu = new ManageGamesMenu(gameManager);
+//                    manageGamesMenu.gameListLoop();
                     quit = true;
                 }else{
                     System.out.println(ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET);
@@ -56,6 +59,8 @@ public class StartMenu {
             }catch (FileIOException e){
                 System.out.println(e.getLocalizedMessage());
                 quit = true;
+            }catch (FileNotFoundException e){
+                System.out.println("");
             }
         } while (!quit);
         scanner.close();
@@ -64,9 +69,9 @@ public class StartMenu {
     public void printStartMenu(){
         System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[1]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Load Log" + ColorUtils.RESET);
         if(!this.gameManager.getTeamMap().isEmpty())
-            System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[2]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "New Game" + ColorUtils.RESET);
+            System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[2]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "New Game " + ColorUtils.WHITE_UNDERLINED + "(In progress)" + ColorUtils.RESET);
         if(!this.gameManager.getGameList().isEmpty())
-            System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[3]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Game List" + ColorUtils.RESET);
+            System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[3]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Manager Options" + ColorUtils.RESET);
         System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[0]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Quit Game" + ColorUtils.RESET);
     }
 
@@ -76,25 +81,5 @@ public class StartMenu {
 
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("StartMenu{");
-        sb.append("gameManager=").append(gameManager);
-        sb.append('}');
-        return sb.toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StartMenu startMenu = (StartMenu) o;
-        return Objects.equals(gameManager, startMenu.gameManager);
-    }
-
-    public StartMenu clone(){
-        return new StartMenu(this);
     }
 }

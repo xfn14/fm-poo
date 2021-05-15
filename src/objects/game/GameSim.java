@@ -147,9 +147,11 @@ public class GameSim extends GameInfo {
     public int getWinner(){
         if(this.gameState == GameState.END_GAME)
             if(this.goals.getX() > this.goals.getY())
-                return 0;
-            else if(this.goals.getX() < this.goals.getY())
                 return 1;
+            else if(this.goals.getX() < this.goals.getY())
+                return 2;
+            else
+                return 0;
         return -1;
     }
 
