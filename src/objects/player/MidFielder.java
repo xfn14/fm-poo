@@ -57,6 +57,14 @@ public class MidFielder extends Player{
         return super.calcAbility() + this.recover;
     }
 
+    public int getRecover() {
+        return this.recover;
+    }
+
+    public void setRecover(int recover) {
+        this.recover = recover;
+    }
+
     @Override
     public MidFielder clone() {
         return new MidFielder(this);

@@ -1,10 +1,10 @@
 package menus;
 
 import exceptions.FileIOException;
-import menus.manager.ManageGamesMenu;
 import objects.game.GameManager;
 import utils.ColorUtils;
 import utils.FileUtils;
+import utils.TextUtils;
 
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
@@ -51,10 +51,10 @@ public class StartMenu {
 //                    manageGamesMenu.gameListLoop();
                     quit = true;
                 }else{
-                    System.out.println(ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET);
+                    System.out.println(TextUtils.INVALID_MENU_OPTION);
                 }
             }catch(InputMismatchException e){
-                System.out.println(ColorUtils.RED_BOLD + "Please input a number!" + ColorUtils.RESET);
+                System.out.println(TextUtils.INPUT_NOT_NUMBER);
                 scanner.next();
             }catch (FileIOException e){
                 System.out.println(e.getLocalizedMessage());

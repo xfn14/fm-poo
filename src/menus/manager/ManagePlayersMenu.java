@@ -1,9 +1,12 @@
 package menus.manager;
 
 import menus.ManagerMenu;
+import menus.manager.playerManager.PlayerCreationMenu;
+import menus.manager.playerManager.PlayerInfoMenu;
 import objects.game.GameManager;
 import objects.player.*;
 import utils.ColorUtils;
+import utils.TextUtils;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -42,31 +45,42 @@ public class ManagePlayersMenu {
         printPage(page);
 
         do{
-            try{
-                int option = scanner.nextInt();
-                if(option == 0){
-                    ManagerMenu managerMenu = new ManagerMenu(this.gameManager);
-                    managerMenu.manageGamesLoop();
-                    quit = true;
-                }else if(option == 1){
-                    if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
-                    else printPage(--page);
-                }else if(option == 2) {
-                    if (page >= maxPage) System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
-                    else printPage(++page);
-                }else{
-                    System.out.println(ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET);
+            String option = scanner.nextLine();
+            if(option.equalsIgnoreCase("b")){
+                ManagerMenu managerMenu = new ManagerMenu(this.gameManager);
+                managerMenu.manageGamesLoop();
+                quit = true;
+            }else if(option.equalsIgnoreCase("a")){
+                if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
+                else printPage(--page);
+            }else if(option.equalsIgnoreCase("d")) {
+                if (page >= maxPage)
+                    System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
+                else printPage(++page);
+            }else if(option.equalsIgnoreCase("n")){
+                PlayerCreationMenu playerCreationMenu = new PlayerCreationMenu(this.gameManager);
+                playerCreationMenu.playerCreationLoop();
+                quit = true;
+            }else{
+                try{
+                    int player_id = Integer.parseInt(option);
+                    if(0 <= player_id && player_id < this.gameManager.getPlayerMap().size()){
+                        PlayerInfoMenu playerInfoMenu = new PlayerInfoMenu(this.gameManager, player_id);
+                        playerInfoMenu.playerInfoLoop();
+                        quit = true;
+                    }else{
+                        System.out.println(ColorUtils.RED_BOLD + "Invalid player id." + ColorUtils.RESET);
+                    }
+                }catch (NumberFormatException e){
+                    System.out.println(TextUtils.INVALID_MENU_OPTION);
                 }
-            }catch (InputMismatchException e){
-                System.out.println(ColorUtils.RED_BOLD + "Please input a number!" + ColorUtils.RESET);
-                scanner.next();
             }
         }while (!quit);
         scanner.close();
     }
 
     private void printControls(){
-        System.out.println(ColorUtils.BLUE + "[1] - Previous Page; [2] - Next Page; [3] - New Player; [0] - Go Back" + ColorUtils.RESET);
+        System.out.println(ColorUtils.BLUE + "[a] - Previous Page; [d] - Next Page; [n] - New Player; [b] - Go Back" + ColorUtils.RESET);
     }
 
     private void printPage(int page){

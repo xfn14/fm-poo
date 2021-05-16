@@ -4,6 +4,7 @@ import menus.ManagerMenu;
 import objects.game.GameManager;
 import objects.game.GameSim;
 import utils.ColorUtils;
+import utils.TextUtils;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -50,10 +51,10 @@ public class ManageGamesMenu {
                     if(page >= maxPage) System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
                     else printPage(++page);
                 }else{
-                    System.out.println(ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET);
+                    System.out.println(TextUtils.INVALID_MENU_OPTION);
                 }
             }catch(InputMismatchException e){
-                System.out.println(ColorUtils.RED_BOLD + "Please input a number!" + ColorUtils.RESET);
+                System.out.println(TextUtils.INPUT_NOT_NUMBER);
                 scanner.next();
             }
         } while (!quit);

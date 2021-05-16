@@ -1,6 +1,11 @@
 package utils;
 
+import java.io.IOException;
+
 public class TextUtils {
+    public static final String INVALID_MENU_OPTION = ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET;
+    public static final String INPUT_NOT_NUMBER = ColorUtils.RED_BOLD + "Please input a number!" + ColorUtils.RESET;
+
     public static String getASCIIArt(){
         StringBuilder sb = new StringBuilder();
         sb.append(ColorUtils.BLUE_BRIGHT);
@@ -17,5 +22,11 @@ public class TextUtils {
         sb.append(ColorUtils.BLUE_BRIGHT).append(" '----------------' '----------------'   " )  .append(ColorUtils.RED_BOLD).append(" '----------------' '----------------' ").append('\n');
         sb.append(ColorUtils.RESET);
         return sb.toString();
+    }
+
+    public static void clearConsole() throws IOException {
+        final String os = System.getProperty("os.name");
+        if(os.contains("Windows")) Runtime.getRuntime().exec("cls");
+        else Runtime.getRuntime().exec("clear");
     }
 }

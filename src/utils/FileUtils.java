@@ -58,7 +58,7 @@ public class FileUtils {
         List<String> lines = fileToList(path);
         String[] splitLine; int crtLine = 0;
         Team lastTeam = null; int lastTeamLine = 0;
-        Player player; int crtPlayerId = 0;
+        Player player;
 
         Map<Integer, Player> playerMap = new HashMap<>();
         Map<String, Team> teamMap = new HashMap<>();
@@ -75,7 +75,7 @@ public class FileUtils {
                     break;
                 case "Guarda-Redes":
                     try{
-                        player = Keeper.parser(splitLine[1].split(","), crtPlayerId++);
+                        player = Keeper.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
                             playerMap.put(player.getId(), player);
@@ -89,7 +89,7 @@ public class FileUtils {
                     break;
                 case "Defesa":
                     try{
-                        player = Defender.parser(splitLine[1].split(","), crtPlayerId++);
+                        player = Defender.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
                             playerMap.put(player.getId(), player);
@@ -103,7 +103,7 @@ public class FileUtils {
                     break;
                 case "Medio":
                     try{
-                        player = MidFielder.parser(splitLine[1].split(","), crtPlayerId++);
+                        player = MidFielder.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
                             playerMap.put(player.getId(), player);
@@ -117,7 +117,7 @@ public class FileUtils {
                     break;
                 case "Lateral":
                     try{
-                        player = FullBack.parser(splitLine[1].split(","), crtPlayerId++);
+                        player = FullBack.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
                             playerMap.put(player.getId(), player);
@@ -131,7 +131,7 @@ public class FileUtils {
                     break;
                 case "Avancado":
                     try{
-                        player = Striker.parser(splitLine[1].split(","), crtPlayerId++);
+                        player = Striker.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
                             player.changePlayerTeam(lastTeam.getName());
                             playerMap.put(player.getId(), player);

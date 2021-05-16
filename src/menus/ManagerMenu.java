@@ -5,6 +5,7 @@ import menus.manager.ManagePlayersMenu;
 import menus.manager.ManageTeamsMenu;
 import objects.game.GameManager;
 import utils.ColorUtils;
+import utils.TextUtils;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -34,26 +35,26 @@ public class ManagerMenu {
             try{
                 int option = scanner.nextInt();
                 if(option == 0){
-                    StartMenu startMenu = new StartMenu(gameManager);
+                    StartMenu startMenu = new StartMenu(this.gameManager);
                     startMenu.startMenuLoop();
                     quit = true;
                 }else if(option == 1){
-                    ManagePlayersMenu managePlayersMenu = new ManagePlayersMenu(gameManager);
+                    ManagePlayersMenu managePlayersMenu = new ManagePlayersMenu(this.gameManager);
                     managePlayersMenu.playerListLoop();
                     quit = true;
                 }else if(option == 2){
-                    ManageTeamsMenu manageTeamsMenu = new ManageTeamsMenu(gameManager);
+                    ManageTeamsMenu manageTeamsMenu = new ManageTeamsMenu(this.gameManager);
                     manageTeamsMenu.teamListLoop();
                     quit = true;
                 }else if(option == 3){
-                    ManageGamesMenu manageGamesMenu = new ManageGamesMenu(gameManager);
+                    ManageGamesMenu manageGamesMenu = new ManageGamesMenu(this.gameManager);
                     manageGamesMenu.gameListLoop();
                     quit = true;
                 }else{
-                    System.out.println(ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET);
+                    System.out.println(TextUtils.INVALID_MENU_OPTION);
                 }
             }catch (InputMismatchException e){
-                System.out.println(ColorUtils.RED_BOLD + "Please input a number!" + ColorUtils.RESET);
+                System.out.println(TextUtils.INPUT_NOT_NUMBER);
             }
         }while (!quit);
         scanner.close();
