@@ -1,6 +1,5 @@
 package objects.team;
 
-import objects.player.Keeper;
 import objects.player.Player;
 
 import java.util.ArrayList;
@@ -45,11 +44,22 @@ public class Team {
     }
 
     // TODO: 6/5/2021 Check player shirt number
+    // returns players because players can be changed during the progress
     public Player addPlayer(Player player){
         Player newPlayer = player.clone();
         newPlayer.setCurrentTeam(this.name);
         this.teamPlayers.add(newPlayer.clone());
-        return player;
+        return newPlayer;
+    }
+
+    public int calcOverall(){
+        return this.teamPlayers.stream()
+                .mapToInt(Player::calcAbility)
+                .sum() / this.teamPlayers.size();
+    }
+
+    public void removePlayer(Player player){
+        this.teamPlayers.remove(player);
     }
 
     public void incrementTeamVictories(){

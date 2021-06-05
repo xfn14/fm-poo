@@ -54,7 +54,16 @@ public class FullBack extends Player{
 
     @Override
     public int calcAbility() {
-        return super.calcAbility() + this.crossing;
+        return (int) Math.floor(
+                this.getResistance() * 0.08
+              + this.getDexterity() * 0.08
+              + this.getPass() * 0.2
+              + this.getVelocity() * 0.08
+              + this.getThrust() * 0.2
+              + this.getHeader() * 0.08
+              + this.getFinish() * 0.08
+              + this.getCrossing() * 0.2
+        );
     }
 
     public int getCrossing() {

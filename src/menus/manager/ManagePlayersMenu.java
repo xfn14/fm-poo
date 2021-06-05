@@ -64,6 +64,7 @@ public class ManagePlayersMenu {
                     if(0 <= player_id && player_id < this.gameManager.getPlayerMap().size()){
                         PlayerInfoMenu playerInfoMenu = new PlayerInfoMenu(this.gameManager, player_id);
                         playerInfoMenu.playerInfoLoop();
+                        this.gameManager = playerInfoMenu.getGameManager();
                         quit = true;
                     }else{
                         System.out.println(ColorUtils.RED_BOLD + "Invalid player id." + ColorUtils.RESET);

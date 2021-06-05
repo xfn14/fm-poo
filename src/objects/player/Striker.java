@@ -37,6 +37,19 @@ public class Striker extends Player {
     }
 
     @Override
+    public int calcAbility() {
+        return (int) Math.floor(
+                this.getResistance() * 0.1
+              + this.getDexterity() * 0.1
+              + this.getPass() * 0.1
+              + this.getVelocity() * 0.2
+              + this.getThrust() * 0.1
+              + this.getHeader() * 0.2
+              + this.getFinish() * 0.2
+        );
+    }
+
+    @Override
     public Striker clone() {
         return new Striker(this);
     }

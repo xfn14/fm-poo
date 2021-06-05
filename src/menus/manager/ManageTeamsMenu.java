@@ -1,6 +1,5 @@
 package menus.manager;
 
-import menus.ManagerMenu;
 import objects.game.GameManager;
 import objects.player.*;
 import objects.team.Team;
@@ -83,6 +82,7 @@ public class ManageTeamsMenu {
         sb.append(ColorUtils.WHITE).append(" - ").append(ColorUtils.GREEN).append(" ");
         sb.append(team.getName()).append(" | ");
         sb.append(team.getTeamVictories()).append(" | ");
+        sb.append(team.calcOverall()).append(" | ");
         sb.append(
                 team.getTeamPlayers().stream()
                         .map(Player::getFstLstName)

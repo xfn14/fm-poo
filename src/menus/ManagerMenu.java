@@ -30,7 +30,6 @@ public class ManagerMenu {
         boolean quit = false;
 
         do{
-            System.out.println(this.gameManager.getPlayerMap().size());
             printManageGames();
             try{
                 int option = scanner.nextInt();

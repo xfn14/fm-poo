@@ -37,6 +37,7 @@ public class StartMenu {
                     System.out.println(ColorUtils.GREEN_UNDERLINED + "Thank you for playing!" + ColorUtils.RESET);
                     quit = true;
                 }else if(option == 1) {
+                    // TODO: 6/5/2021 Ask for file location 
                     GameManager tempGameManager = FileUtils.loadLogFile("resources/logs.txt");
                     tempGameManager.setGameList(FileUtils.loadGameSimFile("resources/gameSims.txt", tempGameManager.getGameList()));
                     tempGameManager.updateTeamVictoriesHistory();

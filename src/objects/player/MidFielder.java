@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MidFielder extends Player{
-    // TODO: 5/18/2021 Recover not being obtained from file 
     private int recover;
 
     public MidFielder() {
@@ -60,7 +59,16 @@ public class MidFielder extends Player{
 
     @Override
     public int calcAbility() {
-        return super.calcAbility() + this.recover;
+        return (int) Math.floor(
+                this.getResistance() * 0.08
+              + this.getDexterity() * 0.2
+              + this.getPass() * 0.08
+              + this.getVelocity() * 0.08
+              + this.getThrust() * 0.2
+              + this.getHeader() * 0.08
+              + this.getFinish() * 0.08
+              + this.getRecover() * 0.2
+        );
     }
 
     public int getRecover() {

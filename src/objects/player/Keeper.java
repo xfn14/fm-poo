@@ -33,7 +33,16 @@ public class Keeper extends Player{
 
     @Override
     public int calcAbility() {
-        return super.calcAbility() + this.elasticity;
+        return (int) Math.floor(
+                this.getResistance() * 0.08
+              + this.getDexterity() * 0.08
+              + this.getPass() * 0.2
+              + this.getVelocity() * 0.08
+              + this.getThrust() * 0.08
+              + this.getHeader() * 0.2
+              + this.getFinish() * 0.08
+              + this.getElasticity() * 0.2
+        );
     }
 
     public static Keeper parser(String[] args, int id) throws NumberFormatException{

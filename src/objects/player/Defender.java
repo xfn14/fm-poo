@@ -37,6 +37,19 @@ public class Defender extends Player {
     }
 
     @Override
+    public int calcAbility() {
+        return (int) Math.floor(
+                this.getResistance() * 0.2
+              + this.getDexterity() * 0.2
+              + this.getPass() * 0.2
+              + this.getVelocity() * 0.1
+              + this.getThrust() * 0.1
+              + this.getHeader() * 0.1
+              + this.getFinish() * 0.1
+        );
+    }
+
+    @Override
     public Defender clone() {
         return new Defender(this);
     }
