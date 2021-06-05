@@ -29,27 +29,25 @@ public class ManagerMenu {
         Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
-        printManageGames();
-
         do{
+            System.out.println(this.gameManager.getPlayerMap().size());
+            printManageGames();
             try{
                 int option = scanner.nextInt();
                 if(option == 0){
-                    StartMenu startMenu = new StartMenu(this.gameManager);
-                    startMenu.startMenuLoop();
                     quit = true;
                 }else if(option == 1){
                     ManagePlayersMenu managePlayersMenu = new ManagePlayersMenu(this.gameManager);
                     managePlayersMenu.playerListLoop();
-                    quit = true;
+                    this.gameManager = managePlayersMenu.getGameManager().clone();
                 }else if(option == 2){
                     ManageTeamsMenu manageTeamsMenu = new ManageTeamsMenu(this.gameManager);
                     manageTeamsMenu.teamListLoop();
-                    quit = true;
+                    this.gameManager = manageTeamsMenu.getGameManager().clone();
                 }else if(option == 3){
                     ManageGamesMenu manageGamesMenu = new ManageGamesMenu(this.gameManager);
                     manageGamesMenu.gameListLoop();
-                    quit = true;
+                    this.gameManager = manageGamesMenu.getGameManager().clone();
                 }else{
                     System.out.println(TextUtils.INVALID_MENU_OPTION);
                 }
@@ -57,7 +55,6 @@ public class ManagerMenu {
                 System.out.println(TextUtils.INPUT_NOT_NUMBER);
             }
         }while (!quit);
-        scanner.close();
     }
 
     public void printManageGames(){

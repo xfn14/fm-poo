@@ -29,9 +29,8 @@ public class StartMenu {
         Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
-        printStartMenu();
-
         do{
+            printStartMenu();
             try{
                 int option = scanner.nextInt();
                 if(option == 0){
@@ -43,13 +42,9 @@ public class StartMenu {
                     tempGameManager.updateTeamVictoriesHistory();
                     this.gameManager = tempGameManager.clone();
                     System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!" + ColorUtils.RESET);
-                    printStartMenu();
                 }else if(!this.gameManager.getGameList().isEmpty() && option == 3){
                     ManagerMenu managerMenu = new ManagerMenu(gameManager);
                     managerMenu.manageGamesLoop();
-//                    ManageGamesMenu manageGamesMenu = new ManageGamesMenu(gameManager);
-//                    manageGamesMenu.gameListLoop();
-                    quit = true;
                 }else{
                     System.out.println(TextUtils.INVALID_MENU_OPTION);
                 }
@@ -63,7 +58,6 @@ public class StartMenu {
                 System.out.println("");
             }
         } while (!quit);
-        scanner.close();
     }
 
     public void printStartMenu(){

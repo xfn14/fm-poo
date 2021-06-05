@@ -1,6 +1,5 @@
 package menus.manager;
 
-import menus.ManagerMenu;
 import objects.game.GameManager;
 import objects.game.GameSim;
 import utils.ColorUtils;
@@ -41,8 +40,6 @@ public class ManageGamesMenu {
             try{
                 int option = scanner.nextInt();
                 if(option == 0) {
-                    ManagerMenu managerMenu = new ManagerMenu(this.gameManager);
-                    managerMenu.manageGamesLoop();
                     quit = true;
                 }else if(option == 1) {
                     if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
@@ -58,7 +55,6 @@ public class ManageGamesMenu {
                 scanner.next();
             }
         } while (!quit);
-        scanner.close();
     }
 
     private void printControls(){

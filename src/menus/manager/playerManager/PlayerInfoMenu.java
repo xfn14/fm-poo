@@ -1,6 +1,5 @@
 package menus.manager.playerManager;
 
-import menus.manager.ManagePlayersMenu;
 import objects.game.GameManager;
 import objects.player.*;
 import utils.ColorUtils;
@@ -38,19 +37,13 @@ public class PlayerInfoMenu {
         do{
             try{
                 int option = scanner.nextInt();
-                if(option == 0){
-                    ManagePlayersMenu managePlayersMenu = new ManagePlayersMenu(this.gameManager);
-                    managePlayersMenu.playerListLoop();
-                    quit = true;
-                }else{
-                    System.out.println(TextUtils.INVALID_MENU_OPTION);
-                }
+                if(option == 0) quit = true;
+                else System.out.println(TextUtils.INVALID_MENU_OPTION);
             }catch (InputMismatchException e){
                 System.out.println(TextUtils.INPUT_NOT_NUMBER);
                 scanner.next();
             }
         }while (!quit);
-        scanner.close();
     }
 
     private void printControls(){
@@ -64,7 +57,7 @@ public class PlayerInfoMenu {
         StringBuilder sb = new StringBuilder();
         sb.append(ColorUtils.BLUE).append(" Player ").append(player.getId()).append(" Info\n").append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append(" -> Name: ").append(ColorUtils.YELLOW).append(player.getName()).append('\n').append(ColorUtils.RESET);
-        sb.append(ColorUtils.GREEN).append(" -> Number: ").append(ColorUtils.YELLOW).append(player.getName()).append('\n').append(ColorUtils.RESET);
+        sb.append(ColorUtils.GREEN).append(" -> Number: ").append(ColorUtils.YELLOW).append(player.getNumber()).append('\n').append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append(" -> Team History: ").append(ColorUtils.YELLOW).append(player.getTeamHistory()).append('\n').append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append(" -> Skills: ").append(ColorUtils.YELLOW).append('\n').append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append("    Velocity: ").append(ColorUtils.YELLOW).append(player.getVelocity()).append('\n').append(ColorUtils.RESET);

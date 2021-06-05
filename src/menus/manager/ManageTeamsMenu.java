@@ -48,8 +48,6 @@ public class ManageTeamsMenu {
             try{
                 int option = scanner.nextInt();
                 if(option == 0){
-                    ManagerMenu managerMenu = new ManagerMenu(this.gameManager);
-                    managerMenu.manageGamesLoop();
                     quit = true;
                 }else if(option == 1){
                     if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
@@ -65,7 +63,6 @@ public class ManageTeamsMenu {
                 scanner.next();
             }
         }while (!quit);
-        scanner.close();
     }
 
     private void printControls(){

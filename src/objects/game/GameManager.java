@@ -60,6 +60,14 @@ public class GameManager {
         }
     }
 
+    public void addPlayer(Player player){
+        this.playerMap.put(player.getId(), player.clone());
+    }
+
+    public void addTeam(Team team){
+        this.teamMap.put(team.getName(), team.clone());
+    }
+
     public Map<Integer, Player> getPlayerMap(){
         Map<Integer, Player> newPlayerMap = new HashMap<>();
         for(Player player : this.playerMap.values())

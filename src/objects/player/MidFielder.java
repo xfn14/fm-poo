@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MidFielder extends Player{
+    // TODO: 5/18/2021 Recover not being obtained from file 
     private int recover;
 
     public MidFielder() {
@@ -33,6 +34,11 @@ public class MidFielder extends Player{
     public MidFielder(Player player, int recover) {
         super(player);
         this.recover = recover;
+    }
+
+    public MidFielder(MidFielder midFielder){
+        super(midFielder.getId(), midFielder.getName(), midFielder.getNumber(), midFielder.getTeamHistory(), midFielder.getVelocity(), midFielder.getResistance(), midFielder.getDexterity(), midFielder.getThrust(), midFielder.getHeader(), midFielder.getFinish(), midFielder.getPass());
+        this.recover = midFielder.getRecover();
     }
 
     public static MidFielder parser(String[] args, int id) throws NumberFormatException{

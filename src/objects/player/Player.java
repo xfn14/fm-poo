@@ -42,6 +42,19 @@ public class Player extends Person {
         this.pass = 0;
     }
 
+    public Player(Person person, int number){
+        super(person);
+        this.number = number;
+        this.teamHistory = new ArrayList<>();
+        this.velocity = 0;
+        this.resistance = 0;
+        this.dexterity = 0;
+        this.thrust = 0;
+        this.header = 0;
+        this.finish = 0;
+        this.pass = 0;
+    }
+
     public Player(int number, List<String> teamHistory, int velocity,
                   int resistance, int dexterity, int thrust,
                   int header, int finish, int pass) {
@@ -100,17 +113,12 @@ public class Player extends Person {
         setPass(player.getPass());
     }
 
-    public void changePlayerTeam(String teamName){
-        this.teamHistory.add(teamName);
-    }
-
     public String getFstLstName(){
         String[] names = this.getName().split(" ");
         if(names.length != 1) return names[0] + " " + names[names.length-1];
         return names[0];
     }
 
-    // TODO: 3/31/2021 Temporary for testing
     public int calcAbility(){
         return this.velocity + this.resistance + this.dexterity + this.thrust + this.header + this.finish + this.pass;
     }

@@ -1,6 +1,5 @@
 package menus.manager;
 
-import menus.ManagerMenu;
 import menus.manager.playerManager.PlayerCreationMenu;
 import menus.manager.playerManager.PlayerInfoMenu;
 import objects.game.GameManager;
@@ -8,7 +7,6 @@ import objects.player.*;
 import utils.ColorUtils;
 import utils.TextUtils;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ManagePlayersMenu {
@@ -47,8 +45,6 @@ public class ManagePlayersMenu {
         do{
             String option = scanner.nextLine();
             if(option.equalsIgnoreCase("b")){
-                ManagerMenu managerMenu = new ManagerMenu(this.gameManager);
-                managerMenu.manageGamesLoop();
                 quit = true;
             }else if(option.equalsIgnoreCase("a")){
                 if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
@@ -59,7 +55,8 @@ public class ManagePlayersMenu {
                 else printPage(++page);
             }else if(option.equalsIgnoreCase("n")){
                 PlayerCreationMenu playerCreationMenu = new PlayerCreationMenu(this.gameManager);
-                playerCreationMenu.playerCreationLoop();
+                playerCreationMenu.playerCreationMenu();
+                this.gameManager = playerCreationMenu.getGameManager().clone();
                 quit = true;
             }else{
                 try{
@@ -76,11 +73,10 @@ public class ManagePlayersMenu {
                 }
             }
         }while (!quit);
-        scanner.close();
     }
 
     private void printControls(){
-        System.out.println(ColorUtils.BLUE + "[a] - Previous Page; [d] - Next Page; [n] - New Player; [b] - Go Back" + ColorUtils.RESET);
+        System.out.println(ColorUtils.BLUE + "[a] - Previous Page; [d] - Next Page; [n] - New Player; [playerId] - Player Info; [b] - Go Back" + ColorUtils.RESET);
     }
 
     private void printPage(int page){

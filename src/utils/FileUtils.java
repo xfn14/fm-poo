@@ -6,7 +6,6 @@ import objects.team.Team;
 import exceptions.FileIOException;
 import objects.player.*;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -77,9 +76,8 @@ public class FileUtils {
                     try{
                         player = Keeper.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
-                            player.changePlayerTeam(lastTeam.getName());
+                            player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
-                            lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -91,9 +89,8 @@ public class FileUtils {
                     try{
                         player = Defender.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
-                            player.changePlayerTeam(lastTeam.getName());
+                            player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
-                            lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -105,9 +102,8 @@ public class FileUtils {
                     try{
                         player = MidFielder.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
-                            player.changePlayerTeam(lastTeam.getName());
+                            player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
-                            lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -119,9 +115,8 @@ public class FileUtils {
                     try{
                         player = FullBack.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
-                            player.changePlayerTeam(lastTeam.getName());
+                            player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
-                            lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
@@ -133,9 +128,8 @@ public class FileUtils {
                     try{
                         player = Striker.parser(splitLine[1].split(","), playerMap.size());
                         if(lastTeam != null){
-                            player.changePlayerTeam(lastTeam.getName());
+                            player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
-                            lastTeam.addPlayer(player);
                         }
                         else throw new FileIOException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");

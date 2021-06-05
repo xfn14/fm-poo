@@ -30,6 +30,11 @@ public class FullBack extends Player{
         this.crossing = 0;
     }
 
+    public FullBack(Player player, int crossing) {
+        super(player);
+        this.crossing = crossing;
+    }
+
     public static FullBack parser(String[] args, int id) throws NumberFormatException{
         return new FullBack(
                 id,
@@ -57,7 +62,7 @@ public class FullBack extends Player{
     }
 
     public void setCrossing(int crossing) {
-        this.crossing = this.crossing;
+        this.crossing = crossing;
     }
 
     @Override
