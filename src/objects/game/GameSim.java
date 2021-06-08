@@ -1,8 +1,10 @@
 package objects.game;
 
+import exceptions.InvalidPlayerSubException;
 import objects.team.Team;
 import objects.player.Player;
 import objects.team.TeamFormation;
+import utils.ColorUtils;
 import utils.DateUtils;
 import utils.Tuple;
 
@@ -112,7 +114,8 @@ public class GameSim extends GameInfo {
         }
     }
 
-    public static GameSim parser(String[] args, int gameId, Map<String, Team> teamMap) throws NumberFormatException{
+    public static GameSim parser(String[] args, int gameId, Map<String, Team> teamMap)
+            throws NumberFormatException, InvalidPlayerSubException {
         Team team1 = teamMap.get(args[0]), team2 = teamMap.get(args[1]);
         if(team1 == null || team2 == null) return null;
 
@@ -127,11 +130,12 @@ public class GameSim extends GameInfo {
         for(int i = 5; i < args.length; i++){
             if(args[i].contains("->")){
                 switchTeam = 1;
-                gameSim.subPlayers(
-                        i > 20 ? 1 : 0,
-                        Integer.parseInt(args[i].split("->")[0]),
-                        Integer.parseInt(args[i].split("->")[1])
-                );
+                int player1 = Integer.parseInt(args[i].split("->")[0]),
+                    player2 = Integer.parseInt(args[i].split("->")[1]);
+                if (!gameSim.subPlayers( i > 20 ? 1 : 0, player1, player2))
+                    throw new InvalidPlayerSubException(ColorUtils.RED +
+                            "In game " + gameId + " theres an invalid sub with player " + player1 + " and " + player2
+                    + ColorUtils.RESET);
             }else {
                 gameSim.addPlayerToField(
                         switchTeam,

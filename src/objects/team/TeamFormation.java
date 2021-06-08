@@ -19,7 +19,7 @@ public enum TeamFormation {
         this.strikers = strikers;
     }
 
-    private static final List<TeamFormation> allFormations = List.of(TeamFormation.values());
+    public static final List<TeamFormation> allFormations = List.of(TeamFormation.values());
     private static final Random random = new Random();
     public static TeamFormation getRandomFormation(){
         return allFormations.get(random.nextInt(allFormations.size()));
@@ -39,5 +39,10 @@ public enum TeamFormation {
 
     public int getStrikers() {
         return strikers;
+    }
+
+    @Override
+    public String toString() {
+        return this.keepers + "-" + this.defenders + "-" + this.midFielders + "-" + this.strikers;
     }
 }

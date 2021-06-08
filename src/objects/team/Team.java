@@ -5,6 +5,7 @@ import objects.player.Player;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Team {
@@ -43,19 +44,31 @@ public class Team {
         );
     }
 
-    // TODO: 6/5/2021 Check player shirt number
     // returns players because players can be changed during the progress
     public Player addPlayer(Player player){
         Player newPlayer = player.clone();
         newPlayer.setCurrentTeam(this.name);
+
+        Random random = new Random();
+        while(containsShirtNumber(newPlayer.getNumber()))
+            newPlayer.setNumber(random.nextInt(100));
+
         this.teamPlayers.add(newPlayer.clone());
         return newPlayer;
     }
 
+    private boolean containsShirtNumber(int shirtNumber){
+        for(Player player : this.teamPlayers)
+            if(player.getNumber() == shirtNumber)
+                return true;
+        return false;
+    }
+
     public int calcOverall(){
-        return this.teamPlayers.stream()
+        return (int) this.teamPlayers.stream()
                 .mapToInt(Player::calcAbility)
-                .sum() / this.teamPlayers.size();
+                .average()
+                .orElse(0.0);
     }
 
     public void removePlayer(Player player){

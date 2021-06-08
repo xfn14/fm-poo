@@ -7,9 +7,11 @@ import objects.player.*;
 import utils.ColorUtils;
 import utils.TextUtils;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class ManagePlayersMenu {
+    private final Scanner scanner = new Scanner(System.in);
     private GameManager gameManager;
     private final int maxPage;
 
@@ -36,23 +38,21 @@ public class ManagePlayersMenu {
     }
 
     public void playerListLoop(){
-        Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
         int page = 1;
-        printPage(page);
-
         do{
+            printPage(page);
             String option = scanner.nextLine();
             if(option.equalsIgnoreCase("b")){
                 quit = true;
             }else if(option.equalsIgnoreCase("a")){
                 if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
-                else printPage(--page);
+                else --page;
             }else if(option.equalsIgnoreCase("d")) {
                 if (page >= maxPage)
                     System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
-                else printPage(++page);
+                else ++page;
             }else if(option.equalsIgnoreCase("n")){
                 PlayerCreationMenu playerCreationMenu = new PlayerCreationMenu(this.gameManager);
                 playerCreationMenu.playerCreationMenu();

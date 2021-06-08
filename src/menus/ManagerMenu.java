@@ -11,6 +11,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ManagerMenu {
+    private final Scanner scanner = new Scanner(System.in);
     private GameManager gameManager;
 
     public ManagerMenu(){
@@ -26,7 +27,6 @@ public class ManagerMenu {
     }
 
     public void manageGamesLoop(){
-        Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
         do{
@@ -52,6 +52,7 @@ public class ManagerMenu {
                 }
             }catch (InputMismatchException e){
                 System.out.println(TextUtils.INPUT_NOT_NUMBER);
+                scanner.next();
             }
         }while (!quit);
     }

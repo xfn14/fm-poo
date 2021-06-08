@@ -55,6 +55,21 @@ public class Player extends Person {
         this.pass = 0;
     }
 
+    public Player(Person person, int number, int velocity,
+                  int resistance, int dexterity, int thrust,
+                  int header, int finish, int pass) {
+        super(person);
+        this.number = number;
+        this.teamHistory = new ArrayList<>();
+        this.velocity = velocity;
+        this.resistance = resistance;
+        this.dexterity = dexterity;
+        this.thrust = thrust;
+        this.header = header;
+        this.finish = finish;
+        this.pass = pass;
+    }
+
     public Player(int number, List<String> teamHistory, int velocity,
                   int resistance, int dexterity, int thrust,
                   int header, int finish, int pass) {

@@ -11,6 +11,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class StartMenu {
+    private final Scanner scanner = new Scanner(System.in);
     private GameManager gameManager;
 
     public StartMenu(){
@@ -26,7 +27,6 @@ public class StartMenu {
     }
 
     public void startMenuLoop(){
-        Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
         do{
@@ -43,6 +43,10 @@ public class StartMenu {
                     tempGameManager.updateTeamVictoriesHistory();
                     this.gameManager = tempGameManager.clone();
                     System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!" + ColorUtils.RESET);
+                }else if(!this.gameManager.getTeamMap().isEmpty() && option == 2){
+                    NewGameMenu newGameMenu = new NewGameMenu(this.gameManager);
+                    newGameMenu.newGameMenu();
+                    this.gameManager = newGameMenu.getGameManager();
                 }else if(!this.gameManager.getGameList().isEmpty() && option == 3){
                     ManagerMenu managerMenu = new ManagerMenu(gameManager);
                     managerMenu.manageGamesLoop();

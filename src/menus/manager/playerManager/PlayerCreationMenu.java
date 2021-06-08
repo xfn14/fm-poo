@@ -6,9 +6,11 @@ import objects.team.Team;
 import utils.ColorUtils;
 
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class PlayerCreationMenu {
+    private final Scanner scanner = new Scanner(System.in);
     private GameManager gameManager;
 
     public PlayerCreationMenu(){
@@ -23,24 +25,28 @@ public class PlayerCreationMenu {
         this.gameManager = playerCreationMenu.getGameManager();
     }
 
+    // Player stats are given randomly
     public void playerCreationMenu(){
-        Scanner scanner = new Scanner(System.in);
-
+        Random random = new Random();
         Person person = null;
+        Player player = null;
+
         while(person == null){
             System.out.println(ColorUtils.GREEN + "Insert player name: " + ColorUtils.RESET);
             String playerName = scanner.nextLine();
-            if(!(playerName.isBlank() || playerName.contains(",") || playerName.contains("-")))
+            if(!(playerName.isBlank() || playerName.contains(",") || playerName.contains("-"))) {
                 person = new Person(this.gameManager.getPlayerMap().size(), playerName);
+            }
         }
 
-        Player player = null;
         while(player == null){
             System.out.println(ColorUtils.GREEN + "Insert shirt number: " + ColorUtils.RESET);
             try{
                 int shirtNumber = scanner.nextInt();
                 if(!(shirtNumber < -1 || 99 < shirtNumber))
-                    player = new Player(person, shirtNumber);
+                    player = new Player(person, shirtNumber, random.nextInt(100), random.nextInt(100),
+                            random.nextInt(100), random.nextInt(100), random.nextInt(100),
+                            random.nextInt(100), random.nextInt(100));
             }catch (InputMismatchException e){
                 System.out.println(ColorUtils.RED + "Invalid shirt number." + ColorUtils.RESET);
                 scanner.next();
@@ -66,10 +72,10 @@ public class PlayerCreationMenu {
             }
         }
 
-        if(pos == 0) player = new Keeper(player, 0);
+        if(pos == 0) player = new Keeper(player, random.nextInt(100));
         else if(pos == 1) player = new Defender(player);
-        else if(pos == 2) player = new FullBack(player, 0);
-        else if(pos == 3) player = new MidFielder(player, 0);
+        else if(pos == 2) player = new FullBack(player, random.nextInt(100));
+        else if(pos == 3) player = new MidFielder(player, random.nextInt(100));
         else player = new Striker(player);
 
         done = false;

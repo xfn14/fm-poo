@@ -6,11 +6,11 @@ import objects.team.Team;
 import utils.ColorUtils;
 import utils.TextUtils;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class ManageTeamsMenu {
+    private final Scanner scanner = new Scanner(System.in);
     private GameManager gameManager;
     private final int maxPage;
 
@@ -37,35 +37,47 @@ public class ManageTeamsMenu {
     }
 
     public void teamListLoop(){
-        Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
         int page = 1;
-        printPage(page);
-
         do{
-            try{
-                int option = scanner.nextInt();
-                if(option == 0){
-                    quit = true;
-                }else if(option == 1){
-                    if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
-                    else printPage(--page);
-                }else if(option == 2) {
-                    if (page >= maxPage) System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
-                    else printPage(++page);
-                }else{
-                    System.out.println(TextUtils.INVALID_MENU_OPTION);
-                }
-            }catch (InputMismatchException e){
-                System.out.println(TextUtils.INPUT_NOT_NUMBER);
-                scanner.next();
-            }
+            printPage(page);
+            String option = scanner.nextLine();
+            if(option.equalsIgnoreCase("b")) quit = true;
+            else if(option.equalsIgnoreCase("a"))
+                if(page <= 1) System.out.println(ColorUtils.RED + "You are already in the first page." + ColorUtils.RESET);
+                else printPage(--page);
+            else if(option.equalsIgnoreCase("d"))
+                if (page >= maxPage) System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
+                else printPage(++page);
+            else if(this.gameManager.getTeamMap().containsKey(option))
+                teamInfoLoop(this.gameManager.getTeamMap().get(option));
+            else System.out.println(TextUtils.INVALID_MENU_OPTION);
         }while (!quit);
     }
 
+    private void teamInfoLoop(Team team){
+        boolean quit = false;
+        System.out.println(getTeamDetailedInfo(team));
+        System.out.println(ColorUtils.BLUE + "[0] - Go Back" + ColorUtils.RESET);
+        while(!quit){
+            String input = scanner.nextLine();
+            if(input.equals("0")) quit = true;
+            else System.out.println(TextUtils.INVALID_MENU_OPTION);
+        }
+    }
+
+    private String getTeamDetailedInfo(Team team){
+        StringBuilder sb = new StringBuilder();
+        sb.append(ColorUtils.BLUE).append(team.getName()).append("'s Info\n").append(ColorUtils.RESET);
+        sb.append(ColorUtils.GREEN).append(" -> Victories: ").append(ColorUtils.YELLOW).append(team.getTeamVictories()).append('\n').append(ColorUtils.RESET);
+        sb.append(ColorUtils.GREEN).append(" -> Players: ").append(ColorUtils.YELLOW).append(team.getTeamPlayers().stream().map(Player::getFstLstName).collect(Collectors.toList())).append('\n').append(ColorUtils.RESET);
+        sb.append(ColorUtils.GREEN).append(" -> Games Played: ").append(ColorUtils.YELLOW).append(team.getPassedGames()).append(ColorUtils.RESET);
+        return sb.toString();
+    }
+
     private void printControls(){
-        System.out.println(ColorUtils.BLUE + "[1] - Previous Page; [2] - Next Page; ; [0] - Go Back" + ColorUtils.RESET);
+        System.out.println(ColorUtils.BLUE + "[a] - Previous Page; [d] - Next Page; [teamName] - Team Info; [b] - Go Back" + ColorUtils.RESET);
     }
 
     private void printPage(int page){
@@ -88,7 +100,6 @@ public class ManageTeamsMenu {
                         .map(Player::getFstLstName)
                         .collect(Collectors.toList())
         );
-
         return sb.toString();
     }
 

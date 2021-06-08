@@ -1,5 +1,6 @@
 package utils;
 
+import exceptions.InvalidPlayerSubException;
 import objects.game.GameManager;
 import objects.game.GameSim;
 import objects.team.Team;
@@ -143,6 +144,8 @@ public class FileUtils {
                         if(gameSim != null) gameSimList.add(gameSim);
                     }catch (NumberFormatException e){
                         System.out.println("Invalid fields in parse of Game. (line " + crtLine + ")");
+                    }catch (InvalidPlayerSubException e){
+                        System.out.println(e.getLocalizedMessage());
                     }
                     break;
                 default:

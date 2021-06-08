@@ -24,9 +24,14 @@ public class TextUtils {
         return sb.toString();
     }
 
-    public static void clearConsole() throws IOException {
-        final String os = System.getProperty("os.name");
-        if(os.contains("Windows")) Runtime.getRuntime().exec("cls");
-        else Runtime.getRuntime().exec("clear");
+    // Doesnt work on IntelliJ terminal
+    public static void clearConsole() {
+        try{
+            final String os = System.getProperty("os.name");
+            if(os.contains("Windows")) Runtime.getRuntime().exec("cls");
+            else Runtime.getRuntime().exec("clear");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

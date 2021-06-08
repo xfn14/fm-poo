@@ -6,10 +6,12 @@ import objects.team.Team;
 import utils.ColorUtils;
 import utils.TextUtils;
 
+import javax.swing.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PlayerInfoMenu {
+    private final Scanner scanner = new Scanner(System.in);
     private GameManager gameManager;
     private int playerId;
 
@@ -29,13 +31,13 @@ public class PlayerInfoMenu {
     }
 
     public void playerInfoLoop(){
-        Scanner scanner = new Scanner(System.in);
         boolean quit = false;
 
         System.out.print(getPlayerInfo());
         printControls();
 
         do{
+            // TODO: 6/8/2021 Change to nextLine()
             try{
                 int option = scanner.nextInt();
                 if(option == 0) quit = true;
@@ -52,7 +54,6 @@ public class PlayerInfoMenu {
     }
 
     private void changePlayerTeamLoop(){
-        Scanner scanner = new Scanner(System.in);
         boolean done = false;
         String wantedTeam = null;
         System.out.print(ColorUtils.GREEN + "What team you want the player to go? " + ColorUtils.RESET);
@@ -86,7 +87,7 @@ public class PlayerInfoMenu {
         if(player == null) return ColorUtils.RED_BOLD + "Invalid player" + ColorUtils.RESET;
 
         StringBuilder sb = new StringBuilder();
-        sb.append(ColorUtils.BLUE).append(" Player ").append(player.getId()).append(" Info\n").append(ColorUtils.RESET);
+        sb.append(ColorUtils.BLUE).append("Player ").append(player.getId()).append(" Info\n").append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append(" -> Name: ").append(ColorUtils.YELLOW).append(player.getName()).append('\n').append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append(" -> Number: ").append(ColorUtils.YELLOW).append(player.getNumber()).append('\n').append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append(" -> Team History: ").append(ColorUtils.YELLOW).append(player.getTeamHistory()).append('\n').append(ColorUtils.RESET);
