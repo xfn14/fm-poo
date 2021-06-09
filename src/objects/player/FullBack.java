@@ -4,13 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FullBack extends Player{
+    /**
+     * FullBack's crossing ability
+     */
     private int crossing;
 
+    /**
+     * Instantiates a FullBack
+     */
     public FullBack() {
         super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
         this.crossing = 0;
     }
 
+    /**
+     * Instantiates a FullBack with Player&Person's attributes
+     * @param id Identification of the Person
+     * @param name Name of the Person
+     * @param number shirt number
+     * @param teamHistory list of teams where the player has been
+     * @param velocity velocity ability
+     * @param resistance resistance ability
+     * @param dexterity dexterity ability
+     * @param thrust thrust ability
+     * @param header header ability
+     * @param finish finish ability
+     * @param pass pass ability
+     * @param crossing crossing ability
+     */
     public FullBack(int id, String name, int number, List<String> teamHistory,
                     int velocity, int resistance, int dexterity, int thrust,
                     int header, int finish, int pass, int crossing) {
@@ -18,6 +39,20 @@ public class FullBack extends Player{
         this.crossing = crossing;
     }
 
+    /**
+     * Instantiates a FullBack from a Person's object and with Player's attributes
+     * @param person Person's object
+     * @param number shirt number
+     * @param teamHistory list of teams where the player has been
+     * @param velocity velocity ability
+     * @param resistance resistance ability
+     * @param dexterity dexterity ability
+     * @param thrust thrust ability
+     * @param header header ability
+     * @param finish finish ability
+     * @param pass pass ability
+     * @param crossing crossing ability
+     */
     public FullBack(Person person, int number, List<String> teamHistory, int velocity,
                     int resistance, int dexterity, int thrust, int header,
                     int finish, int pass, int crossing) {
@@ -25,16 +60,32 @@ public class FullBack extends Player{
         this.crossing = crossing;
     }
 
+    /**
+     * Instantiates a FullBack from a FullBack's object
+     * @param fullback FullBack's object
+     */
     public FullBack(FullBack fullback) {
         super(fullback);
         this.crossing = fullback.getCrossing();
     }
 
+    /**
+     * Instantiates a FullBack from a Player's object
+     * @param player Player's object
+     * @param crossing crossing ability
+     */
     public FullBack(Player player, int crossing) {
         super(player);
         this.crossing = crossing;
     }
 
+    /**
+     * Parses an array of strings and creates a FullBack's instance from it
+     * @param args Array of strings containing respective values to be parsed
+     * @param id Person's Id
+     * @return New FullBack instance
+     * @throws NumberFormatException
+     */
     public static FullBack parser(String[] args, int id) throws NumberFormatException{
         return new FullBack(
                 id,
@@ -52,6 +103,10 @@ public class FullBack extends Player{
         );
     }
 
+    /**
+     * Calculate FullBack's ability
+     * @return FullBack's ability value
+     */
     @Override
     public int calcAbility() {
         return (int) Math.floor(
@@ -66,24 +121,45 @@ public class FullBack extends Player{
         );
     }
 
+    /**
+     * Get FullBack's crossing ability
+     * @return FullBack's crossing ability value
+     */
     public int getCrossing() {
         return this.crossing;
     }
 
+    /**
+     * Set FullBack's crossing ability
+     * @param crossing Crossing ability value
+     */
     public void setCrossing(int crossing) {
         this.crossing = crossing;
     }
 
+    /**
+     * Clone FullBack's instance
+     * @return FullBack's cloned instance
+     */
     @Override
     public FullBack clone() {
         return new FullBack(this);
     }
 
+    /**
+     * Equality between FullBack's instance and another object
+     * @param o Object
+     * @return Boolean representing the equality of this instance comparing to the given object
+     */
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
     }
 
+    /**
+     * String representation of FullBack's instance
+     * @return String representation of the instance
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("FullBack{");
