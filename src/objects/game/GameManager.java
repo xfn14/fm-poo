@@ -29,16 +29,6 @@ public class GameManager {
         this.gameList = gameManager.getGameList();
     }
 
-    public int createNewGame(Team team1, Team team2){
-        GameSim newGameSim = new GameSim(
-                this.gameList.size(),
-                team1.clone(),
-                team2.clone()
-        );
-        this.gameList.add(newGameSim);
-        return newGameSim.getId();
-    }
-
     public void updateTeamVictoriesHistory(){
         for(GameSim gameSim : this.gameList){
             Team team1 = this.teamMap.get(gameSim.getHomeTeam().getName()),

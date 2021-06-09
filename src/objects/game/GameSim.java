@@ -1,18 +1,15 @@
 package objects.game;
 
 import exceptions.InvalidPlayerSubException;
+import objects.player.*;
 import objects.team.Team;
-import objects.player.Player;
 import objects.team.TeamFormation;
 import utils.ColorUtils;
 import utils.DateUtils;
 import utils.Tuple;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GameSim extends GameInfo {
@@ -31,6 +28,23 @@ public class GameSim extends GameInfo {
 
     public GameSim(){
         super();
+
+        this.gameState = GameState.INIT_GAME;
+        this.time = 0;
+        this.extraTime = 0;
+        this.goals = new Tuple<>(0, 0);
+
+        this.inFieldHome = new ArrayList<>();
+        this.homeSubs = new ArrayList<>();
+        this.homeFormation = TeamFormation.getRandomFormation();
+
+        this.inFieldAway = new ArrayList<>();
+        this.awaySubs = new ArrayList<>();
+        this.awayFormation = TeamFormation.getRandomFormation();
+    }
+
+    public GameSim(int id){
+        super(id);
 
         this.gameState = GameState.INIT_GAME;
         this.time = 0;
@@ -101,6 +115,36 @@ public class GameSim extends GameInfo {
         this.awayFormation = gameSim.getAwayFormation();
     }
 
+    public String simulateGame(int time){
+        this.time += time;
+        this.goals.setX(this.goals.getX()+1);
+        return "Golo Equipa da casa";
+    }
+
+    public boolean subPlayers(int team, int leave, int stay){
+        if(leave == stay) return false;
+        if((team == 0 ? this.homeSubs : this.awaySubs).size() >= 3) return false;
+
+        Player leavePlayer = (team == 0 ? this.inFieldHome : this.inFieldAway).stream()
+                .filter(player -> leave == player.getNumber())
+                .findAny()
+                .orElse(null);
+
+        if(leavePlayer == null) return false;
+
+        Player stayPlayer = (team == 0 ? getHomeTeam() : getAwayTeam()).getTeamPlayers().stream()
+                .filter(player -> stay == player.getNumber())
+                .findAny()
+                .orElse(null);
+
+        if(stayPlayer != null){
+            ((team == 0) ? this.inFieldHome : this.inFieldAway).remove(leavePlayer);
+            ((team == 0) ? this.inFieldHome : this.inFieldAway).add(stayPlayer.clone());
+            ((team == 0) ? this.homeSubs : this.awaySubs).add(new Tuple<>(leave, stay));
+            return true;
+        } return false;
+    }
+
     public void parseCustom(String[] args) throws IllegalArgumentException {
         setHomeFormation(args[1] != null ? TeamFormation.valueOf(args[1]) : null);
         setAwayFormation(args[2] != null ? TeamFormation.valueOf(args[2]) : null);
@@ -146,6 +190,77 @@ public class GameSim extends GameInfo {
         return gameSim;
     }
 
+    public List<Player> initInFieldTeam(int team){
+        Random random = new Random();
+        List<Player> inFieldPlayer = new ArrayList<>();
+        List<Player> teamPlayers = team == 1 ? getHomeTeam().getTeamPlayers() : getAwayTeam().getTeamPlayers();
+        TeamFormation teamFormation = team == 1 ? this.homeFormation : this.awayFormation;
+
+        inFieldPlayer.addAll(
+                teamPlayers.stream()
+                        .map(Player::clone)
+                        .filter(player -> player instanceof Keeper)
+                        .limit(teamFormation.getKeepers())
+                        .collect(Collectors.toList())
+        );
+        teamPlayers.removeAll(inFieldPlayer);
+
+        inFieldPlayer.addAll(
+                teamPlayers.stream()
+                        .map(Player::clone)
+                        .filter(player -> player instanceof Defender)
+                        .limit(teamFormation.getDefenders())
+                        .collect(Collectors.toList())
+        );
+        teamPlayers.removeAll(inFieldPlayer);
+
+        int randomDef = random.nextInt(2);
+        inFieldPlayer.addAll(
+                teamPlayers.stream()
+                        .map(Player::clone)
+                        .filter(player -> player instanceof MidFielder)
+                        .limit(teamFormation.getMidFielders() - randomDef)
+                        .collect(Collectors.toList())
+        );
+        teamPlayers.removeAll(inFieldPlayer);
+        if(randomDef > 0)
+            inFieldPlayer.addAll(
+                    teamPlayers.stream()
+                            .map(Player::clone)
+                            .filter(player -> player instanceof FullBack)
+                            .limit(randomDef)
+                            .collect(Collectors.toList())
+            );
+        teamPlayers.removeAll(inFieldPlayer);
+
+        int randomMid = random.nextInt(2);
+        inFieldPlayer.addAll(
+                teamPlayers.stream()
+                        .map(Player::clone)
+                        .filter(player -> player instanceof Striker)
+                        .limit(teamFormation.getStrikers() - randomMid)
+                        .collect(Collectors.toList())
+        );
+        teamPlayers.removeAll(inFieldPlayer);
+        inFieldPlayer.addAll(
+                teamPlayers.stream()
+                        .map(Player::clone)
+                        .filter(player -> player instanceof FullBack)
+                        .limit(randomMid)
+                        .collect(Collectors.toList())
+        );
+        teamPlayers.removeAll(inFieldPlayer);
+
+        inFieldPlayer.addAll(
+                teamPlayers.stream()
+                .map(Player::clone)
+                .filter(player -> player instanceof Striker || player instanceof FullBack)
+                .limit(11 - inFieldPlayer.size())
+                .collect(Collectors.toList())
+        );
+        return inFieldPlayer;
+    }
+
     public int getWinner(){
         if(this.gameState == GameState.END_GAME)
             if(this.goals.getX() > this.goals.getY())
@@ -172,30 +287,6 @@ public class GameSim extends GameInfo {
             return true;
         }
         return false;
-    }
-
-    public boolean subPlayers(int team, int leave, int stay){
-        if(leave == stay) return false;
-        if((team == 0 ? this.homeSubs : this.awaySubs).size() >= 3) return false;
-
-        Player leavePlayer = (team == 0 ? this.inFieldHome : this.inFieldAway).stream()
-                .filter(player -> leave == player.getNumber())
-                .findAny()
-                .orElse(null);
-
-        if(leavePlayer == null) return false;
-
-        Player stayPlayer = (team == 0 ? getHomeTeam() : getAwayTeam()).getTeamPlayers().stream()
-                .filter(player -> stay == player.getNumber())
-                .findAny()
-                .orElse(null);
-
-        if(stayPlayer != null){
-            ((team == 0) ? this.inFieldHome : this.inFieldAway).remove(leavePlayer);
-            ((team == 0) ? this.inFieldHome : this.inFieldAway).add(stayPlayer.clone());
-            ((team == 0) ? this.homeSubs : this.awaySubs).add(new Tuple<>(leave, stay));
-            return true;
-        } return false;
     }
 
     public GameState getGameState() {

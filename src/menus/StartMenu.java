@@ -2,13 +2,19 @@ package menus;
 
 import exceptions.FileIOException;
 import objects.game.GameManager;
+import objects.player.Defender;
+import objects.player.Player;
+import objects.team.TeamFormation;
 import utils.ColorUtils;
 import utils.FileUtils;
 import utils.TextUtils;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class StartMenu {
     private final Scanner scanner = new Scanner(System.in);
@@ -40,6 +46,7 @@ public class StartMenu {
                     // TODO: 6/5/2021 Ask for file location 
                     GameManager tempGameManager = FileUtils.loadLogFile("resources/logs.txt");
                     tempGameManager.setGameList(FileUtils.loadGameSimFile("resources/gameSims.txt", tempGameManager.getGameList()));
+                    // TODO: 6/8/2021 pass team as argument
                     tempGameManager.updateTeamVictoriesHistory();
                     this.gameManager = tempGameManager.clone();
                     System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!" + ColorUtils.RESET);
@@ -60,7 +67,7 @@ public class StartMenu {
                 System.out.println(e.getLocalizedMessage());
                 quit = true;
             }catch (FileNotFoundException e){
-                System.out.println("");
+                System.out.println(e.getLocalizedMessage());
             }
         } while (!quit);
     }

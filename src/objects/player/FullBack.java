@@ -25,9 +25,9 @@ public class FullBack extends Player{
         this.crossing = crossing;
     }
 
-    public FullBack(Player player) {
-        super(player);
-        this.crossing = 0;
+    public FullBack(FullBack fullback) {
+        super(fullback);
+        this.crossing = fullback.getCrossing();
     }
 
     public FullBack(Player player, int crossing) {

@@ -235,14 +235,14 @@ public class Player extends Person {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Player{");
         sb.append("number=").append(number);
-        sb.append(", teamHistory=").append(teamHistory);
-        sb.append(", velocity=").append(velocity);
-        sb.append(", resistance=").append(resistance);
-        sb.append(", dexterity=").append(dexterity);
-        sb.append(", thrust=").append(thrust);
-        sb.append(", header=").append(header);
-        sb.append(", finish=").append(finish);
-        sb.append(", pass=").append(pass);
+//        sb.append(", teamHistory=").append(teamHistory);
+//        sb.append(", velocity=").append(velocity);
+//        sb.append(", resistance=").append(resistance);
+//        sb.append(", dexterity=").append(dexterity);
+//        sb.append(", thrust=").append(thrust);
+//        sb.append(", header=").append(header);
+//        sb.append(", finish=").append(finish);
+//        sb.append(", pass=").append(pass);
         sb.append("} ").append(super.toString());
         return sb.toString();
     }

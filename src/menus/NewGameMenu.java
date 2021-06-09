@@ -1,14 +1,16 @@
 package menus;
 
+import objects.game.GameConstants;
 import objects.game.GameManager;
 import objects.game.GameSim;
+import objects.game.GameState;
 import objects.team.Team;
 import objects.team.TeamFormation;
 import utils.ColorUtils;
+import utils.Triplet;
 import utils.Tuple;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class NewGameMenu {
     private final Scanner scanner = new Scanner(System.in);
@@ -27,30 +29,45 @@ public class NewGameMenu {
     }
 
     public void newGameMenu(){
-        Tuple<Team, TeamFormation> team1, team2;
+        GameSim gameSim = new GameSim(this.gameManager.getGameList().size());
+        Triplet<Team, TeamFormation, List<Tuple<Integer,Integer>>> team1, team2;
 
         System.out.println(ColorUtils.BLUE + "FIRST TEAM SELECTION" + ColorUtils.RESET);
         team1 = selectTeamInfo();
+        gameSim.setHomeTeam(team1.getX());
+        gameSim.setHomeFormation(team1.getY());
+        gameSim.setInFieldHome(gameSim.initInFieldTeam(1));
 
         System.out.println(ColorUtils.BLUE + "SECOND TEAM SELECTION" + ColorUtils.RESET);
         team2 = selectTeamInfo();
-
-        GameSim gameSim = new GameSim(this.gameManager.getGameList().size(), team1.getX().clone(), team2.getX().clone());
-        gameSim.setHomeFormation(team1.getY());
+        gameSim.setAwayTeam(team2.getX());
         gameSim.setAwayFormation(team2.getY());
+        gameSim.setInFieldAway(gameSim.initInFieldTeam(2));
 
         System.out.println(gameSim);
+
+//        gameSim.setHomeSubs(team1.getZ());
+//        gameSim.setAwaySubs(team2.getZ());
+
+//        while(gameSim.getGameState() != GameState.END_GAME){
+//            Random random = new Random();
+//            int time = random.nextInt(GameConstants.MAX_SIM_TIME - GameConstants.MIN_SIM_TIME) - GameConstants.MIN_SIM_TIME;
+//            String simRes = gameSim.simulateGame(time);
+//            System.out.println(simRes);
+//        }
     }
 
-    private Tuple<Team, TeamFormation> selectTeamInfo() {
+    private Triplet<Team, TeamFormation, List<Tuple<Integer,Integer>>> selectTeamInfo() {
         Team team = null;
         TeamFormation teamFormation = null;
+        List<Tuple<Integer,Integer>> subs = new ArrayList<>();
 
         System.out.println(ColorUtils.GREEN + "Insert team name: " + ColorUtils.RESET);
         while(team == null){
             String teamName = scanner.nextLine();
-            if(!teamName.isBlank() && this.gameManager.getTeamMap().containsKey(teamName))
+            if(!teamName.isBlank() && this.gameManager.getTeamMap().containsKey(teamName)) {
                 team = this.gameManager.getTeamMap().get(teamName).clone();
+            }
             else System.out.println(ColorUtils.RED + "Invalid team name" + ColorUtils.RESET);
         }
 
@@ -59,14 +76,34 @@ public class NewGameMenu {
         while(teamFormation == null){
             try{
                 int wantedFormation = scanner.nextInt();
-                if (0 <= wantedFormation && wantedFormation < TeamFormation.allFormations.size())
+                if (0 <= wantedFormation && wantedFormation < TeamFormation.allFormations.size()) {
                     teamFormation = TeamFormation.allFormations.get(wantedFormation);
+                }
             }catch (InputMismatchException e){
                 System.out.println(ColorUtils.RED + "Invalid team formation." + ColorUtils.RESET);
                 scanner.next();
             }
         }
-        return new Tuple<>(team, teamFormation);
+
+//        System.out.println(ColorUtils.YELLOW + "(Substitutions will be done at half-time)" + ColorUtils.RESET);
+//        System.out.println(ColorUtils.GREEN + "Insert team substitutions " + ColorUtils.BLUE + "<leave>" + ColorUtils.YELLOW + "->" + ColorUtils.BLUE + "<enter>" + ColorUtils.YELLOW + "(3 required)" + ColorUtils.RESET);
+//        while(subs.size() < 3){
+//            String input = scanner.nextLine();
+//            String[] players = input.split("->", 2);
+//            if(players[0] != null && players[1] != null
+//            && !players[0].isBlank() && !players[1].isBlank()){
+//                try{
+//                    int playerLeave = Integer.parseInt(players[0]);
+//                    int playerStay = Integer.parseInt(players[1]);
+//                    if(team.getTeamPlayers().stream().anyMatch(player -> playerLeave == player.getNumber()))
+//                    subs.add(new Tuple<>(playerLeave, playerStay));
+//                }catch (NumberFormatException e){
+//                    System.out.println(ColorUtils.RED + "Invalid player substitution." + ColorUtils.RESET);
+//                    scanner.next();
+//                }
+//            }
+//        }
+        return new Triplet<>(team, teamFormation, subs);
     }
 
     private String teamFormationsString(){

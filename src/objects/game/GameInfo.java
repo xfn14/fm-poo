@@ -18,6 +18,13 @@ public class GameInfo {
         this.awayTeam = null;
     }
 
+    public GameInfo(int id){
+        this.id = id;
+        this.date = LocalDate.now();
+        this.homeTeam = new Team();
+        this.awayTeam = new Team();
+    }
+
     public GameInfo(int id, Team homeTeam, Team awayTeam) {
         this.id = id;
         this.date = LocalDate.now();
