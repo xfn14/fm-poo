@@ -4,22 +4,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Striker extends Player {
+    /**
+     * Instantiates a Striker
+     */
     public Striker() {
         super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
     }
 
+    /**
+     * Instantiates a Striker with Player&Person's attributes
+     * @param id Identification of the Person
+     * @param name Name of the Person
+     * @param number shirt number
+     * @param teamHistory list of teams where the player has been
+     * @param velocity velocity ability
+     * @param resistance resistance ability
+     * @param dexterity dexterity ability
+     * @param thrust thrust ability
+     * @param header header ability
+     * @param finish finish ability
+     * @param pass pass ability
+     */
     public Striker(int id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
     }
 
+    /**
+     * Instantiates a Striker from a Person's object and with Player's attributes
+     * @param person Person's object
+     * @param number shirt number
+     * @param teamHistory list of teams where the player has been
+     * @param velocity velocity ability
+     * @param resistance resistance ability
+     * @param dexterity dexterity ability
+     * @param thrust thrust ability
+     * @param header header ability
+     * @param finish finish ability
+     * @param pass pass ability
+     */
     public Striker(Person person, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
         super(person, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
     }
 
+    /**
+     * Instantiates a Striker from a Player's object
+     * @param player Player's object
+     */
     public Striker(Player player) {
         super(player);
     }
 
+    /**
+     * Parses an array of strings and creates a Striker's instance from it
+     * @param args Array of strings containing respective values to be parsed
+     * @param id Person's Id
+     * @return New Striker instance
+     * @throws NumberFormatException
+     */
     public static Striker parser(String[] args, int id) throws NumberFormatException{
         return new Striker(
                 id,
@@ -36,6 +77,10 @@ public class Striker extends Player {
         );
     }
 
+    /**
+     * Calculate Striker's ability
+     * @return Striker's ability value
+     */
     @Override
     public int calcAbility() {
         return (int) Math.floor(
@@ -49,16 +94,29 @@ public class Striker extends Player {
         );
     }
 
+    /**
+     * Clone Striker's instance
+     * @return Striker's cloned instance
+     */
     @Override
     public Striker clone() {
         return new Striker(this);
     }
 
+    /**
+     * Equality between Striker's instance and another object
+     * @param o Object
+     * @return Boolean representing the equality of this instance comparing to the given object
+     */
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
     }
 
+    /**
+     * String representation of Striker's instance
+     * @return String representation of the instance
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Striker{");

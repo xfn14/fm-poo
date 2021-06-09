@@ -33,7 +33,7 @@ public class Person {
 
     /**
      * Instantiates a new Person with the given Person
-     * @param person Person received
+     * @param person Person's object
      */
     public Person(Person person){
         this.id = person.getId();
@@ -48,19 +48,46 @@ public class Person {
         return this.id;
     }
 
+    /**
+     * Get Person's name
+     * @return Person's name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Get Person's Id
+     * @param name Person's name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Get Person's first and last name
+     * @return String containing person's first and last name
+     */
+    public String getFstLstName(){
+        String[] names = this.getName().split(" ");
+        if(names.length != 1) return names[0] + " " + names[names.length-1];
+        return names[0];
+    }
+
+    /**
+     * Clones Person's instance
+     * @return Person's new object
+     */
     @Override
     public Person clone() {
         return new Person(this);
     }
 
+    /**
+     * Equality between Person's instance and another object
+     * @param o Object
+     * @return Boolean representing the equality of this instance comparing to the given object
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -72,6 +99,10 @@ public class Person {
         return Objects.equals(name, person.name);
     }
 
+    /**
+     * String representation of Person's instance
+     * @return String representation of the instance
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Person{");
