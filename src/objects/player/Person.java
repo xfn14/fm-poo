@@ -3,24 +3,47 @@ package objects.player;
 import java.util.Objects;
 
 public class Person {
+    /**
+     * Id representing a person
+     */
     private final int id;
+
+    /**
+     * Person's name
+     */
     private String name;
 
+    /**
+     * Instantiates a new Person
+     */
     public Person(){
         this.id = -1;
         this.name = null;
     }
 
+    /**
+     * Instantiates a new Person with the given arguments
+     * @param id Identification of the Person
+     * @param name Name of the Person
+     */
     public Person(int id, String name){
         this.id = id;
         this.name = name;
     }
 
+    /**
+     * Instantiates a new Person with the given Person
+     * @param person Person received
+     */
     public Person(Person person){
         this.id = person.getId();
         this.name = person.getName();
     }
 
+    /**
+     * Get Person's Id
+     * @return Person's Id
+     */
     public int getId() {
         return this.id;
     }
