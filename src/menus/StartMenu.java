@@ -66,9 +66,13 @@ public class StartMenu {
                     this.gameManager = tempGameManager.clone();
                     System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!" + ColorUtils.RESET);
                 }else if(option == 2 && !this.gameManager.getTeamMap().isEmpty()){
-                    NewGameMenu newGameMenu = new NewGameMenu(this.gameManager);
-                    newGameMenu.newGameMenu();
-                    this.gameManager = newGameMenu.getGameManager();
+                    try{
+                        NewGameMenu newGameMenu = new NewGameMenu(this.gameManager);
+                        newGameMenu.newGameMenu();
+                        this.gameManager = newGameMenu.getGameManager();
+                    }catch (InterruptedException e){
+                        System.err.format("InterruptedException: %s%n", e);
+                    }
                 }else if(option == 3 && !this.gameManager.getGameList().isEmpty()){
                     ManagerMenu managerMenu = new ManagerMenu(gameManager);
                     managerMenu.manageGamesLoop();

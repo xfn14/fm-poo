@@ -1,6 +1,9 @@
 package objects.game;
 
 import exceptions.InvalidPlayerSubException;
+import objects.game.plays.GamePlay;
+import objects.game.plays.PlayFinish;
+import objects.game.plays.PlayPass;
 import objects.player.*;
 import objects.team.Team;
 import objects.team.TeamFormation;
@@ -8,7 +11,6 @@ import utils.ColorUtils;
 import utils.DateUtils;
 import utils.Tuple;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -191,28 +193,71 @@ public class GameSim extends GameInfo {
 
     /**
      * Simulate a new play of the game
-     * @param time Time until the new play
-     * @return
+     * @param time Time to simulate the new play
+     * @return the resulted play
      */
-    public String simulateGame(int time){
+    public List<GamePlay> simulateGame(int time, GamePlay lastPlay){
+        List<GamePlay> newPlay = new ArrayList<>();
+        boolean stop = skipTime(time);
+
+        if(stop){
+            if(this.gameState == GameState.FST_HALF){
+                PlayPass halfStartPass = new PlayPass(
+                        this.inFieldAway.get(this.inFieldAway.size()-1),
+                        GameConstants.GAME_HALF_TIME,
+                        1,
+                        this.inFieldAway.get(this.inFieldAway.size()-2),
+                        null);
+                newPlay.add(halfStartPass);
+            }
+        }
+
+
+        if(lastPlay == null){
+
+        }else{
+            if(lastPlay.result()){
+                if(lastPlay instanceof PlayFinish){
+
+                }else if(lastPlay instanceof PlayPass){
+
+                }
+            }else{
+                if(lastPlay instanceof PlayFinish){
+
+                }else if(lastPlay instanceof PlayPass){
+
+                }
+            }
+        }
+        return newPlay;
+    }
+
+    private boolean skipTime(int time){
         int timeInSeconds = time*60;
         if(this.gameState == GameState.FST_HALF){
             if(this.time >= GameConstants.GAME_HALF_TIME && this.extraTime > 0){
                 this.extraTime = Math.min(0, this.extraTime - timeInSeconds);
+                this.time += timeInSeconds;
             }else if(this.time < GameConstants.GAME_HALF_TIME){
                 this.time = Math.min(this.time + timeInSeconds, GameConstants.GAME_HALF_TIME);
             }else{
                 this.time = GameConstants.GAME_HALF_TIME;
                 this.gameState = GameState.HALF_TIME;
+                return true;
             }
-        }else if(this.gameState == GameState.HALF_TIME){
-
         }else if(this.gameState == GameState.SND_HALF){
-
+            if(this.time >= (GameConstants.GAME_HALF_TIME*2) && this.extraTime > 0){
+                this.extraTime = Math.min(0, this.extraTime - timeInSeconds);
+                this.time += timeInSeconds;
+            }else if(this.time < (GameConstants.GAME_HALF_TIME*2)){
+                this.time = Math.min(this.time + timeInSeconds, GameConstants.GAME_HALF_TIME*2);
+            }else{
+                this.gameState = GameState.END_GAME;
+                return true;
+            }
         }
-        this.time += time;
-        this.goals.setX(this.goals.getX()+1);
-        return "Golo Equipa da casa";
+        return false;
     }
 
     /**
@@ -317,74 +362,75 @@ public class GameSim extends GameInfo {
         Random random = new Random();
         List<Player> teamPlayers = team == 1 ? this.getHomeTeam().getTeamPlayers() : this.getAwayTeam().getTeamPlayers();
         TeamFormation teamFormation = team == 1 ? this.homeFormation : this.awayFormation;
-        /*
-        int randomValue = random.nextInt(2);
-        int totalKeepers = teamFormation.getKeepers();
-        int totalDefenders = teamFormation.getDefenders();
-        int totalMidFielders = teamFormation.getMidFielders() - randomValue;
-        int totalFullBacks = randomValue;
-        randomValue = random.nextInt(2);
-        int totalStrikers = teamFormation.getStrikers() - randomValue;
-        totalFullBacks += randomValue;
+//
+//        int randomValue = random.nextInt(2);
+//        int totalKeepers = teamFormation.getKeepers();
+//        int totalDefenders = teamFormation.getDefenders();
+//        int totalMidFielders = teamFormation.getMidFielders() - randomValue;
+//        int totalFullBacks = randomValue;
+//        randomValue = random.nextInt(2);
+//        int totalStrikers = teamFormation.getStrikers() - randomValue;
+//        totalFullBacks += randomValue;
+//
+//        List<Player> finalTeamPlayers = new ArrayList<>();
+//        List<Player> inFieldPlayer = new ArrayList<>();
+//
+//        for (Player player: teamPlayers){
+//            if (player instanceof Keeper){
+//                if (totalKeepers > 0) {
+//                    --totalKeepers;
+//                    inFieldPlayer.add(player);
+//                }
+//                else
+//                    finalTeamPlayers.add(player);
+//            }
+//            else if (player instanceof Defender){
+//                if (totalDefenders > 0) {
+//                    --totalDefenders;
+//                    inFieldPlayer.add(player);
+//                }
+//                else
+//                    finalTeamPlayers.add(player);
+//            }
+//            else if (player instanceof MidFielder){
+//                if (totalMidFielders > 0) {
+//                    --totalMidFielders;
+//                    inFieldPlayer.add(player);
+//                }
+//                else
+//                    finalTeamPlayers.add(player);
+//            }
+//            else if (player instanceof Striker){
+//                if (totalStrikers > 0) {
+//                    --totalStrikers;
+//                    inFieldPlayer.add(player);
+//                }
+//                else
+//                    finalTeamPlayers.add(player);
+//            }
+//            else {
+//                if (totalFullBacks > 0){
+//                    --totalStrikers;
+//                    inFieldPlayer.add(player);
+//                }
+//                else
+//                    finalTeamPlayers.add(player);
+//            }
+//        }
+//
+//        System.out.println(inFieldPlayer);
+//        if (inFieldPlayer.size() != 11) {
+//            inFieldPlayer.addAll(
+//                    finalTeamPlayers.stream()
+//                            .map(Player::clone)
+//                            .filter(player -> player instanceof Striker || player instanceof FullBack)
+//                            .limit(11 - inFieldPlayer.size())
+//                            .collect(Collectors.toList())
+//            );
+//        }
+//
+//        return inFieldPlayer;
 
-        List <Player> finalTeamPlayers = new ArrayList<>();
-        List<Player> inFieldPlayer = new ArrayList<>();
-
-        for (Player player: teamPlayers){
-            if (player instanceof Keeper){
-                if (totalKeepers > 0) {
-                    --totalKeepers;
-                    inFieldPlayer.add(player);
-                }
-                else
-                    finalTeamPlayers.add(player);
-            }
-            else if (player instanceof Defender){
-                if (totalDefenders > 0) {
-                    --totalDefenders;
-                    inFieldPlayer.add(player);
-                }
-                else
-                    finalTeamPlayers.add(player);
-            }
-            else if (player instanceof MidFielder){
-                if (totalMidFielders > 0) {
-                    --totalMidFielders;
-                    inFieldPlayer.add(player);
-                }
-                else
-                    finalTeamPlayers.add(player);
-            }
-            else if (player instanceof Striker){
-                if (totalStrikers > 0) {
-                    --totalStrikers;
-                    inFieldPlayer.add(player);
-                }
-                else
-                    finalTeamPlayers.add(player);
-            }
-            else {
-                if (totalFullBacks > 0){
-                    --totalStrikers;
-                    inFieldPlayer.add(player);
-                }
-                else
-                    finalTeamPlayers.add(player);
-            }
-        }
-
-        if (inFieldPlayer.size() != 11) {
-            inFieldPlayer.addAll(
-                    teamPlayers.stream()
-                            .map(Player::clone)
-                            .filter(player -> player instanceof Striker || player instanceof FullBack)
-                            .limit(11 - inFieldPlayer.size())
-                            .collect(Collectors.toList())
-            );
-        }
-
-        return inFieldPlayer;
-        */
         List<Player> inFieldPlayer = teamPlayers.stream()
                 .map(Player::clone)
                 .filter(player -> player instanceof Keeper)
@@ -437,6 +483,7 @@ public class GameSim extends GameInfo {
         );
         teamPlayers.removeAll(inFieldPlayer);
 
+
         inFieldPlayer.addAll(
                 teamPlayers.stream()
                 .map(Player::clone)
@@ -444,6 +491,32 @@ public class GameSim extends GameInfo {
                 .limit(11 - inFieldPlayer.size())
                 .collect(Collectors.toList())
         );
+
+        inFieldPlayer.sort((p1, p2) -> {
+            int res;
+            int val1, val2;
+
+            if(p1 instanceof Striker) val1 = 5;
+            else if (p1 instanceof FullBack) val1 = 4;
+            else if (p1 instanceof MidFielder) val1 = 3;
+            else if (p1 instanceof Defender) val1 = 2;
+            else if (p1 instanceof Keeper) val1 = 1;
+            else val1 = 0;
+
+            if(p2 instanceof Striker) val2 = 5;
+            else if (p2 instanceof FullBack) val2 = 4;
+            else if (p2 instanceof MidFielder) val2 = 3;
+            else if (p2 instanceof Defender) val2 = 2;
+            else if (p2 instanceof Keeper) val2 = 1;
+            else val2 = 0;
+
+            res = Integer.compare(val1, val2);
+            if(res == 0) res = Integer.compare(p1.calcAbility(), p2.calcAbility());
+
+            return res;
+        });
+
+        System.out.println(inFieldPlayer);
         return inFieldPlayer;
     }
 

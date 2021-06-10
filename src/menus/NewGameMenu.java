@@ -3,13 +3,18 @@ package menus;
 import objects.game.GameConstants;
 import objects.game.GameManager;
 import objects.game.GameSim;
+import objects.game.GameState;
+import objects.game.plays.GamePlay;
+import objects.game.plays.PlayPass;
 import objects.player.Player;
 import objects.team.Team;
 import objects.team.TeamFormation;
 import utils.ColorUtils;
+import utils.TextUtils;
 import utils.Tuple;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class NewGameMenu {
@@ -51,42 +56,67 @@ public class NewGameMenu {
     /**
      * Menu for creating a new game
      */
-    public void newGameMenu(){
-        GameSim gameSim = new GameSim(this.gameManager.getGameList().size());
-        Tuple<Team, TeamFormation> team1, team2;
+    public void newGameMenu() throws InterruptedException {
+//        GameSim gameSim = new GameSim(this.gameManager.getGameList().size());
+//        Tuple<Team, TeamFormation> team1, team2;
+//
+//        System.out.println(ColorUtils.BLUE + "FIRST TEAM SELECTION" + ColorUtils.RESET);
+//        team1 = this.selectTeamInfo();
+//        gameSim.setHomeTeam(team1.getX());
+//        gameSim.setHomeFormation(team1.getY());
+//        gameSim.setInFieldHome(gameSim.initInFieldTeam(1));
+//        List<Player> team1Subs = gameSim.getHomeTeam().getTeamPlayers();
+//        team1Subs.removeAll(gameSim.getInFieldHome());
+//        gameSim.setHomeSubs(selectTeamSubs(gameSim.getInFieldHome(), team1Subs));
+//
+//        System.out.println(ColorUtils.BLUE + "SECOND TEAM SELECTION" + ColorUtils.RESET);
+//        team2 = this.selectTeamInfo();
+//        gameSim.setAwayTeam(team2.getX());
+//        gameSim.setAwayFormation(team2.getY());
+//        gameSim.setInFieldAway(gameSim.initInFieldTeam(2));
+//        List<Player> team2Subs = gameSim.getAwayTeam().getTeamPlayers();
+//        team2Subs.removeAll(gameSim.getInFieldAway());
+//        gameSim.setAwaySubs(selectTeamSubs(gameSim.getInFieldAway(), team2Subs));
+//
+//        System.out.println(gameSim);
 
-        System.out.println(ColorUtils.BLUE + "FIRST TEAM SELECTION" + ColorUtils.RESET);
-        team1 = this.selectTeamInfo();
-        gameSim.setHomeTeam(team1.getX());
-        gameSim.setHomeFormation(team1.getY());
-        gameSim.setInFieldHome(gameSim.initInFieldTeam(1));
-        List<Player> team1Subs = gameSim.getHomeTeam().getTeamPlayers();
-        team1Subs.removeAll(gameSim.getInFieldHome());
-        gameSim.setHomeSubs(selectTeamSubs(gameSim.getInFieldHome(), team1Subs));
-
-        System.out.println(ColorUtils.BLUE + "SECOND TEAM SELECTION" + ColorUtils.RESET);
-        team2 = this.selectTeamInfo();
-        gameSim.setAwayTeam(team2.getX());
-        gameSim.setAwayFormation(team2.getY());
-        gameSim.setInFieldAway(gameSim.initInFieldTeam(2));
-        List<Player> team2Subs = gameSim.getAwayTeam().getTeamPlayers();
-        team2Subs.removeAll(gameSim.getInFieldAway());
-        gameSim.setAwaySubs(selectTeamSubs(gameSim.getInFieldAway(), team2Subs));
-
+        GameSim gameSim = new GameSim(this.gameManager.getGameList().size(), this.gameManager.getTeamMap().get("Sporting Club Schubert"), this.gameManager.getTeamMap().get("Mendelssohn F. C."));
+        gameSim.setInFieldHome(gameSim.initInFieldTeam(0));
+        gameSim.setInFieldAway(gameSim.initInFieldTeam(1));
         System.out.println(gameSim);
 
-//        GameSim gameSim = new GameSim(this.gameManager.getGameList().size(), this.gameManager.getTeamMap().get("Sporting Club Schubert"), this.gameManager.getTeamMap().get("Mendelssohn F. C."));
-//        gameSim.setInFieldHome(gameSim.initInFieldTeam(0));
-//        gameSim.setInFieldAway(gameSim.initInFieldTeam(1));
-//
-//
-//        gameSim.setGameState(GameState.FST_HALF);
-//        while(gameSim.getGameState() != GameState.END_GAME){
-//            // this time in in minutes
-//            int time = this.random.nextInt(GameConstants.MAX_SIM_TIME - GameConstants.MIN_SIM_TIME) - GameConstants.MIN_SIM_TIME;
-//            String simRes = gameSim.simulateGame(time);
-//            System.out.println(simRes);
-//        }
+        List<GamePlay> plays = new ArrayList<>();
+        PlayPass halfStartPass = new PlayPass(
+                gameSim.getInFieldHome().get(10),
+                GameConstants.GAME_HALF_TIME,
+                1,
+                gameSim.getInFieldHome().get(9),
+                null);
+        plays.add(halfStartPass);
+
+        gameSim.setGameState(GameState.FST_HALF);
+        while(gameSim.getGameState() != GameState.END_GAME){
+            if(gameSim.getGameState() == GameState.HALF_TIME){
+                System.out.println(ColorUtils.GREEN + "Half-Time\n" + ColorUtils.BLUE + "[0] - Continue" + ColorUtils.RESET);
+                String option = scanner.nextLine();
+                if(option.equalsIgnoreCase("0")){
+                    gameSim.setGameState(GameState.SND_HALF);
+                }else System.out.println(TextUtils.INVALID_MENU_OPTION);
+            }else{
+                // this time in in minutes
+                int time = this.random.nextInt(GameConstants.MAX_SIM_TIME - GameConstants.MIN_SIM_TIME) + GameConstants.MIN_SIM_TIME;
+                TimeUnit.SECONDS.sleep(Math.max(time, time-2));
+//                System.out.println(time);
+                List<GamePlay> newPlays = gameSim.simulateGame(time, plays.get(plays.size()-1));
+                if(!newPlays.isEmpty()){
+                    for(GamePlay gamePlay : newPlays){
+                        System.out.println(gamePlay);
+                    }
+                }
+                plays.addAll(newPlays);
+            }
+        }
+        System.out.println(ColorUtils.GREEN + "Game Ended" + ColorUtils.RESET);
     }
 
     /**
