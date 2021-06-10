@@ -10,32 +10,65 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class ManageTeamsMenu {
+    /**
+     * Input Scanner
+     */
     private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * GameManager instance
+     */
     private GameManager gameManager;
+
+    /**
+     * Number of pages
+     */
     private final int maxPage;
 
+    /**
+     * Items per page
+     */
     public static final int ITEMS_PER_PAGE = 10;
 
+    /**
+     * Instantiates a ManageTeamsMenu
+     */
     public ManageTeamsMenu(){
         this.gameManager = new GameManager();
         this.maxPage = 1;
     }
 
+    /**
+     * Instantiates a ManageTeamsMenu with a specific GameManager
+     * @param gameManager GameManager's object
+     */
     public ManageTeamsMenu(GameManager gameManager) {
         setGameManager(gameManager);
         this.maxPage = (int) Math.ceil((double) this.gameManager.getTeamMap().size() / ITEMS_PER_PAGE);
     }
 
+    /**
+     * Instantiates a ManageTeamsMenu with the respective attributes
+     * @param gameManager GameManager's object
+     * @param maxPage Number of pages
+     */
     public ManageTeamsMenu(GameManager gameManager, int maxPage) {
         setGameManager(gameManager);
         this.maxPage = maxPage;
     }
 
-    public ManageTeamsMenu(ManagePlayersMenu managePlayersMenu){
-        this.gameManager = managePlayersMenu.getGameManager();
-        this.maxPage = managePlayersMenu.getMaxPage();
+    /**
+     * Instantiates a ManageTeamsMenu from a ManageTeamsMenu
+     * @param manageTeamsMenu ManageTeamsMenu's object
+     */
+    public ManageTeamsMenu(ManagePlayersMenu manageTeamsMenu){
+        this.gameManager = manageTeamsMenu.getGameManager();
+        this.maxPage = manageTeamsMenu.getMaxPage();
     }
 
+    /**
+     * Print requested page for the user to select a Team
+     */
     public void teamListLoop(){
         boolean quit = false;
 
@@ -71,6 +104,10 @@ public class ManageTeamsMenu {
         return team;
     }
 
+    /**
+     * Loop and print Team's info
+     * @param team Team's object
+     */
     private void teamInfoLoop(Team team){
         boolean quit = false;
         System.out.println(getTeamDetailedInfo(team));
@@ -82,6 +119,11 @@ public class ManageTeamsMenu {
         }
     }
 
+    /**
+     * String containing Team's info
+     * @param team Team's object
+     * @return String of Team's info
+     */
     private String getTeamDetailedInfo(Team team){
         StringBuilder sb = new StringBuilder();
         sb.append(ColorUtils.BLUE).append(team.getName()).append("'s Info\n").append(ColorUtils.RESET);
@@ -91,10 +133,17 @@ public class ManageTeamsMenu {
         return sb.toString();
     }
 
+    /**
+     * Print page's controls
+     */
     private void printControls(){
         System.out.println(ColorUtils.BLUE + "[a] - Previous Page; [d] - Next Page; [n] - New Team; [teamName] - Team Info; [b] - Go Back" + ColorUtils.RESET);
     }
 
+    /**
+     * Print respective page
+     * @param page Page index
+     */
     private void printPage(int page){
         int fstIndex = (page - 1) * ITEMS_PER_PAGE;
         int teamListLen = this.gameManager.getTeamMap().size();
@@ -103,6 +152,12 @@ public class ManageTeamsMenu {
         printControls();
     }
 
+    /**
+     * Create String representation of a specific Team's Info with the corresponding line ID
+     * @param team Team's object
+     * @param id Line's id
+     * @return String of the Team's info and line's id
+     */
     public String teamSimpleInfo(Team team, int id){
         StringBuilder sb = new StringBuilder();
         sb.append(ColorUtils.RED_BACKGROUND_BRIGHT).append("[").append(id).append("]");
@@ -118,14 +173,26 @@ public class ManageTeamsMenu {
         return sb.toString();
     }
 
+    /**
+     * Get GameManager
+     * @return GameManager's object
+     */
     public GameManager getGameManager() {
         return this.gameManager.clone();
     }
 
+    /**
+     * Set GameManager
+     * @param gameManager GameManager's object
+     */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
     }
 
+    /**
+     * Get Number of pages
+     * @return Number of pages
+     */
     public int getMaxPage() {
         return this.maxPage;
     }

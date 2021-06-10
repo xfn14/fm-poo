@@ -1,5 +1,8 @@
 package utils;
 
+/**
+ * Color codes
+ */
 public class ColorUtils {
     public static final String RESET = "\033[0m";
 
