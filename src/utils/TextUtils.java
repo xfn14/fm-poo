@@ -3,9 +3,20 @@ package utils;
 import java.io.IOException;
 
 public class TextUtils {
+    /**
+     * Text for Invalid option in menu
+     */
     public static final String INVALID_MENU_OPTION = ColorUtils.RED_BOLD + "Invalid option, please try again!" + ColorUtils.RESET;
+
+    /**
+     * Text when input isn't a number
+     */
     public static final String INPUT_NOT_NUMBER = ColorUtils.RED_BOLD + "Please input a number!" + ColorUtils.RESET;
 
+    /**
+     * Ascii Art of the project
+     * @return String art
+     */
     public static String getASCIIArt(){
         StringBuilder sb = new StringBuilder();
         sb.append(ColorUtils.BLUE_BRIGHT);
@@ -24,6 +35,9 @@ public class TextUtils {
         return sb.toString();
     }
 
+    /**
+     * Clear Console
+     */
     // Doesnt work on IntelliJ terminal
     public static void clearConsole() {
         try{

@@ -14,6 +14,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FileUtils {
+    /**
+     * Loads a list of GameSims with additional info in GameSim's file
+     * @param path Path to GameSim's file
+     * @param logGameSims Logs of GameSim's
+     * @return List of GameSim's file
+     * @throws FileInvalidLineException
+     */
     public static List<GameSim> loadGameSimFile(String path, List<GameSim> logGameSims) throws FileInvalidLineException {
         List<String> lines = fileToList(path);
         List<GameSim> gameSims = logGameSims.stream().map(GameSim::clone).collect(Collectors.toList());
@@ -23,36 +30,39 @@ public class FileUtils {
 
         for(String line : lines){
             splitLine = line.split(":", 2);
-            switch (splitLine[0]){
-                case "GameSim":
-                    try{
-                        splitLineDetailed = splitLine[1].split(",");
-                        int gameSimId = -1;
-                        if(splitLineDetailed[0] != null)
-                            gameSimId = Integer.parseInt(splitLineDetailed[0]);
+            if(splitLine[0].equals("GameSim")) {
+                try {
+                    splitLineDetailed = splitLine[1].split(",");
+                    int gameSimId = -1;
+                    if (splitLineDetailed[0] != null)
+                        gameSimId = Integer.parseInt(splitLineDetailed[0]);
 
-                        if(gameSimId < 0 || gameSims.size() <= gameSimId)
-                            throw new FileInvalidLineException("Invalid GameSim_ID needs to be [0-" + gameSims.size() + "] " + crtLine);
+                    if (gameSimId < 0 || gameSims.size() <= gameSimId)
+                        throw new FileInvalidLineException("Invalid GameSim_ID needs to be [0-" + gameSims.size() + "] " + crtLine);
 
-                        GameSim gameSim = gameSims.get(gameSimId);
-                        if(gameSim == null)
-                            throw new NullPointerException("Error while getting GameSim from log list");
+                    GameSim gameSim = gameSims.get(gameSimId);
+                    if (gameSim == null)
+                        throw new NullPointerException("Error while getting GameSim from log list");
 
-                        gameSim.parseCustom(splitLineDetailed);
-                    }catch (NumberFormatException e){
-                        System.out.println("GameSim_ID must be a number");
-                    }catch (IllegalArgumentException e){
-                        System.out.println("Invalid GameSim_TeamFormation");
-                    }
-                    break;
-                default:
-                    throw new FileInvalidLineException("Error in line " + crtLine);
-            }
+                    gameSim.parseCustom(splitLineDetailed);
+                } catch (NumberFormatException e) {
+                    System.out.println("GameSim_ID must be a number");
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid GameSim_TeamFormation");
+                }
+            }else throw new FileInvalidLineException("Error in line " + crtLine);
             crtLine++;
         }
         return gameSims;
     }
 
+    /**
+     * Loads logs file into Game Manager
+     * @param path path for logs file
+     * @return GameManager's object
+     * @throws FileInvalidLineException
+     * @throws FileNotFoundException
+     */
     public static GameManager loadLogFile(String path) throws FileInvalidLineException, FileNotFoundException {
         GameManager gameManager = new GameManager();
         List<String> lines = fileToList(path);
@@ -164,6 +174,11 @@ public class FileUtils {
         return gameManager;
     }
 
+    /**
+     * Convert a file (disk) into a list of strings (memory)
+     * @param path Path to file
+     * @return List of strings representing each line of the file
+     */
     public static List<String> fileToList(String path) {
         List<String> lines = new ArrayList<>();
         try{
@@ -171,7 +186,7 @@ public class FileUtils {
             Scanner scanner = new Scanner(file);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                if(!line.startsWith("#") || line.isBlank())
+                if(!line.isBlank() && !line.startsWith("#"))
                     lines.add(line);
             }
             scanner.close();
