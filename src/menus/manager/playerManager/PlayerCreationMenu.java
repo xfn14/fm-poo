@@ -10,23 +10,44 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class PlayerCreationMenu {
+    /**
+     * Input Scanner
+     */
     private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * GameManager instance
+     */
     private GameManager gameManager;
 
+    /**
+     * Instantiates a PlayerCreationMenu
+     */
     public PlayerCreationMenu(){
         this.gameManager = new GameManager();
     }
 
+    /**
+     * Instantiates a PlayerCreationMenu with GameManager
+     * @param gameManager GameManager's object
+     */
     public PlayerCreationMenu(GameManager gameManager) {
         setGameManager(gameManager);
     }
 
+    /**
+     * Instantiates a PlayerCreationMenu from a PlayerCreationMenu
+     * @param playerCreationMenu PlayerCreationMenu's object
+     */
     public PlayerCreationMenu(PlayerCreationMenu playerCreationMenu){
         this.gameManager = playerCreationMenu.getGameManager();
     }
 
-    // Player stats are given randomly
+    /**
+     * Menu for user to create a new Player
+     */
     public void playerCreationMenu(){
+        // Player stats are given randomly
         Random random = new Random();
         Person person = null;
         Player player = null;
@@ -34,7 +55,7 @@ public class PlayerCreationMenu {
         while(person == null){
             System.out.println(ColorUtils.GREEN + "Insert player name: " + ColorUtils.RESET);
             String playerName = scanner.nextLine();
-            if(!(playerName.isBlank() || playerName.contains(",") || playerName.contains("-"))) {
+            if(!playerName.isBlank() && !playerName.contains(",") && !playerName.contains("-")) {
                 person = new Person(this.gameManager.getPlayerMap().size(), playerName);
             }
         }
@@ -42,12 +63,12 @@ public class PlayerCreationMenu {
         while(player == null){
             System.out.println(ColorUtils.GREEN + "Insert shirt number: " + ColorUtils.RESET);
             try{
-                int shirtNumber = scanner.nextInt();
-                if(!(shirtNumber < -1 || 99 < shirtNumber))
+                int shirtNumber = Integer.parseInt(scanner.nextLine());
+                if(shirtNumber >= 0 && shirtNumber <= 99)
                     player = new Player(person, shirtNumber, random.nextInt(100), random.nextInt(100),
                             random.nextInt(100), random.nextInt(100), random.nextInt(100),
                             random.nextInt(100), random.nextInt(100));
-            }catch (InputMismatchException e){
+            }catch (NumberFormatException e){
                 System.out.println(ColorUtils.RED + "Invalid shirt number." + ColorUtils.RESET);
                 scanner.next();
             }
@@ -96,10 +117,18 @@ public class PlayerCreationMenu {
         System.out.println(ColorUtils.BLUE + "Player " + player.getName() + " has been created and added to " + playerTeam.getName() + ColorUtils.RESET);
     }
 
+    /**
+     * Get GameManager
+     * @return GameManager's object
+     */
     public GameManager getGameManager() {
         return this.gameManager.clone();
     }
 
+    /**
+     * Set GameManager
+     * @param gameManager GameManager's object
+     */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
     }

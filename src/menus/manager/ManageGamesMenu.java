@@ -10,27 +10,55 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class ManageGamesMenu {
+    /**
+     * Input Scanner
+     */
     private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * GameManager instance
+     */
     private GameManager gameManager;
+
+    /**
+     * Number of pages
+     */
     private final int maxPage;
 
+    /**
+     * Items per page
+     */
     public static final int ITEMS_PER_PAGE = 10;
 
+    /**
+     * Instantiates a ManageGamesMenu
+     */
     public ManageGamesMenu(){
         this.gameManager = new GameManager();
         this.maxPage = 1;
     }
 
+    /**
+     * Instantiates a ManageGamesMenu with a specific GameManager
+     * @param gameManager GameManager's object
+     */
     public ManageGamesMenu(GameManager gameManager){
         setGameManager(gameManager);
         this.maxPage = (int) Math.ceil((double) this.gameManager.getGameList().size() / ITEMS_PER_PAGE);
     }
 
+    /**
+     * Instantiates a ManageGamesMenu from a ManageGamesMenu
+     * @param manageGamesMenu ManageGamesMenu's object
+     */
     public ManageGamesMenu(ManageGamesMenu manageGamesMenu){
         this.gameManager = manageGamesMenu.getGameManager();
         this.maxPage = manageGamesMenu.getMaxPage();
     }
 
+    /**
+     * Print requested page for the user to select a Game
+     */
     public void gameListLoop(){
         boolean quit = false;
 
@@ -58,6 +86,10 @@ public class ManageGamesMenu {
         } while (!quit);
     }
 
+    /**
+     * Loop and print Game's info
+     * @param game Game's object
+     */
     private void gameInfoLoop(GameSim game){
         boolean quit = false;
         System.out.println(getGameDetailedInfo(game));
@@ -69,6 +101,11 @@ public class ManageGamesMenu {
         }
     }
 
+    /**
+     * String containing Game's info
+     * @param game Team's object
+     * @return String of Game's info
+     */
     private String getGameDetailedInfo(GameSim game){
         StringBuilder sb = new StringBuilder();
         sb.append(ColorUtils.BLUE).append("Game ").append(game.getId()).append(" Info ").append(ColorUtils.RESET);
@@ -85,10 +122,17 @@ public class ManageGamesMenu {
         return sb.toString();
     }
 
+    /**
+     * Print page's controls
+     */
     private void printControls(){
         System.out.println(ColorUtils.BLUE + "[a] - Previous Page; [d] - Next Page; [gameId] - Game Info; [b] - Go Back" + ColorUtils.RESET);
     }
 
+    /**
+     * Print respective page
+     * @param page Page index
+     */
     private void printPage(int page){
         int fstIndex = (page - 1) * ITEMS_PER_PAGE;
         int gameListLen = this.gameManager.getGameList().size();
@@ -97,6 +141,11 @@ public class ManageGamesMenu {
         printControls();
     }
 
+    /**
+     * Create String representation of a specific Game Simulation's Info
+     * @param gameSim GameSim's object
+     * @return String of the GameSim's info
+     */
     public String gameSimpleInfo(GameSim gameSim){
         StringBuilder sb = new StringBuilder();
         sb.append(ColorUtils.RED_BACKGROUND_BRIGHT).append("[").append(gameSim.getId()).append("]");
@@ -107,14 +156,26 @@ public class ManageGamesMenu {
         return sb.toString();
     }
 
+    /**
+     * Get GameManager
+     * @return GameManager's object
+     */
     public GameManager getGameManager() {
         return this.gameManager.clone();
     }
 
+    /**
+     * Set GameManager
+     * @param gameManager GameManager's object
+     */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
     }
 
+    /**
+     * Get Number of pages
+     * @return Number of pages
+     */
     public int getMaxPage() {
         return this.maxPage;
     }
