@@ -12,27 +12,48 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class NewGameMenu {
+    /**
+     * Input Scanner
+     */
     private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * GameManager instance
+     */
     private GameManager gameManager;
 
+    /**
+     * Instantiates a NewGameMenu
+     */
     public NewGameMenu(){
         this.gameManager = new GameManager();
     }
 
+    /**
+     * Instantiates a NewGameMenu with respective attributes
+     * @param gameManager GameManager's object
+     */
     public NewGameMenu(GameManager gameManager){
         setGameManager(gameManager);
     }
 
+    /**
+     * Instantiates a NewGameMenu from a NewGameMenu's object
+     * @param newGameMenu
+     */
     public NewGameMenu(NewGameMenu newGameMenu){
         this.gameManager = newGameMenu.getGameManager();
     }
 
+    /**
+     * Menu for creating a new game
+     */
     public void newGameMenu(){
         GameSim gameSim = new GameSim(this.gameManager.getGameList().size());
         Tuple<Team, TeamFormation> team1, team2;
 
         System.out.println(ColorUtils.BLUE + "FIRST TEAM SELECTION" + ColorUtils.RESET);
-        team1 = selectTeamInfo();
+        team1 = this.selectTeamInfo();
         gameSim.setHomeTeam(team1.getX());
         gameSim.setHomeFormation(team1.getY());
         gameSim.setInFieldHome(gameSim.initInFieldTeam(1));
@@ -41,7 +62,7 @@ public class NewGameMenu {
         gameSim.setHomeSubs(selectTeamSubs(gameSim.getInFieldHome(), team1Subs));
 
         System.out.println(ColorUtils.BLUE + "SECOND TEAM SELECTION" + ColorUtils.RESET);
-        team2 = selectTeamInfo();
+        team2 = this.selectTeamInfo();
         gameSim.setAwayTeam(team2.getX());
         gameSim.setAwayFormation(team2.getY());
         gameSim.setInFieldAway(gameSim.initInFieldTeam(2));
@@ -59,6 +80,10 @@ public class NewGameMenu {
 //        }
     }
 
+    /**
+     * Interact with user to select a team and a formation
+     * @return Pair containing the team and formation
+     */
     private Tuple<Team, TeamFormation> selectTeamInfo() {
         Team team = null;
         TeamFormation teamFormation = null;
@@ -72,7 +97,7 @@ public class NewGameMenu {
             else System.out.println(ColorUtils.RED + "Invalid team name" + ColorUtils.RESET);
         }
 
-        System.out.println(teamFormationsString());
+        System.out.println(this.teamFormationsString());
         System.out.println(ColorUtils.GREEN + "Choose team formation: " + ColorUtils.RESET);
         while(teamFormation == null){
             try{
@@ -87,6 +112,12 @@ public class NewGameMenu {
         return new Tuple<>(team, teamFormation);
     }
 
+    /**
+     * Interact with user to make substitutions
+     * @param inField List of Players in field
+     * @param teamSubs List of Players available for substitutions
+     * @return List of substitutions made
+     */
     private List<Tuple<Integer,Integer>> selectTeamSubs(List<Player> inField, List<Player> teamSubs){
         List<Tuple<Integer,Integer>> subs = new ArrayList<>();
         List<Player> inFieldTemp = new ArrayList<>(inField);
@@ -127,6 +158,10 @@ public class NewGameMenu {
         return subs;
     }
 
+    /**
+     * Creates a String for the possible Team Formations
+     * @return String of Team Formations
+     */
     private String teamFormationsString(){
         int counter = 0;
         StringBuilder sb = new StringBuilder(ColorUtils.BLUE + "Available formations: \n");
@@ -141,10 +176,18 @@ public class NewGameMenu {
         return sb.toString();
     }
 
+    /**
+     * Get GameManager
+     * @return GameManager's object
+     */
     public GameManager getGameManager() {
         return this.gameManager.clone();
     }
 
+    /**
+     * Set GameManager
+     * @param gameManager GameManager's object
+     */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
     }

@@ -11,21 +11,42 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class StartMenu {
+    /**
+     * Input Scanner
+     */
     private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * GameManager instance
+     */
     private GameManager gameManager;
 
+    /**
+     * Instantiates a StartMenu
+     */
     public StartMenu(){
         this.gameManager = new GameManager();
     }
 
+    /**
+     * Instantiates a StartMenu with respective attributes
+     * @param gameManager GameManager's object
+     */
     public StartMenu(GameManager gameManager){
         this.gameManager = gameManager.clone();
     }
 
+    /**
+     * Instantiates a StartMenu from a StartMenu's object
+     * @param startMenu
+     */
     public StartMenu(StartMenu startMenu){
         this.gameManager = startMenu.getGameManager();
     }
 
+    /**
+     * Start Menu to interact with user
+     */
     public void startMenuLoop(){
         boolean quit = false;
 
@@ -44,11 +65,11 @@ public class StartMenu {
                     tempGameManager.updateTeamVictoriesHistory();
                     this.gameManager = tempGameManager.clone();
                     System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!" + ColorUtils.RESET);
-                }else if(!this.gameManager.getTeamMap().isEmpty() && option == 2){
+                }else if(option == 2 && !this.gameManager.getTeamMap().isEmpty()){
                     NewGameMenu newGameMenu = new NewGameMenu(this.gameManager);
                     newGameMenu.newGameMenu();
                     this.gameManager = newGameMenu.getGameManager();
-                }else if(!this.gameManager.getGameList().isEmpty() && option == 3){
+                }else if(option == 3 && !this.gameManager.getGameList().isEmpty()){
                     ManagerMenu managerMenu = new ManagerMenu(gameManager);
                     managerMenu.manageGamesLoop();
                 }else{
@@ -66,6 +87,9 @@ public class StartMenu {
         } while (!quit);
     }
 
+    /**
+     * Print Start Menu
+     */
     public void printStartMenu(){
         System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[1]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Load Log" + ColorUtils.RESET);
         if(!this.gameManager.getTeamMap().isEmpty())
@@ -75,10 +99,18 @@ public class StartMenu {
         System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[0]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Quit Game" + ColorUtils.RESET);
     }
 
+    /**
+     * Get GameManager
+     * @return GameManager's object
+     */
     public GameManager getGameManager() {
         return this.gameManager.clone();
     }
 
+    /**
+     * Set GameManager
+     * @param gameManager GameManager's object
+     */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
     }
