@@ -1,20 +1,14 @@
 package menus;
 
-import exceptions.FileIOException;
+import exceptions.FileInvalidLineException;
 import objects.game.GameManager;
-import objects.player.Defender;
-import objects.player.Player;
-import objects.team.TeamFormation;
 import utils.ColorUtils;
 import utils.FileUtils;
 import utils.TextUtils;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class StartMenu {
     private final Scanner scanner = new Scanner(System.in);
@@ -63,7 +57,7 @@ public class StartMenu {
             }catch(InputMismatchException e){
                 System.out.println(TextUtils.INPUT_NOT_NUMBER);
                 scanner.next();
-            }catch (FileIOException e){
+            }catch (FileInvalidLineException e){
                 System.out.println(e.getLocalizedMessage());
                 quit = true;
             }catch (FileNotFoundException e){
