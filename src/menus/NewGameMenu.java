@@ -1,7 +1,9 @@
 package menus;
 
+import objects.game.GameConstants;
 import objects.game.GameManager;
 import objects.game.GameSim;
+import objects.game.GameState;
 import objects.player.Player;
 import objects.team.Team;
 import objects.team.TeamFormation;
@@ -12,6 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class NewGameMenu {
+    private final Random random = new Random();
     private final Scanner scanner = new Scanner(System.in);
     private GameManager gameManager;
 
@@ -51,9 +54,15 @@ public class NewGameMenu {
 
         System.out.println(gameSim);
 
+//        GameSim gameSim = new GameSim(this.gameManager.getGameList().size(), this.gameManager.getTeamMap().get("Sporting Club Schubert"), this.gameManager.getTeamMap().get("Mendelssohn F. C."));
+//        gameSim.setInFieldHome(gameSim.initInFieldTeam(0));
+//        gameSim.setInFieldAway(gameSim.initInFieldTeam(1));
+//
+//
+//        gameSim.setGameState(GameState.FST_HALF);
 //        while(gameSim.getGameState() != GameState.END_GAME){
-//            Random random = new Random();
-//            int time = random.nextInt(GameConstants.MAX_SIM_TIME - GameConstants.MIN_SIM_TIME) - GameConstants.MIN_SIM_TIME;
+//            // this time in in minutes
+//            int time = this.random.nextInt(GameConstants.MAX_SIM_TIME - GameConstants.MIN_SIM_TIME) - GameConstants.MIN_SIM_TIME;
 //            String simRes = gameSim.simulateGame(time);
 //            System.out.println(simRes);
 //        }
@@ -66,10 +75,11 @@ public class NewGameMenu {
         System.out.println(ColorUtils.GREEN + "Insert team name: " + ColorUtils.RESET);
         while(team == null){
             String teamName = scanner.nextLine();
-            if(!teamName.isBlank() && this.gameManager.getTeamMap().containsKey(teamName)) {
-                team = this.gameManager.getTeamMap().get(teamName).clone();
-            }
-            else System.out.println(ColorUtils.RED + "Invalid team name" + ColorUtils.RESET);
+            if(!teamName.isBlank() && this.gameManager.getTeamMap().containsKey(teamName)){
+                Team temp = this.gameManager.getTeamMap().get(teamName).clone();
+                if(temp.getTeamPlayers().size() >= GameConstants.MIN_GAME_PLAYER)
+                    team = temp;
+            } else System.out.println(ColorUtils.RED + "Invalid team name" + ColorUtils.RESET);
         }
 
         System.out.println(teamFormationsString());
@@ -95,7 +105,7 @@ public class NewGameMenu {
         System.out.println(ColorUtils.GREEN + "Starting bench players: " + ColorUtils.YELLOW + teamSubsTemp.stream().map(Player::getNumber).collect(Collectors.toList()) + ColorUtils.RESET);
         System.out.println(ColorUtils.YELLOW + "(Substitutions will be done at half-time)" + ColorUtils.RESET);
         System.out.println(ColorUtils.GREEN + "Insert team substitutions " + ColorUtils.BLUE + "<leave>" + ColorUtils.YELLOW + "->" + ColorUtils.BLUE + "<enter>" + ColorUtils.YELLOW + "(3 required)" + ColorUtils.RESET);
-        while(subs.size() < 3){
+        while(subs.size() < GameConstants.MAX_SUB_NUMBER){
             String input = scanner.nextLine();
             String[] players = input.split("->", 2);
             if(players.length == 2 && players[0] != null && players[1] != null

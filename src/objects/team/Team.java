@@ -39,6 +39,13 @@ public class Team {
         this.passedGames = new ArrayList<>();
     }
 
+    public Team(String name){
+        this.name = name;
+        this.teamPlayers = new ArrayList<>();
+        this.teamVictories = 0;
+        this.passedGames = new ArrayList<>();
+    }
+
     /**
      * Instantiates a Team with respective attributes
      * @param name Team's name

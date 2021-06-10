@@ -116,6 +116,21 @@ public class GameSim extends GameInfo {
     }
 
     public String simulateGame(int time){
+        int timeInSeconds = time*60;
+        if(this.gameState == GameState.FST_HALF){
+            if(this.time >= GameConstants.GAME_HALF_TIME && this.extraTime > 0){
+                this.extraTime = Math.min(0, this.extraTime - timeInSeconds);
+            }else if(this.time < GameConstants.GAME_HALF_TIME){
+                this.time = Math.min(this.time + timeInSeconds, GameConstants.GAME_HALF_TIME);
+            }else{
+                this.time = GameConstants.GAME_HALF_TIME;
+                this.gameState = GameState.HALF_TIME;
+            }
+        }else if(this.gameState == GameState.HALF_TIME){
+
+        }else if(this.gameState == GameState.SND_HALF){
+
+        }
         this.time += time;
         this.goals.setX(this.goals.getX()+1);
         return "Golo Equipa da casa";

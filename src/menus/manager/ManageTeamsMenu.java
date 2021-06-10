@@ -50,10 +50,25 @@ public class ManageTeamsMenu {
             else if(option.equalsIgnoreCase("d"))
                 if (page >= maxPage) System.out.println(ColorUtils.RED + "You are already on the last page." + ColorUtils.RESET);
                 else printPage(++page);
-            else if(this.gameManager.getTeamMap().containsKey(option))
+            else if(option.equalsIgnoreCase("n")){
+                Team newTeam = teamCreationMenu();
+                this.gameManager.addTeam(newTeam.clone());
+            }else if(this.gameManager.getTeamMap().containsKey(option))
                 teamInfoLoop(this.gameManager.getTeamMap().get(option));
             else System.out.println(TextUtils.INVALID_MENU_OPTION);
         }while (!quit);
+    }
+
+    public Team teamCreationMenu(){
+        Team team = null;
+        System.out.println(ColorUtils.GREEN + "Insert new team name: " + ColorUtils.RESET);
+        while(team == null){
+            String input = scanner.nextLine();
+            if(!input.isBlank())
+                team = new Team(input);
+            else System.out.println(ColorUtils.RED + "Invalid team name." + ColorUtils.RESET);
+        }
+        return team;
     }
 
     private void teamInfoLoop(Team team){
@@ -77,7 +92,7 @@ public class ManageTeamsMenu {
     }
 
     private void printControls(){
-        System.out.println(ColorUtils.BLUE + "[a] - Previous Page; [d] - Next Page; [teamName] - Team Info; [b] - Go Back" + ColorUtils.RESET);
+        System.out.println(ColorUtils.BLUE + "[a] - Previous Page; [d] - Next Page; [n] - New Team; [teamName] - Team Info; [b] - Go Back" + ColorUtils.RESET);
     }
 
     private void printPage(int page){
