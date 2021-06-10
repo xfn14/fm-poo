@@ -4,7 +4,7 @@ import exceptions.InvalidPlayerSubException;
 import objects.game.GameManager;
 import objects.game.GameSim;
 import objects.team.Team;
-import exceptions.FileIOException;
+import exceptions.FileInvalidLineException;
 import objects.player.*;
 
 import java.io.File;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class FileUtils {
-    public static List<GameSim> loadGameSimFile(String path, List<GameSim> logGameSims) throws FileIOException {
+    public static List<GameSim> loadGameSimFile(String path, List<GameSim> logGameSims) throws FileInvalidLineException {
         List<String> lines = fileToList(path);
         List<GameSim> gameSims = logGameSims.stream().map(GameSim::clone).collect(Collectors.toList());
 
@@ -32,7 +32,7 @@ public class FileUtils {
                             gameSimId = Integer.parseInt(splitLineDetailed[0]);
 
                         if(gameSimId < 0 || gameSims.size() <= gameSimId)
-                            throw new FileIOException("Invalid GameSim_ID needs to be [0-" + gameSims.size() + "] " + crtLine);
+                            throw new FileInvalidLineException("Invalid GameSim_ID needs to be [0-" + gameSims.size() + "] " + crtLine);
 
                         GameSim gameSim = gameSims.get(gameSimId);
                         if(gameSim == null)
@@ -46,14 +46,14 @@ public class FileUtils {
                     }
                     break;
                 default:
-                    throw new FileIOException("Error in line " + crtLine);
+                    throw new FileInvalidLineException("Error in line " + crtLine);
             }
             crtLine++;
         }
         return gameSims;
     }
 
-    public static GameManager loadLogFile(String path) throws FileIOException, FileNotFoundException {
+    public static GameManager loadLogFile(String path) throws FileInvalidLineException, FileNotFoundException {
         GameManager gameManager = new GameManager();
         List<String> lines = fileToList(path);
         String[] splitLine; int crtLine = 0;
@@ -80,7 +80,7 @@ public class FileUtils {
                             player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
                         }
-                        else throw new FileIOException(
+                        else throw new FileInvalidLineException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
                         System.out.println("Invalid fields in parse of Keeper. (line " + crtLine + ")");
@@ -93,7 +93,7 @@ public class FileUtils {
                             player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
                         }
-                        else throw new FileIOException(
+                        else throw new FileInvalidLineException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
                         System.out.println("Invalid fields in parse of Defender. (line " + crtLine + ")");
@@ -106,7 +106,7 @@ public class FileUtils {
                             player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
                         }
-                        else throw new FileIOException(
+                        else throw new FileInvalidLineException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
                         System.out.println("Invalid fields in parse of MidFielder. (line " + crtLine + ")");
@@ -119,7 +119,7 @@ public class FileUtils {
                             player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
                         }
-                        else throw new FileIOException(
+                        else throw new FileInvalidLineException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
                         System.out.println("Invalid fields in parse of FullBack. (line " + crtLine + ")");
@@ -132,15 +132,20 @@ public class FileUtils {
                             player = lastTeam.addPlayer(player);
                             playerMap.put(player.getId(), player);
                         }
-                        else throw new FileIOException(
+                        else throw new FileInvalidLineException(
                                 "Invalid format at " + path + " in Team format. (line " + lastTeamLine + ")");
                     }catch (NumberFormatException e){
                         System.out.println("Invalid fields in parse of Striker. (line " + crtLine + ")");
                     }
                     break;
                 case "Jogo":
+                    String[] args = splitLine[1].split(",");
+                    if (args.length != 33)
+                        throw new FileInvalidLineException("Invalid fields in parse of Game. (line " + crtLine + ")");
+                    Team team1 = teamMap.get(args[0]);
+                    Team team2 = teamMap.get(args[1]);
                     try{
-                        GameSim gameSim = GameSim.parser(splitLine[1].split(","), gameSimList.size(), teamMap);
+                        GameSim gameSim = GameSim.parser(args, gameSimList.size(), team1, team2);
                         if(gameSim != null) gameSimList.add(gameSim);
                     }catch (NumberFormatException e){
                         System.out.println("Invalid fields in parse of Game. (line " + crtLine + ")");
@@ -149,7 +154,7 @@ public class FileUtils {
                     }
                     break;
                 default:
-                    throw new FileIOException("Error in line " + crtLine );
+                    throw new FileInvalidLineException("Error in line " + crtLine );
             }
             crtLine++;
         }

@@ -1,37 +1,52 @@
 package menus;
 
-import exceptions.FileIOException;
+import exceptions.FileInvalidLineException;
 import objects.game.GameManager;
-import objects.player.Defender;
-import objects.player.Player;
-import objects.team.TeamFormation;
 import utils.ColorUtils;
 import utils.FileUtils;
 import utils.TextUtils;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class StartMenu {
+    /**
+     * Input Scanner
+     */
     private final Scanner scanner = new Scanner(System.in);
+
+    /**
+     * GameManager instance
+     */
     private GameManager gameManager;
 
+    /**
+     * Instantiates a StartMenu
+     */
     public StartMenu(){
         this.gameManager = new GameManager();
     }
 
+    /**
+     * Instantiates a StartMenu with respective attributes
+     * @param gameManager GameManager's object
+     */
     public StartMenu(GameManager gameManager){
         this.gameManager = gameManager.clone();
     }
 
+    /**
+     * Instantiates a StartMenu from a StartMenu's object
+     * @param startMenu
+     */
     public StartMenu(StartMenu startMenu){
         this.gameManager = startMenu.getGameManager();
     }
 
+    /**
+     * Start Menu to interact with user
+     */
     public void startMenuLoop(){
         boolean quit = false;
 
@@ -50,11 +65,11 @@ public class StartMenu {
                     tempGameManager.updateTeamVictoriesHistory();
                     this.gameManager = tempGameManager.clone();
                     System.out.println(ColorUtils.GREEN_BOLD + "Finished loading log file!" + ColorUtils.RESET);
-                }else if(!this.gameManager.getTeamMap().isEmpty() && option == 2){
+                }else if(option == 2 && !this.gameManager.getTeamMap().isEmpty()){
                     NewGameMenu newGameMenu = new NewGameMenu(this.gameManager);
                     newGameMenu.newGameMenu();
                     this.gameManager = newGameMenu.getGameManager();
-                }else if(!this.gameManager.getGameList().isEmpty() && option == 3){
+                }else if(option == 3 && !this.gameManager.getGameList().isEmpty()){
                     ManagerMenu managerMenu = new ManagerMenu(gameManager);
                     managerMenu.manageGamesLoop();
                 }else{
@@ -63,7 +78,7 @@ public class StartMenu {
             }catch(InputMismatchException e){
                 System.out.println(TextUtils.INPUT_NOT_NUMBER);
                 scanner.next();
-            }catch (FileIOException e){
+            }catch (FileInvalidLineException e){
                 System.out.println(e.getLocalizedMessage());
                 quit = true;
             }catch (FileNotFoundException e){
@@ -72,6 +87,9 @@ public class StartMenu {
         } while (!quit);
     }
 
+    /**
+     * Print Start Menu
+     */
     public void printStartMenu(){
         System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[1]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Load Log" + ColorUtils.RESET);
         if(!this.gameManager.getTeamMap().isEmpty())
@@ -81,10 +99,18 @@ public class StartMenu {
         System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[0]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Quit Game" + ColorUtils.RESET);
     }
 
+    /**
+     * Get GameManager
+     * @return GameManager's object
+     */
     public GameManager getGameManager() {
         return this.gameManager.clone();
     }
 
+    /**
+     * Set GameManager
+     * @param gameManager GameManager's object
+     */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
     }
