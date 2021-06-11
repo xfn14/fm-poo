@@ -49,6 +49,16 @@ public class PlayPass extends GamePlay{
         return this.receiver.clone();
     }
 
+    public static PlayPass initialGamePass(int team, int half, Player player, Player receiver){
+        return new PlayPass(
+                player,
+                half == 1 ? 0 : GameConstants.GAME_HALF_TIME,
+                team,
+                receiver,
+                null);
+
+    }
+
     public void setReceiver(Player receiver) {
         this.receiver = receiver.clone();
     }

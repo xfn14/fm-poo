@@ -200,35 +200,40 @@ public class GameSim extends GameInfo {
         List<GamePlay> newPlay = new ArrayList<>();
         boolean stop = skipTime(time);
 
-        if(stop){
-            if(this.gameState == GameState.FST_HALF){
-                PlayPass halfStartPass = new PlayPass(
-                        this.inFieldAway.get(this.inFieldAway.size()-1),
-                        GameConstants.GAME_HALF_TIME,
-                        1,
-                        this.inFieldAway.get(this.inFieldAway.size()-2),
-                        null);
-                newPlay.add(halfStartPass);
+        if(lastPlay instanceof PlayFinish){
+            PlayFinish playFinish = (PlayFinish) lastPlay;
+            if(playFinish.result()){
+
+            }else{
+
+            }
+        }else if(lastPlay instanceof PlayPass){
+            PlayPass playPass = (PlayPass) lastPlay;
+            List<Player> inField = playPass.getTeam() == 1 ? this.inFieldHome : this.inFieldAway;
+            TeamFormation teamFormation = playPass.getTeam() == 1 ? this.homeFormation : this.awayFormation;
+            if(playPass.result()){
+                int playerIdx = inField.indexOf(playPass.getPlayer());
+                if(inField.size() - teamFormation.getStrikers() - teamFormation.getMidFielders() + 1 < playerIdx){
+                    PlayFinish playFinish = new PlayFinish(playPass.getPlayer(), this.time, playPass.getTeam(),
+                            (playPass.getTeam() == 1 ? this.inFieldAway : this.inFieldHome).get(0));
+                    newPlay.add(playFinish);
+                    if(playFinish.result()){
+                        // ScoreGoal
+                    }else{
+
+                    }
+                }
+            }else{
+
             }
         }
 
 
-        if(lastPlay == null){
-
-        }else{
-            if(lastPlay.result()){
-                if(lastPlay instanceof PlayFinish){
-
-                }else if(lastPlay instanceof PlayPass){
-
-                }
-            }else{
-                if(lastPlay instanceof PlayFinish){
-
-                }else if(lastPlay instanceof PlayPass){
-
-                }
-            }
+        if(stop && this.gameState == GameState.FST_HALF){
+            Player player = this.inFieldAway.get(this.inFieldAway.size()-1);
+            Player receiver = this.inFieldAway.get(this.inFieldAway.size()-2);
+            PlayPass halfStartPass = PlayPass.initialGamePass(2, 2, player, receiver);
+            newPlay.add(halfStartPass);
         }
         return newPlay;
     }

@@ -88,7 +88,7 @@ public class NewGameMenu {
         List<GamePlay> plays = new ArrayList<>();
         PlayPass halfStartPass = new PlayPass(
                 gameSim.getInFieldHome().get(10),
-                GameConstants.GAME_HALF_TIME,
+                0,
                 1,
                 gameSim.getInFieldHome().get(9),
                 null);
