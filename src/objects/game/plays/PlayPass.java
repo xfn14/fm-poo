@@ -71,8 +71,10 @@ public class PlayPass extends GamePlay{
             MidFielder midFielder = (MidFielder) interceptor;
             r = random.nextInt(Math.max(GameConstants.RECOVER_DIFF + gameTimeDiff, GameConstants.RECOVER_DIFF));
             return midFielder.getRecover() >= r;
+        }else{
+            r = random.nextInt(Math.max(GameConstants.RECOVER_DIFF + gameTimeDiff, GameConstants.RECOVER_DIFF));
+            return (getInterceptor().getResistance() + getInterceptor().getThrust() + getInterceptor().getVelocity())/3 >= r;
         }
-        return true;
     }
 
     /**
@@ -142,7 +144,11 @@ public class PlayPass extends GamePlay{
     @Override
     public String toString() {
         Tuple<Integer,Integer> time = DateUtils.secondsToTuple(getGameTime());
-        return ColorUtils.BLUE + "[" + time.getX() + ":" + time.getY() + "]" + ColorUtils.GREEN + " Goal by " + getPlayer().getName() + ColorUtils.RESET;
+        if(getResult()){
+            return ColorUtils.GREEN + " Pass from " + getPlayer().getFstLstName() + " to " + getReceiver().getFstLstName() + ColorUtils.RESET;
+        }else{
+            return ColorUtils.GREEN + " Pass from " + getPlayer().getFstLstName() + " to " + getReceiver().getFstLstName() + " intercepted" + (this.interceptor != null ? " by " + interceptor.getFstLstName() : "")  + ColorUtils.RESET;
+        }
     }
 
     /**

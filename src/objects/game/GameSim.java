@@ -194,10 +194,10 @@ public class GameSim extends GameInfo {
     }
 
     /**
-     * Simulate a new play of the game with knowledge about the last one
+     * Simulate a new play/plays of the game with knowledge about the last one
      * @param time Time to simulate the new play
      * @param lastPlay Last play executed
-     * @return the resulted play
+     * @return the resulted list of plays
      */
     public List<GamePlay> simulateGame(int time, GamePlay lastPlay){
         List<GamePlay> newPlay = new ArrayList<>();
@@ -214,6 +214,8 @@ public class GameSim extends GameInfo {
                         rival.get(rival.size()-1),
                         rival.get(rival.size()-2)
                 ));
+                if(playFinish.getTeam() == 1) this.goals.setX(this.goals.getX()+1);
+                else this.goals.setY(this.goals.getY()+1);
             }else{
                 int interceptorRandom = RandomUtils.randomBetween(1, 3);
                 int receiverRandom = RandomUtils.randomBetween(1,4);
@@ -229,7 +231,7 @@ public class GameSim extends GameInfo {
             PlayPass playPass = (PlayPass) lastPlay;
             List<Player> inField = playPass.getTeam() == 1 ? this.inFieldHome : this.inFieldAway;
             TeamFormation teamFormation = playPass.getTeam() == 1 ? this.homeFormation : this.awayFormation;
-            List<Player> rival = playPass.getTeam() == 1 ? this.inFieldHome : this.inFieldAway;
+            List<Player> rival = playPass.getTeam() == 1 ? this.inFieldAway : this.inFieldHome;
             if(playPass.getResult()){
                 int playerIdx = inField.indexOf(playPass.getReceiver());
                 if(inField.size() - teamFormation.getStrikers() - teamFormation.getMidFielders() + 1 < playerIdx){
@@ -243,6 +245,8 @@ public class GameSim extends GameInfo {
                                     rival.get(rival.size()-1),
                                     rival.get(rival.size()-2)
                             ));
+                            if(playFinish.getTeam() == 1) this.goals.setX(this.goals.getX()+1);
+                            else this.goals.setY(this.goals.getY()+1);
                         }else{
                             int interceptorRandom = RandomUtils.randomBetween(1, 3);
                             int receiverRandom = RandomUtils.randomBetween(1,4);
@@ -255,7 +259,7 @@ public class GameSim extends GameInfo {
                             ));
                         }
                     }else{
-                        int passRandom = RandomUtils.randomBetween(-1, 2);
+                        int passRandom = RandomUtils.randomBetween(-1, 4);
                         if(passRandom == 0) passRandom++;
                         newPlay.add(new PlayPass(
                                 playPass.getReceiver(),
@@ -266,26 +270,37 @@ public class GameSim extends GameInfo {
                         ));
                     }
                 }else{
-                    int passRandom = RandomUtils.randomBetween(1, 3);
+                    int passRandom = RandomUtils.randomBetween(1, 6);
                     newPlay.add(new PlayPass(
                             playPass.getReceiver(),
                             this.time,
                             playPass.getTeam(),
                             inField.get(inField.size() - passRandom),
-                            rival.get(rival.size() - playerIdx - 1)
+                            rival.get(rival.size() - playerIdx - 2)
                     ));
                 }
             }else{
-                int passRandom = RandomUtils.randomBetween(-1, 2);
+                int passRandom = RandomUtils.randomBetween(-1, 6);
                 if(passRandom == 0) passRandom++;
-                int randomIdx = rival.indexOf(playPass.getInterceptor());
-                newPlay.add(new PlayPass(
-                        playPass.getInterceptor(),
-                        this.time,
-                        playPass.getTeam(),
-                        rival.get(rival.size() + passRandom),
-                        inField.get(inField.size() - randomIdx - 1)
-                ));
+                if(playPass.getInterceptor() == null){
+                    int randomIdx = rival.indexOf(playPass.getInterceptor());
+                    newPlay.add(new PlayPass(
+                            playPass.getInterceptor(),
+                            this.time,
+                            playPass.getTeam(),
+                            rival.get(rival.size() + passRandom),
+                            inField.get(inField.size() - randomIdx - 1)
+                    ));
+                }else{
+                    int playerIdx = inField.indexOf(playPass.getPlayer());
+                    newPlay.add(new PlayPass(
+                            rival.get(Math.min(rival.size() - playerIdx - 1, rival.size() - 1)),
+                            this.time,
+                            playPass.getTeam(),
+                            rival.get(Math.min(rival.size() - passRandom, rival.size() - 1)),
+                            inField.get(Math.min(inField.size() - playerIdx - 1, inField.size()-1))
+                    ));
+                }
             }
         }
 

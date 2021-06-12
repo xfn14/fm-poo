@@ -93,6 +93,10 @@ public class GameManager {
         this.teamMap.put(team.getName(), team.clone());
     }
 
+    public void addGame(GameSim gameSim){
+        this.gameList.add(gameSim);
+    }
+
     /**
      * Get Map of Players
      * @return Map of Players

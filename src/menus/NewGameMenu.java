@@ -10,6 +10,7 @@ import objects.player.Player;
 import objects.team.Team;
 import objects.team.TeamFormation;
 import utils.ColorUtils;
+import utils.DateUtils;
 import utils.TextUtils;
 import utils.Tuple;
 
@@ -57,30 +58,30 @@ public class NewGameMenu {
      * Menu for creating a new game
      */
     public void newGameMenu() throws InterruptedException {
-//        GameSim gameSim = new GameSim(this.gameManager.getGameList().size());
-//        Tuple<Team, TeamFormation> team1, team2;
-//
-//        System.out.println(ColorUtils.BLUE + "FIRST TEAM SELECTION" + ColorUtils.RESET);
-//        team1 = this.selectTeamInfo();
-//        gameSim.setHomeTeam(team1.getX());
-//        gameSim.setHomeFormation(team1.getY());
-//        gameSim.setInFieldHome(gameSim.initInFieldTeam(1));
-//        List<Player> team1Subs = gameSim.getHomeTeam().getTeamPlayers();
-//        team1Subs.removeAll(gameSim.getInFieldHome());
-//        gameSim.setHomeSubs(selectTeamSubs(gameSim.getInFieldHome(), team1Subs));
-//
-//        System.out.println(ColorUtils.BLUE + "SECOND TEAM SELECTION" + ColorUtils.RESET);
-//        team2 = this.selectTeamInfo();
-//        gameSim.setAwayTeam(team2.getX());
-//        gameSim.setAwayFormation(team2.getY());
-//        gameSim.setInFieldAway(gameSim.initInFieldTeam(2));
-//        List<Player> team2Subs = gameSim.getAwayTeam().getTeamPlayers();
-//        team2Subs.removeAll(gameSim.getInFieldAway());
-//        gameSim.setAwaySubs(selectTeamSubs(gameSim.getInFieldAway(), team2Subs));
-//
-//        System.out.println(gameSim);
+        GameSim gameSim = new GameSim(this.gameManager.getGameList().size());
+        Tuple<Team, TeamFormation> team1, team2;
 
-        GameSim gameSim = new GameSim(this.gameManager.getGameList().size(), this.gameManager.getTeamMap().get("Sporting Club Schubert"), this.gameManager.getTeamMap().get("Mendelssohn F. C."));
+        System.out.println(ColorUtils.BLUE + "FIRST TEAM SELECTION" + ColorUtils.RESET);
+        team1 = this.selectTeamInfo();
+        gameSim.setHomeTeam(team1.getX());
+        gameSim.setHomeFormation(team1.getY());
+        gameSim.setInFieldHome(gameSim.initInFieldTeam(1));
+        List<Player> team1Subs = gameSim.getHomeTeam().getTeamPlayers();
+        team1Subs.removeAll(gameSim.getInFieldHome());
+        gameSim.setHomeSubs(selectTeamSubs(gameSim.getInFieldHome(), team1Subs));
+
+        System.out.println(ColorUtils.BLUE + "SECOND TEAM SELECTION" + ColorUtils.RESET);
+        team2 = this.selectTeamInfo();
+        gameSim.setAwayTeam(team2.getX());
+        gameSim.setAwayFormation(team2.getY());
+        gameSim.setInFieldAway(gameSim.initInFieldTeam(2));
+        List<Player> team2Subs = gameSim.getAwayTeam().getTeamPlayers();
+        team2Subs.removeAll(gameSim.getInFieldAway());
+        gameSim.setAwaySubs(selectTeamSubs(gameSim.getInFieldAway(), team2Subs));
+
+        System.out.println(gameSim);
+
+//        GameSim gameSim = new GameSim(this.gameManager.getGameList().size(), this.gameManager.getTeamMap().get("Sporting Club Schubert"), this.gameManager.getTeamMap().get("Mendelssohn F. C."));
         gameSim.setInFieldHome(gameSim.initInFieldTeam(0));
         gameSim.setInFieldAway(gameSim.initInFieldTeam(1));
         System.out.println(gameSim);
@@ -101,22 +102,34 @@ public class NewGameMenu {
                 String option = scanner.nextLine();
                 if(option.equalsIgnoreCase("0")){
                     gameSim.setGameState(GameState.SND_HALF);
+                    Tuple<Integer,Integer> timed = DateUtils.secondsToTuple(gameSim.getTime());
+                    System.out.println(ColorUtils.BLUE + "[" + timed.getX() + "']" + plays.get(plays.size()-1));
                 }else System.out.println(TextUtils.INVALID_MENU_OPTION);
             }else{
                 // this time in in minutes
                 int time = this.random.nextInt(GameConstants.MAX_SIM_TIME - GameConstants.MIN_SIM_TIME) + GameConstants.MIN_SIM_TIME;
                 TimeUnit.SECONDS.sleep(Math.max(time, time-2));
-//                System.out.println(time);
                 List<GamePlay> newPlays = gameSim.simulateGame(time, plays.get(plays.size()-1));
                 if(!newPlays.isEmpty()){
-                    for(GamePlay gamePlay : newPlays){
-                        System.out.println(gamePlay);
+                    for (int i = 0; i < newPlays.size(); i++) {
+                        GamePlay gamePlay = newPlays.get(i);
+                        if(gameSim.getGameState() != GameState.HALF_TIME){
+                            Tuple<Integer,Integer> timed = DateUtils.secondsToTuple(gameSim.getTime());
+                            System.out.println(ColorUtils.BLUE + "[" + timed.getX() + "']" + gamePlay);
+                        }else{
+                            if(i != newPlays.size()-1){
+                                Tuple<Integer,Integer> timed = DateUtils.secondsToTuple(gameSim.getTime());
+                                System.out.println(ColorUtils.BLUE + "[" + timed.getX() + "']" + gamePlay);
+                            }
+                        }
                     }
                 }
                 plays.addAll(newPlays);
             }
         }
-        System.out.println(ColorUtils.GREEN + "Game Ended" + ColorUtils.RESET);
+        System.out.println(ColorUtils.GREEN + "Game Ended " + ColorUtils.BLUE + "[ " + gameSim.getGoals().getX() + " - " + gameSim.getGoals().getY() + " ]" + ColorUtils.RESET);
+        this.gameManager.addGame(gameSim);
+        this.gameManager.updateTeamVictoriesHistory();
     }
 
     /**

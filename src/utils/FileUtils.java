@@ -7,8 +7,7 @@ import objects.team.Team;
 import exceptions.FileInvalidLineException;
 import objects.player.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -195,5 +194,23 @@ public class FileUtils {
             lines = new ArrayList<>();
         }
         return lines;
+    }
+
+    public static void saveObject(String objectPath, GameManager gameManager) throws IOException {
+        FileOutputStream fos = new FileOutputStream(objectPath);
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        ObjectOutputStream oos = new ObjectOutputStream(bos);
+        oos.writeObject(gameManager);
+        oos.flush();
+        oos.close();
+    }
+
+    public static GameManager loadGameManager(String objectPath) throws IOException, ClassNotFoundException {
+        FileInputStream fis = new FileInputStream(objectPath);
+        BufferedInputStream bi = new BufferedInputStream(fis);
+        ObjectInputStream ois = new ObjectInputStream(bi);
+        GameManager gameManager = (GameManager) ois.readObject();
+        ois.close();
+        return gameManager;
     }
 }

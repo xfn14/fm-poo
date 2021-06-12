@@ -3,6 +3,9 @@ package objects.game.plays;
 import objects.game.GameConstants;
 import objects.player.Keeper;
 import objects.player.Player;
+import utils.ColorUtils;
+import utils.DateUtils;
+import utils.Tuple;
 
 import java.util.Objects;
 import java.util.Random;
@@ -59,7 +62,6 @@ public class PlayFinish extends GamePlay{
             return k.getElasticity() >= r;
         }else{
             r = random.nextInt(Math.max(GameConstants.SAVE_DIFF_NOT_KEEPER + gameTimeDiff, GameConstants.SAVE_DIFF_NOT_KEEPER));
-            System.out.println(keeper);
             return (keeper.getDexterity() + keeper.getHeader() + keeper.getThrust())/3 >= r;
         }
     }
@@ -95,9 +97,17 @@ public class PlayFinish extends GamePlay{
      */
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PlayFinish{");
-        sb.append("keeper=").append(keeper);
-        sb.append('}');
+        Tuple<Integer,Integer> time = DateUtils.secondsToTuple(getGameTime());
+        StringBuilder sb = new StringBuilder();
+        sb.append(ColorUtils.GREEN).append(" Shot by ").append(getPlayer().getFstLstName()).append(ColorUtils.RESET).append("\n");
+        if(getResult()){
+            sb.append(ColorUtils.GREEN).append(" Goal by ").append(getPlayer().getFstLstName()).append(ColorUtils.RESET);
+        }else{
+            if(keeper != null)
+                sb.append(ColorUtils.GREEN).append(" Saved by ").append(getKeeper().getFstLstName()).append(ColorUtils.RESET);
+            else
+                sb.append(ColorUtils.GREEN).append(" Missed the shot ").append(getPlayer().getFstLstName()).append(ColorUtils.RESET);
+        }
         return sb.toString();
     }
 
