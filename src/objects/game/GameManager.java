@@ -82,6 +82,10 @@ public class GameManager implements Serializable {
         this.teamMap.put(team.getName(), team.clone());
     }
 
+    /**
+     * Add a Game to the Game's list
+     * @param gameSim GameSim's object
+     */
     public void addGame(GameSim gameSim){
         this.gameList.add(gameSim);
     }

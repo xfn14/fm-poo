@@ -30,7 +30,7 @@ public class StartMenu {
     }
 
     /**
-     * Start Menu to interact with user
+     * Start Menu to interact with user after loading files
      */
     public void startMenuLoop(){
         boolean quit = false;
@@ -85,6 +85,13 @@ public class StartMenu {
         } while (!quit);
     }
 
+    /**
+     * Interaction menu to get path of file(s) to load the game
+     * @return GameManager's object
+     * @throws IOException
+     * @throws FileInvalidLineException
+     * @throws ClassNotFoundException
+     */
     public GameManager loadMenu() throws IOException, FileInvalidLineException, ClassNotFoundException {
         GameManager gameManager = null;
         boolean quit = false;
@@ -119,6 +126,10 @@ public class StartMenu {
         return gameManager;
     }
 
+    /**
+     * Get an existing path from user's input
+     * @return Path
+     */
     public String requestFileLocation(){
         String location = "";
         while(location.isBlank()){

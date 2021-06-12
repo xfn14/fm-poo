@@ -196,6 +196,12 @@ public class FileUtils {
         return lines;
     }
 
+    /**
+     * Save current GameManager into a file
+     * @param objectPath Path of the new file
+     * @param gameManager GameManager's object
+     * @throws IOException
+     */
     public static void saveGameManager(String objectPath, GameManager gameManager) throws IOException {
         FileOutputStream fos = new FileOutputStream(objectPath);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
@@ -205,6 +211,13 @@ public class FileUtils {
         oos.close();
     }
 
+    /**
+     * Loads a GameManager from a file
+     * @param objectPath Path to the saved file
+     * @return GameManager's object
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static GameManager loadGameManager(String objectPath) throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(objectPath);
         BufferedInputStream bi = new BufferedInputStream(fis);

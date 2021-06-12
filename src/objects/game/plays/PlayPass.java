@@ -54,7 +54,7 @@ public class PlayPass extends GamePlay {
     @Override
     public boolean result() {
         Random random = new Random();
-        int gameTimeDiff = (GameConstants.GAME_TIME_MAX_DIFF * getGameTime()) / GameConstants.GAME_HALF_TIME*2;
+        int gameTimeDiff = (GameConstants.GAME_TIME_MAX_DIFF * getGameTime()) / (GameConstants.GAME_HALF_TIME*2);
         int r = random.nextInt(Math.max(GameConstants.PASS_DIFF + gameTimeDiff, GameConstants.PASS_DIFF));
         if(interceptor == null) return true;
         if(getPlayer().getPass() < r) return false;

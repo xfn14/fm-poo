@@ -399,7 +399,7 @@ public class GameSim extends GameInfo implements Serializable {
     }
 
     /**
-     * Parses an array of strings and creates a FullBack's instance from it
+     * Parses an array of strings and creates a GameSim's instance from it
      * @param args Array of strings containing respective values to be parsed
      * @param gameId Game's id
      * @param homeTeam Team which plays at home
