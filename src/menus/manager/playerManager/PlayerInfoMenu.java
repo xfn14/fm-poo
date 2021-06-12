@@ -63,7 +63,6 @@ public class PlayerInfoMenu {
         printControls();
 
         do{
-            // TODO: 6/8/2021 Change to nextLine()
             try{
                 int option = Integer.parseInt(scanner.nextLine());
                 if(option == 0) quit = true;
@@ -96,9 +95,8 @@ public class PlayerInfoMenu {
         if(!player.getTeamHistory().isEmpty()){
             Team oldTeam = this.gameManager.getTeamMap().get(player.getTeamHistory().get(player.getTeamHistory().size()-1)).clone();
             oldTeam.removePlayer(player);
+            this.gameManager.addTeam(oldTeam);
         }
-
-        // TODO: 6/10/2021 Update old team otherwise player will belong to two teams at the same time
 
         Team playerTeam = this.gameManager.getTeamMap().get(wantedTeam).clone();
         player = playerTeam.addPlayer(player);
