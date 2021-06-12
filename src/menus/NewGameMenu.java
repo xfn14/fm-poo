@@ -32,26 +32,11 @@ public class NewGameMenu {
     private GameManager gameManager;
 
     /**
-     * Instantiates a NewGameMenu
-     */
-    public NewGameMenu(){
-        this.gameManager = new GameManager();
-    }
-
-    /**
      * Instantiates a NewGameMenu with respective attributes
      * @param gameManager GameManager's object
      */
     public NewGameMenu(GameManager gameManager){
         setGameManager(gameManager);
-    }
-
-    /**
-     * Instantiates a NewGameMenu from a NewGameMenu's object
-     * @param newGameMenu
-     */
-    public NewGameMenu(NewGameMenu newGameMenu){
-        this.gameManager = newGameMenu.getGameManager();
     }
 
     /**
@@ -78,10 +63,6 @@ public class NewGameMenu {
         List<Player> team2Subs = gameSim.getAwayTeam().getTeamPlayers();
         team2Subs.removeAll(gameSim.getInFieldAway());
         gameSim.setAwaySubs(selectTeamSubs(gameSim.getInFieldAway(), team2Subs));
-
-//        GameSim gameSim = new GameSim(this.gameManager.getGameList().size(), this.gameManager.getTeamMap().get("Sporting Club Schubert"), this.gameManager.getTeamMap().get("Mendelssohn F. C."));
-        gameSim.setInFieldHome(gameSim.initInFieldTeam(0));
-        gameSim.setInFieldAway(gameSim.initInFieldTeam(1));
 
         List<GamePlay> plays = new ArrayList<>();
         PlayPass halfStartPass = new PlayPass(
@@ -227,7 +208,7 @@ public class NewGameMenu {
             sb.append(teamFormation.getStrikers()).append('\n');
         }
         sb.append(ColorUtils.RESET);
-        return sb.substring(0, sb.toString().length() - 1);
+        return sb.toString();
     }
 
     /**

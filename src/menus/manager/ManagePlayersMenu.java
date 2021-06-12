@@ -7,7 +7,6 @@ import objects.player.*;
 import utils.ColorUtils;
 import utils.TextUtils;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class ManagePlayersMenu {
@@ -32,39 +31,12 @@ public class ManagePlayersMenu {
     public static final int ITEMS_PER_PAGE = 10;
 
     /**
-     * Instantiates a ManagePlayersMenu
-     */
-    public ManagePlayersMenu(){
-        this.gameManager = new GameManager();
-        this.maxPage = 1;
-    }
-
-    /**
      * Instantiates a ManagePlayersMenu with a specific GameManager
      * @param gameManager GameManager's object
      */
     public ManagePlayersMenu(GameManager gameManager) {
         setGameManager(gameManager);
         this.maxPage = (int) Math.ceil((double) this.gameManager.getPlayerMap().size() / ITEMS_PER_PAGE);
-    }
-
-    /**
-     * Instantiates a ManagePlayersMenu with the respective attributes
-     * @param gameManager GameManager's object
-     * @param maxPage Number of pages
-     */
-    public ManagePlayersMenu(GameManager gameManager, int maxPage) {
-        setGameManager(gameManager);
-        this.maxPage = maxPage;
-    }
-
-    /**
-     * Instantiates a ManagePlayersMenu from a ManagePlayersMenu
-     * @param managePlayersMenu ManagePlayersMenu's object
-     */
-    public ManagePlayersMenu(ManagePlayersMenu managePlayersMenu){
-        this.gameManager = managePlayersMenu.getGameManager();
-        this.maxPage = managePlayersMenu.getMaxPage();
     }
 
     /**
@@ -166,13 +138,5 @@ public class ManagePlayersMenu {
      */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
-    }
-
-    /**
-     * Get Number of pages
-     * @return Number of pages
-     */
-    public int getMaxPage() {
-        return this.maxPage;
     }
 }

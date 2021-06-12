@@ -14,15 +14,7 @@ public class PlayFinish extends GamePlay{
     /**
      * Keeper who will face the play
      */
-    private Player keeper;
-
-    /**
-     * Instantiate a PlayFinish
-     */
-    public PlayFinish() {
-        super();
-        this.keeper = new Player();
-    }
+    private final Player keeper;
 
     /**
      * Instantiate a PlayFinish with the respective attributes
@@ -72,14 +64,6 @@ public class PlayFinish extends GamePlay{
      */
     public Player getKeeper() {
         return this.keeper.clone();
-    }
-
-    /**
-     * Set Keeper who is about to face the play
-     * @param keeper Keeper who is about to face the play
-     */
-    public void setKeeper(Player keeper) {
-        this.keeper = keeper.clone();
     }
 
     /**

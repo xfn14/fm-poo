@@ -1,21 +1,14 @@
 package objects.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MidFielder extends Player{
+public class MidFielder extends Player implements Serializable {
     /**
      * MidFielder's recover ability
      */
     private int recover;
-
-    /**
-     * Instantiates a MidFielder
-     */
-    public MidFielder() {
-        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
-        this.recover = 0;
-    }
 
     /**
      * Instantiates a MidFielder with Player&Person's attributes
@@ -36,27 +29,6 @@ public class MidFielder extends Player{
                       int velocity, int resistance, int dexterity, int thrust,
                       int header, int finish, int pass, int recover) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
-        this.recover = recover;
-    }
-
-    /**
-     * Instantiates a MidFielder from a Person's object and with Player's attributes
-     * @param person Person's object
-     * @param number shirt number
-     * @param teamHistory list of teams where the player has been
-     * @param velocity velocity ability
-     * @param resistance resistance ability
-     * @param dexterity dexterity ability
-     * @param thrust thrust ability
-     * @param header header ability
-     * @param finish finish ability
-     * @param pass pass ability
-     * @param recover recover ability
-     */
-    public MidFielder(Person person, int number, List<String> teamHistory,
-                      int velocity, int resistance, int dexterity, int thrust,
-                      int header, int finish, int pass, int recover) {
-        super(person, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
         this.recover = recover;
     }
 
@@ -127,14 +99,6 @@ public class MidFielder extends Player{
      */
     public int getRecover() {
         return this.recover;
-    }
-
-    /**
-     * Set MidFielder's recover ability
-     * @param recover Recover ability value
-     */
-    public void setRecover(int recover) {
-        this.recover = recover;
     }
 
     /**

@@ -3,10 +3,11 @@ package objects.game;
 import objects.player.Player;
 import objects.team.Team;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class GameManager {
+public class GameManager implements Serializable {
     /**
      * Map every Player's number to their respective object
      */
@@ -29,18 +30,6 @@ public class GameManager {
         this.playerMap = new HashMap<>();
         this.teamMap = new HashMap<>();
         this.gameList = new ArrayList<>();
-    }
-
-    /**
-     * Instantiates a GameManager with the respective attributes
-     * @param playerMap Map Player's number to the object
-     * @param teamMap Map Team's name to the object
-     * @param gameList List simulated games
-     */
-    public GameManager(Map<Integer, Player> playerMap, Map<String, Team> teamMap, List<GameSim> gameList){
-        setPlayerMap(playerMap);
-        setTeamMap(teamMap);
-        setGameList(gameList);
     }
 
     /**

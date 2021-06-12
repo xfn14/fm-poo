@@ -10,25 +10,16 @@ import utils.Tuple;
 import java.util.Objects;
 import java.util.Random;
 
-public class PlayPass extends GamePlay{
+public class PlayPass extends GamePlay {
     /**
      * Player who is about to receive the ball
      */
-    private Player receiver;
+    private final Player receiver;
 
     /**
      * Possible Player who will cut the pass
      */
     private Player interceptor = null;
-
-    /**
-     * Instantiate a PlayPass
-     */
-    public PlayPass() {
-        super();
-        this.receiver = new Player();
-        this.interceptor = new Player();
-    }
 
     /**
      * Instantiate a PlayPass with the respective attributes
@@ -100,15 +91,6 @@ public class PlayPass extends GamePlay{
                 team,
                 receiver,
                 null);
-
-    }
-
-    /**
-     * Set Player who is about to receive the ball
-     * @param receiver Player who is about to receive the ball
-     */
-    public void setReceiver(Player receiver) {
-        this.receiver = receiver.clone();
     }
 
     /**
@@ -118,14 +100,6 @@ public class PlayPass extends GamePlay{
     public Player getInterceptor() {
         if (this.interceptor == null) return null;
         return this.interceptor.clone();
-    }
-
-    /**
-     * Set Player who will try to cut the pass
-     * @param interceptor Player who will try to cut the pass
-     */
-    public void setInterceptor(Player interceptor) {
-        this.interceptor = interceptor.clone();
     }
 
     /**

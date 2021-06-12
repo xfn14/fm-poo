@@ -1,8 +1,9 @@
 package utils;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Tuple<X,Y> {
+public class Tuple<X,Y> implements Serializable {
 
     /**
      * First element

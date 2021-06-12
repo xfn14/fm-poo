@@ -1,16 +1,10 @@
 package objects.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Striker extends Player {
-    /**
-     * Instantiates a Striker
-     */
-    public Striker() {
-        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
-    }
-
+public class Striker extends Player implements Serializable {
     /**
      * Instantiates a Striker with Player&Person's attributes
      * @param id Identification of the Person
@@ -27,23 +21,6 @@ public class Striker extends Player {
      */
     public Striker(int id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
-    }
-
-    /**
-     * Instantiates a Striker from a Person's object and with Player's attributes
-     * @param person Person's object
-     * @param number shirt number
-     * @param teamHistory list of teams where the player has been
-     * @param velocity velocity ability
-     * @param resistance resistance ability
-     * @param dexterity dexterity ability
-     * @param thrust thrust ability
-     * @param header header ability
-     * @param finish finish ability
-     * @param pass pass ability
-     */
-    public Striker(Person person, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass) {
-        super(person, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
     }
 
     /**

@@ -1,9 +1,10 @@
 package objects.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Player extends Person {
+public class Player extends Person implements Serializable {
 
     /**
      * Player's shirt number

@@ -12,11 +12,12 @@ import utils.DateUtils;
 import utils.RandomUtils;
 import utils.Tuple;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class GameSim extends GameInfo {
+public class GameSim extends GameInfo implements Serializable {
     private final Random random = new Random();
     /**
      * Current state of the game
@@ -449,74 +450,6 @@ public class GameSim extends GameInfo {
         Random random = new Random();
         List<Player> teamPlayers = team == 1 ? this.getHomeTeam().getTeamPlayers() : this.getAwayTeam().getTeamPlayers();
         TeamFormation teamFormation = team == 1 ? this.homeFormation : this.awayFormation;
-//
-//        int randomValue = random.nextInt(2);
-//        int totalKeepers = teamFormation.getKeepers();
-//        int totalDefenders = teamFormation.getDefenders();
-//        int totalMidFielders = teamFormation.getMidFielders() - randomValue;
-//        int totalFullBacks = randomValue;
-//        randomValue = random.nextInt(2);
-//        int totalStrikers = teamFormation.getStrikers() - randomValue;
-//        totalFullBacks += randomValue;
-//
-//        List<Player> finalTeamPlayers = new ArrayList<>();
-//        List<Player> inFieldPlayer = new ArrayList<>();
-//
-//        for (Player player: teamPlayers){
-//            if (player instanceof Keeper){
-//                if (totalKeepers > 0) {
-//                    --totalKeepers;
-//                    inFieldPlayer.add(player);
-//                }
-//                else
-//                    finalTeamPlayers.add(player);
-//            }
-//            else if (player instanceof Defender){
-//                if (totalDefenders > 0) {
-//                    --totalDefenders;
-//                    inFieldPlayer.add(player);
-//                }
-//                else
-//                    finalTeamPlayers.add(player);
-//            }
-//            else if (player instanceof MidFielder){
-//                if (totalMidFielders > 0) {
-//                    --totalMidFielders;
-//                    inFieldPlayer.add(player);
-//                }
-//                else
-//                    finalTeamPlayers.add(player);
-//            }
-//            else if (player instanceof Striker){
-//                if (totalStrikers > 0) {
-//                    --totalStrikers;
-//                    inFieldPlayer.add(player);
-//                }
-//                else
-//                    finalTeamPlayers.add(player);
-//            }
-//            else {
-//                if (totalFullBacks > 0){
-//                    --totalStrikers;
-//                    inFieldPlayer.add(player);
-//                }
-//                else
-//                    finalTeamPlayers.add(player);
-//            }
-//        }
-//
-//        System.out.println(inFieldPlayer);
-//        if (inFieldPlayer.size() != 11) {
-//            inFieldPlayer.addAll(
-//                    finalTeamPlayers.stream()
-//                            .map(Player::clone)
-//                            .filter(player -> player instanceof Striker || player instanceof FullBack)
-//                            .limit(11 - inFieldPlayer.size())
-//                            .collect(Collectors.toList())
-//            );
-//        }
-//
-//        return inFieldPlayer;
 
         List<Player> inFieldPlayer = teamPlayers.stream()
                 .map(Player::clone)
@@ -603,7 +536,6 @@ public class GameSim extends GameInfo {
             return res;
         });
 
-        System.out.println(inFieldPlayer);
         return inFieldPlayer;
     }
 
@@ -685,15 +617,6 @@ public class GameSim extends GameInfo {
      */
     public int getExtraTime() {
         return this.extraTime;
-    }
-
-    /**
-     * Set accumulated extra time in minutes
-     * @param extraTime Extra time in minutes
-     */
-    public void setExtraTime(int extraTime) {
-        if(extraTime <= GameConstants.MAX_EXTRA_TIME)
-            this.extraTime = extraTime;
     }
 
     /**

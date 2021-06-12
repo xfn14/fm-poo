@@ -27,7 +27,6 @@ public class GameConstants {
      */
     public static int GAME_HALF_TIME = 45*60; // 45 min in seconds
 
-
     public static int GAME_TIME_MAX_DIFF = 10;
     public static int PASS_DIFF = 70;
     public static int RECOVER_DIFF = 80;

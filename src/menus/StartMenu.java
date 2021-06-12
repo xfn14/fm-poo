@@ -30,22 +30,6 @@ public class StartMenu {
     }
 
     /**
-     * Instantiates a StartMenu with respective attributes
-     * @param gameManager GameManager's object
-     */
-    public StartMenu(GameManager gameManager){
-        this.gameManager = gameManager.clone();
-    }
-
-    /**
-     * Instantiates a StartMenu from a StartMenu's object
-     * @param startMenu
-     */
-    public StartMenu(StartMenu startMenu){
-        this.gameManager = startMenu.getGameManager();
-    }
-
-    /**
      * Start Menu to interact with user
      */
     public void startMenuLoop(){
@@ -69,9 +53,10 @@ public class StartMenu {
                     System.out.println(ColorUtils.GREEN + "Where do you want to save it? " + ColorUtils.YELLOW + "(Ex: resources/gameOut.dat)" + ColorUtils.RESET);
                     String where = scanner.nextLine();
                     try{
-                        FileUtils.saveObject(where, this.gameManager);
+                        FileUtils.saveGameManager(where, this.gameManager);
                         System.out.println(ColorUtils.GREEN + "Saved successfully" + ColorUtils.RESET);
                     }catch (IOException e){
+                        e.printStackTrace();
                         System.out.println(ColorUtils.RED + "Failed to save game manager" + ColorUtils.RESET);
                     }
                 }else if(option.equalsIgnoreCase("3") && this.gameManager != null && !this.gameManager.getTeamMap().isEmpty()){
@@ -122,7 +107,7 @@ public class StartMenu {
                 String path = requestFileLocation();
                 try{
                     GameManager temp = FileUtils.loadGameManager(path);
-                    if(temp != null) this.gameManager = temp;
+                    if(temp != null) gameManager = temp;
                     quit = true;
                 }catch (IOException e){
                     System.out.println(ColorUtils.RED + "Invalid file format" + ColorUtils.RESET);
@@ -158,21 +143,5 @@ public class StartMenu {
         if(this.gameManager != null && !this.gameManager.getGameList().isEmpty())
             System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[4]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Manager Options" + ColorUtils.RESET);
         System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[0]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Quit Game" + ColorUtils.RESET);
-    }
-
-    /**
-     * Get GameManager
-     * @return GameManager's object
-     */
-    public GameManager getGameManager() {
-        return this.gameManager.clone();
-    }
-
-    /**
-     * Set GameManager
-     * @param gameManager GameManager's object
-     */
-    public void setGameManager(GameManager gameManager) {
-        this.gameManager = gameManager.clone();
     }
 }

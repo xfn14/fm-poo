@@ -31,29 +31,12 @@ public class ManageGamesMenu {
     public static final int ITEMS_PER_PAGE = 10;
 
     /**
-     * Instantiates a ManageGamesMenu
-     */
-    public ManageGamesMenu(){
-        this.gameManager = new GameManager();
-        this.maxPage = 1;
-    }
-
-    /**
      * Instantiates a ManageGamesMenu with a specific GameManager
      * @param gameManager GameManager's object
      */
     public ManageGamesMenu(GameManager gameManager){
         setGameManager(gameManager);
         this.maxPage = (int) Math.ceil((double) this.gameManager.getGameList().size() / ITEMS_PER_PAGE);
-    }
-
-    /**
-     * Instantiates a ManageGamesMenu from a ManageGamesMenu
-     * @param manageGamesMenu ManageGamesMenu's object
-     */
-    public ManageGamesMenu(ManageGamesMenu manageGamesMenu){
-        this.gameManager = manageGamesMenu.getGameManager();
-        this.maxPage = manageGamesMenu.getMaxPage();
     }
 
     /**
@@ -170,13 +153,5 @@ public class ManageGamesMenu {
      */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
-    }
-
-    /**
-     * Get Number of pages
-     * @return Number of pages
-     */
-    public int getMaxPage() {
-        return this.maxPage;
     }
 }

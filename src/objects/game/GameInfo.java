@@ -2,10 +2,11 @@ package objects.game;
 
 import objects.team.Team;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class GameInfo {
+public class GameInfo implements Serializable {
 
     /**
      * Game's unique Id

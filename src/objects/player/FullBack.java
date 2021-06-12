@@ -1,21 +1,14 @@
 package objects.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FullBack extends Player{
+public class FullBack extends Player implements Serializable {
     /**
      * FullBack's crossing ability
      */
     private int crossing;
-
-    /**
-     * Instantiates a FullBack
-     */
-    public FullBack() {
-        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
-        this.crossing = 0;
-    }
 
     /**
      * Instantiates a FullBack with Player&Person's attributes
@@ -36,27 +29,6 @@ public class FullBack extends Player{
                     int velocity, int resistance, int dexterity, int thrust,
                     int header, int finish, int pass, int crossing) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
-        this.crossing = crossing;
-    }
-
-    /**
-     * Instantiates a FullBack from a Person's object and with Player's attributes
-     * @param person Person's object
-     * @param number shirt number
-     * @param teamHistory list of teams where the player has been
-     * @param velocity velocity ability
-     * @param resistance resistance ability
-     * @param dexterity dexterity ability
-     * @param thrust thrust ability
-     * @param header header ability
-     * @param finish finish ability
-     * @param pass pass ability
-     * @param crossing crossing ability
-     */
-    public FullBack(Person person, int number, List<String> teamHistory, int velocity,
-                    int resistance, int dexterity, int thrust, int header,
-                    int finish, int pass, int crossing) {
-        super(person, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
         this.crossing = crossing;
     }
 
@@ -127,14 +99,6 @@ public class FullBack extends Player{
      */
     public int getCrossing() {
         return this.crossing;
-    }
-
-    /**
-     * Set FullBack's crossing ability
-     * @param crossing Crossing ability value
-     */
-    public void setCrossing(int crossing) {
-        this.crossing = crossing;
     }
 
     /**

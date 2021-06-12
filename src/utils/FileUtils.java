@@ -196,7 +196,7 @@ public class FileUtils {
         return lines;
     }
 
-    public static void saveObject(String objectPath, GameManager gameManager) throws IOException {
+    public static void saveGameManager(String objectPath, GameManager gameManager) throws IOException {
         FileOutputStream fos = new FileOutputStream(objectPath);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
         ObjectOutputStream oos = new ObjectOutputStream(bos);

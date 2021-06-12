@@ -1,9 +1,10 @@
 package objects.team;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Random;
 
-public enum TeamFormation {
+public enum TeamFormation implements Serializable {
     /**
      * Team's formation 1-4-4-2
      */

@@ -21,26 +21,11 @@ public class PlayerCreationMenu {
     private GameManager gameManager;
 
     /**
-     * Instantiates a PlayerCreationMenu
-     */
-    public PlayerCreationMenu(){
-        this.gameManager = new GameManager();
-    }
-
-    /**
      * Instantiates a PlayerCreationMenu with GameManager
      * @param gameManager GameManager's object
      */
     public PlayerCreationMenu(GameManager gameManager) {
         setGameManager(gameManager);
-    }
-
-    /**
-     * Instantiates a PlayerCreationMenu from a PlayerCreationMenu
-     * @param playerCreationMenu PlayerCreationMenu's object
-     */
-    public PlayerCreationMenu(PlayerCreationMenu playerCreationMenu){
-        this.gameManager = playerCreationMenu.getGameManager();
     }
 
     /**

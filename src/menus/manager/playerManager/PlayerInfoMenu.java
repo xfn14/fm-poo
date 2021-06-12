@@ -6,8 +6,6 @@ import objects.team.Team;
 import utils.ColorUtils;
 import utils.TextUtils;
 
-import javax.swing.*;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class PlayerInfoMenu {
@@ -19,20 +17,12 @@ public class PlayerInfoMenu {
     /**
      * GameManager instance
      */
-    private GameManager gameManager;
+    private final GameManager gameManager;
 
     /**
      * Player's id
      */
-    private int playerId;
-
-    /**
-     * Instantiates a PlayerInfoMenu
-     */
-    public PlayerInfoMenu(){
-        this.gameManager = new GameManager();
-        this.playerId = -1;
-    }
+    private final int playerId;
 
     /**
      * Instantiates a PlayerInfoMenu with respective GameManager and Player's id
@@ -42,15 +32,6 @@ public class PlayerInfoMenu {
     public PlayerInfoMenu(GameManager gameManager, int playerId) {
         this.gameManager = gameManager.clone();
         this.playerId = playerId;
-    }
-
-    /**
-     * Instantiates a PlayerInfoMenu from a PlayerInfoMenu
-     * @param playerInfoMenu PlayerInfoMenu's object
-     */
-    public PlayerInfoMenu(PlayerInfoMenu playerInfoMenu){
-        this.gameManager = playerInfoMenu.getGameManager();
-        this.playerId = playerInfoMenu.getPlayerId();
     }
 
     /**
@@ -166,26 +147,10 @@ public class PlayerInfoMenu {
     }
 
     /**
-     * Set GameManager
-     * @param gameManager GameManager's object
-     */
-    public void setGameManager(GameManager gameManager) {
-        this.gameManager = gameManager.clone();
-    }
-
-    /**
      * Get Player's id
      * @return Unique id
      */
     public int getPlayerId() {
         return this.playerId;
-    }
-
-    /**
-     * Set Player's id
-     * @param playerId Unique id
-     */
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
     }
 }

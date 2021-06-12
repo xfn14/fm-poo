@@ -13,22 +13,13 @@ public abstract class GamePlay {
     /**
      * Time in the game where the play occurs
      */
-    private int gameTime;
+    private final int gameTime;
 
     /**
      * Team where Player plays
      */
     private int team; // 0 - homeTeam; 1 - awayTeam
     private boolean result = false;
-
-    /**
-     * Instantiate a GamePlay
-     */
-    public GamePlay(){
-        this.player = new Player();
-        this.gameTime = 0;
-        this.team = -1;
-    }
 
     /**
      * Instantiate a GamePlay with the respective attributes
@@ -81,14 +72,6 @@ public abstract class GamePlay {
      */
     public int getGameTime() {
         return this.gameTime;
-    }
-
-    /**
-     * Set time at which the play occurs
-     * @return Time at which the play occurs
-     */
-    public void setGameTime(int gameTime) {
-        this.gameTime = gameTime;
     }
 
     /**

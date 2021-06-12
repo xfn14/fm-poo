@@ -1,8 +1,9 @@
 package objects.player;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Person {
+public class Person implements Serializable {
     /**
      * Id representing a person
      */

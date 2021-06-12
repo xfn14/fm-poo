@@ -31,39 +31,12 @@ public class ManageTeamsMenu {
     public static final int ITEMS_PER_PAGE = 10;
 
     /**
-     * Instantiates a ManageTeamsMenu
-     */
-    public ManageTeamsMenu(){
-        this.gameManager = new GameManager();
-        this.maxPage = 1;
-    }
-
-    /**
      * Instantiates a ManageTeamsMenu with a specific GameManager
      * @param gameManager GameManager's object
      */
     public ManageTeamsMenu(GameManager gameManager) {
         setGameManager(gameManager);
         this.maxPage = (int) Math.ceil((double) this.gameManager.getTeamMap().size() / ITEMS_PER_PAGE);
-    }
-
-    /**
-     * Instantiates a ManageTeamsMenu with the respective attributes
-     * @param gameManager GameManager's object
-     * @param maxPage Number of pages
-     */
-    public ManageTeamsMenu(GameManager gameManager, int maxPage) {
-        setGameManager(gameManager);
-        this.maxPage = maxPage;
-    }
-
-    /**
-     * Instantiates a ManageTeamsMenu from a ManageTeamsMenu
-     * @param manageTeamsMenu ManageTeamsMenu's object
-     */
-    public ManageTeamsMenu(ManagePlayersMenu manageTeamsMenu){
-        this.gameManager = manageTeamsMenu.getGameManager();
-        this.maxPage = manageTeamsMenu.getMaxPage();
     }
 
     /**
@@ -129,7 +102,8 @@ public class ManageTeamsMenu {
         sb.append(ColorUtils.BLUE).append(team.getName()).append("'s Info\n").append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append(" -> Victories: ").append(ColorUtils.YELLOW).append(team.getTeamVictories()).append('\n').append(ColorUtils.RESET);
         sb.append(ColorUtils.GREEN).append(" -> Players: ").append(ColorUtils.YELLOW).append(team.getTeamPlayers().stream().map(Player::getFstLstName).collect(Collectors.toList())).append('\n').append(ColorUtils.RESET);
-        sb.append(ColorUtils.GREEN).append(" -> Games Played: ").append(ColorUtils.YELLOW).append(team.getPassedGames()).append(ColorUtils.RESET);
+        sb.append(ColorUtils.GREEN).append(" -> Games Played: ").append(ColorUtils.YELLOW).append(team.getPassedGames()).append(ColorUtils.RESET).append('\n');
+        sb.append(ColorUtils.GREEN).append(" -> Overall: ").append(ColorUtils.YELLOW).append(team.calcOverall()).append(ColorUtils.RESET);
         return sb.toString();
     }
 
@@ -187,13 +161,5 @@ public class ManageTeamsMenu {
      */
     public void setGameManager(GameManager gameManager) {
         this.gameManager = gameManager.clone();
-    }
-
-    /**
-     * Get Number of pages
-     * @return Number of pages
-     */
-    public int getMaxPage() {
-        return this.maxPage;
     }
 }

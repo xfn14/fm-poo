@@ -22,26 +22,11 @@ public class ManagerMenu {
     private GameManager gameManager;
 
     /**
-     * Instantiates a ManagerMenu
-     */
-    public ManagerMenu(){
-        this.gameManager = new GameManager();
-    }
-
-    /**
      * Instantiates a ManagerMenu with respective attributes
      * @param gameManager GameManager's object
      */
     public ManagerMenu(GameManager gameManager){
         setGameManager(gameManager);
-    }
-
-    /**
-     * Instantiates a ManagerMenu from a StartMenu's object
-     * @param managerMenu
-     */
-    public ManagerMenu(ManagerMenu managerMenu){
-        setGameManager(managerMenu.getGameManager());
     }
 
     /**
@@ -89,14 +74,6 @@ public class ManagerMenu {
         if(!this.gameManager.getGameList().isEmpty())
             System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[3]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Manage Games" + ColorUtils.RESET);
         System.out.println(ColorUtils.BLACK_BACKGROUND_BRIGHT + "[0]" + ColorUtils.WHITE + " - " + ColorUtils.GREEN + "Go Back" + ColorUtils.RESET);
-    }
-
-    /**
-     * Get GameManager
-     * @return GameManager's object
-     */
-    public GameManager getGameManager() {
-        return this.gameManager.clone();
     }
 
     /**

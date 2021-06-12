@@ -1,21 +1,14 @@
 package objects.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Keeper extends Player{
+public class Keeper extends Player implements Serializable {
     /**
      * Keeper's elasticity ability
      */
     private int elasticity;
-
-    /**
-     * Instantiates a Keeper
-     */
-    public Keeper() {
-        super(0, new ArrayList<>(), 0, 0, 0, 0, 0, 0, 0);
-        this.elasticity = 0;
-    }
 
     /**
      * Instantiates a Keeper with Player&Person's attributes
@@ -34,25 +27,6 @@ public class Keeper extends Player{
      */
     public Keeper(int id, String name, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass, int elasticity) {
         super(id, name, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
-        this.elasticity = elasticity;
-    }
-
-    /**
-     * Instantiates a Keeper from a Person's object and with Player's attributes
-     * @param person Person's object
-     * @param number shirt number
-     * @param teamHistory list of teams where the player has been
-     * @param velocity velocity ability
-     * @param resistance resistance ability
-     * @param dexterity dexterity ability
-     * @param thrust thrust ability
-     * @param header header ability
-     * @param finish finish ability
-     * @param pass pass ability
-     * @param elasticity elasticity ability
-     */
-    public Keeper(Person person, int number, List<String> teamHistory, int velocity, int resistance, int dexterity, int thrust, int header, int finish, int pass, int elasticity) {
-        super(person, number, teamHistory, velocity, resistance, dexterity, thrust, header, finish, pass);
         this.elasticity = elasticity;
     }
 
@@ -123,14 +97,6 @@ public class Keeper extends Player{
      */
     public int getElasticity() {
         return this.elasticity;
-    }
-
-    /**
-     * Set Keeper's elasticity ability
-     * @param elasticity Elasticity ability value
-     */
-    public void setElasticity(int elasticity) {
-        this.elasticity = elasticity;
     }
 
     /**

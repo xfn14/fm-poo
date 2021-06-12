@@ -2,13 +2,14 @@ package objects.team;
 
 import objects.player.Player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class Team {
+public class Team implements Serializable {
     /**
      * Team's name
      */
