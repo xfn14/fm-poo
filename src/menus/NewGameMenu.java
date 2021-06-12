@@ -79,12 +79,9 @@ public class NewGameMenu {
         team2Subs.removeAll(gameSim.getInFieldAway());
         gameSim.setAwaySubs(selectTeamSubs(gameSim.getInFieldAway(), team2Subs));
 
-        System.out.println(gameSim);
-
 //        GameSim gameSim = new GameSim(this.gameManager.getGameList().size(), this.gameManager.getTeamMap().get("Sporting Club Schubert"), this.gameManager.getTeamMap().get("Mendelssohn F. C."));
         gameSim.setInFieldHome(gameSim.initInFieldTeam(0));
         gameSim.setInFieldAway(gameSim.initInFieldTeam(1));
-        System.out.println(gameSim);
 
         List<GamePlay> plays = new ArrayList<>();
         PlayPass halfStartPass = new PlayPass(
@@ -101,6 +98,10 @@ public class NewGameMenu {
                 System.out.println(ColorUtils.GREEN + "Half-Time\n" + ColorUtils.BLUE + "[0] - Continue" + ColorUtils.RESET);
                 String option = scanner.nextLine();
                 if(option.equalsIgnoreCase("0")){
+                    gameSim.getHomeSubs().forEach(a -> gameSim.subPlayers(0, a.getX(), a.getY()));
+                    gameSim.getAwaySubs().forEach(a -> gameSim.subPlayers(1, a.getX(), a.getY()));
+                    System.out.println(ColorUtils.BLUE + "Substitutions done.");
+
                     gameSim.setGameState(GameState.SND_HALF);
                     Tuple<Integer,Integer> timed = DateUtils.secondsToTuple(gameSim.getTime());
                     System.out.println(ColorUtils.BLUE + "[" + timed.getX() + "']" + plays.get(plays.size()-1));
@@ -226,7 +227,7 @@ public class NewGameMenu {
             sb.append(teamFormation.getStrikers()).append('\n');
         }
         sb.append(ColorUtils.RESET);
-        return sb.toString();
+        return sb.substring(0, sb.toString().length() - 1);
     }
 
     /**
