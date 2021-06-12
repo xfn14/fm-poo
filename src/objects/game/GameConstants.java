@@ -16,8 +16,17 @@ public class GameConstants {
      */
     public static int MIN_SIM_TIME = 1;
     public static int MIN_GAME_PLAYER = 14;
+
+    /**
+     * Maximum possible substitutions
+     */
     public static int MAX_SUB_NUMBER = 3;
+
+    /**
+     * Game half in seconds
+     */
     public static int GAME_HALF_TIME = 45*60; // 45 min in seconds
+
 
     public static int GAME_TIME_MAX_DIFF = 10;
     public static int PASS_DIFF = 70;

@@ -8,15 +8,33 @@ import java.util.Objects;
 import java.util.Random;
 
 public class PlayPass extends GamePlay{
+    /**
+     * Player who is about to receive the ball
+     */
     private Player receiver;
+
+    /**
+     * Possible Player who will cut the pass
+     */
     private Player interceptor = null;
 
+    /**
+     * Instantiate a PlayPass
+     */
     public PlayPass() {
         super();
         this.receiver = new Player();
         this.interceptor = new Player();
     }
 
+    /**
+     * Instantiate a PlayPass with the respective attributes
+     * @param player Player who does the play
+     * @param gameTime Time at which the play occurs
+     * @param team Team where the player belongs to
+     * @param receiver Player who is about to receive the ball
+     * @param interceptor Possible Player who will cut the pass
+     */
     public PlayPass(Player player, int gameTime, int team, Player receiver, Player interceptor) {
         super(player, gameTime, team);
         this.receiver = receiver.clone();
@@ -24,12 +42,20 @@ public class PlayPass extends GamePlay{
             this.interceptor = interceptor.clone();
     }
 
+    /**
+     * Instantiate a PlayPass from a PlayPass
+     * @param playPass PlayPass's object
+     */
     public PlayPass(PlayPass playPass) {
         super(playPass);
         this.receiver = playPass.getReceiver();
         this.interceptor = playPass.getInterceptor();
     }
 
+    /**
+     * Give the play's result based on probabilities
+     * @return Play has succeeded
+     */
     @Override
     public boolean result() {
         Random random = new Random();
@@ -45,10 +71,22 @@ public class PlayPass extends GamePlay{
         return true;
     }
 
+    /**
+     * Get Player who is about to receive the ball
+     * @return Player who is about to receive the ball
+     */
     public Player getReceiver() {
         return this.receiver.clone();
     }
 
+    /**
+     * Instantiate the first PlayPass by the respective attributes and the respective half of the game
+     * @param team Team which the Player belongs to
+     * @param half half is 0 if beginning or 1 if second part
+     * @param player Player's object
+     * @param receiver Player's receiver
+     * @return PlayPass's object
+     */
     public static PlayPass initialGamePass(int team, int half, Player player, Player receiver){
         return new PlayPass(
                 player,
@@ -59,23 +97,43 @@ public class PlayPass extends GamePlay{
 
     }
 
+    /**
+     * Set Player who is about to receive the ball
+     * @param receiver Player who is about to receive the ball
+     */
     public void setReceiver(Player receiver) {
         this.receiver = receiver.clone();
     }
 
+    /**
+     * Get Player who will try to cut the pass
+     * @return Player who will try to cut the pass
+     */
     public Player getInterceptor() {
         return this.interceptor.clone();
     }
 
+    /**
+     * Set Player who will try to cut the pass
+     * @param interceptor Player who will try to cut the pass
+     */
     public void setInterceptor(Player interceptor) {
         this.interceptor = interceptor.clone();
     }
 
+    /**
+     * Clone PlayPass's instance
+     * @return PlayPass's cloned instance
+     */
     @Override
     public PlayPass clone() {
         return new PlayPass(this);
     }
 
+    /**
+     * String representation of PlayPass's instance
+     * @return String representation of the instance
+     */
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("PlayPass{");
@@ -85,6 +143,11 @@ public class PlayPass extends GamePlay{
         return sb.toString();
     }
 
+    /**
+     * Equality between PlayPass's instance and another object
+     * @param o Object
+     * @return Boolean representing the equality of this instance comparing to the given object
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -192,8 +192,9 @@ public class GameSim extends GameInfo {
     }
 
     /**
-     * Simulate a new play of the game
+     * Simulate a new play of the game with knowledge about the last one
      * @param time Time to simulate the new play
+     * @param lastPlay Last play executed
      * @return the resulted play
      */
     public List<GamePlay> simulateGame(int time, GamePlay lastPlay){
@@ -238,12 +239,19 @@ public class GameSim extends GameInfo {
         return newPlay;
     }
 
+    /**
+     * Skips time resulting in game's state changes
+     * @param time Time in minutes
+     * @return If game is changing state
+     */
     private boolean skipTime(int time){
         int timeInSeconds = time*60;
         if(this.gameState == GameState.FST_HALF){
             if(this.time >= GameConstants.GAME_HALF_TIME && this.extraTime > 0){
-                this.extraTime = Math.min(0, this.extraTime - timeInSeconds);
-                this.time += timeInSeconds;
+                int delta = this.extraTime - timeInSeconds > 0 ? timeInSeconds : this.extraTime;
+
+                this.extraTime -= delta;
+                this.time += delta;
             }else if(this.time < GameConstants.GAME_HALF_TIME){
                 this.time = Math.min(this.time + timeInSeconds, GameConstants.GAME_HALF_TIME);
             }else{
