@@ -33,4 +33,5 @@ public class GameConstants {
     public static int RECOVER_DIFF = 80;
     public static int FINISH_DIFF = 75;
     public static int SAVE_DIFF = 100;
+    public static int SAVE_DIFF_NOT_KEEPER = 150;
 }

@@ -9,6 +9,7 @@ import objects.team.Team;
 import objects.team.TeamFormation;
 import utils.ColorUtils;
 import utils.DateUtils;
+import utils.RandomUtils;
 import utils.Tuple;
 
 import java.time.LocalDate;
@@ -16,6 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GameSim extends GameInfo {
+    private final Random random = new Random();
     /**
      * Current state of the game
      */
@@ -203,32 +205,89 @@ public class GameSim extends GameInfo {
 
         if(lastPlay instanceof PlayFinish){
             PlayFinish playFinish = (PlayFinish) lastPlay;
-            if(playFinish.result()){
-
+            List<Player> inField = playFinish.getTeam() == 1 ? this.inFieldHome : this.inFieldAway;
+            List<Player> rival = playFinish.getTeam() == 1 ? this.inFieldAway : this.inFieldHome;
+            if(playFinish.getResult()){
+                newPlay.add(PlayPass.initialGamePass(
+                        playFinish.getTeam() == 1 ? 2 : 1,
+                        this.gameState == GameState.FST_HALF ? 1 : 2,
+                        rival.get(rival.size()-1),
+                        rival.get(rival.size()-2)
+                ));
             }else{
-
+                int interceptorRandom = RandomUtils.randomBetween(1, 3);
+                int receiverRandom = RandomUtils.randomBetween(1,4);
+                newPlay.add(new PlayPass(
+                        rival.get(0),
+                        this.time,
+                        playFinish.getTeam() == 1 ? 2 : 1,
+                        rival.get(receiverRandom),
+                        inField.get(inField.size()-interceptorRandom)
+                ));
             }
         }else if(lastPlay instanceof PlayPass){
             PlayPass playPass = (PlayPass) lastPlay;
             List<Player> inField = playPass.getTeam() == 1 ? this.inFieldHome : this.inFieldAway;
             TeamFormation teamFormation = playPass.getTeam() == 1 ? this.homeFormation : this.awayFormation;
-            if(playPass.result()){
-                int playerIdx = inField.indexOf(playPass.getPlayer());
+            List<Player> rival = playPass.getTeam() == 1 ? this.inFieldHome : this.inFieldAway;
+            if(playPass.getResult()){
+                int playerIdx = inField.indexOf(playPass.getReceiver());
                 if(inField.size() - teamFormation.getStrikers() - teamFormation.getMidFielders() + 1 < playerIdx){
-                    PlayFinish playFinish = new PlayFinish(playPass.getPlayer(), this.time, playPass.getTeam(),
-                            (playPass.getTeam() == 1 ? this.inFieldAway : this.inFieldHome).get(0));
-                    newPlay.add(playFinish);
-                    if(playFinish.result()){
-                        // ScoreGoal
+                    if(random.nextInt(100) > 60){
+                        PlayFinish playFinish = new PlayFinish(playPass.getReceiver(), this.time, playPass.getTeam(), rival.get(0));
+                        newPlay.add(playFinish);
+                        if(playFinish.getResult()){
+                            newPlay.add(PlayPass.initialGamePass(
+                                    playPass.getTeam() == 1 ? 2 : 1,
+                                    this.gameState == GameState.FST_HALF ? 1 : 2,
+                                    rival.get(rival.size()-1),
+                                    rival.get(rival.size()-2)
+                            ));
+                        }else{
+                            int interceptorRandom = RandomUtils.randomBetween(1, 3);
+                            int receiverRandom = RandomUtils.randomBetween(1,4);
+                            newPlay.add(new PlayPass(
+                                    rival.get(0),
+                                    this.time,
+                                    playPass.getTeam() == 1 ? 2 : 1,
+                                    rival.get(receiverRandom),
+                                    inField.get(inField.size()-interceptorRandom)
+                            ));
+                        }
                     }else{
-
+                        int passRandom = RandomUtils.randomBetween(-1, 2);
+                        if(passRandom == 0) passRandom++;
+                        newPlay.add(new PlayPass(
+                                playPass.getReceiver(),
+                                this.time,
+                                playPass.getTeam(),
+                                inField.get(Math.min(playerIdx + passRandom, inField.size()-1)),
+                                rival.get(rival.size() - playerIdx - 1)
+                        ));
                     }
+                }else{
+                    int passRandom = RandomUtils.randomBetween(1, 3);
+                    newPlay.add(new PlayPass(
+                            playPass.getReceiver(),
+                            this.time,
+                            playPass.getTeam(),
+                            inField.get(inField.size() - passRandom),
+                            rival.get(rival.size() - playerIdx - 1)
+                    ));
                 }
             }else{
-
+                int passRandom = RandomUtils.randomBetween(-1, 2);
+                if(passRandom == 0) passRandom++;
+                int randomIdx = rival.indexOf(playPass.getInterceptor());
+                newPlay.add(new PlayPass(
+                        playPass.getInterceptor(),
+                        this.time,
+                        playPass.getTeam(),
+                        rival.get(rival.size() + passRandom),
+                        inField.get(inField.size() - randomIdx - 1)
+                ));
             }
         }
-
 
         if(stop && this.gameState == GameState.FST_HALF){
             Player player = this.inFieldAway.get(this.inFieldAway.size()-1);

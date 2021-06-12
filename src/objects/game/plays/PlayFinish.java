@@ -56,8 +56,11 @@ public class PlayFinish extends GamePlay{
             Keeper k = (Keeper) keeper;
             r = random.nextInt(Math.max(GameConstants.SAVE_DIFF + gameTimeDiff, GameConstants.SAVE_DIFF));
             return k.getElasticity() >= r;
+        }else{
+            r = random.nextInt(Math.max(GameConstants.SAVE_DIFF_NOT_KEEPER + gameTimeDiff, GameConstants.SAVE_DIFF_NOT_KEEPER));
+            System.out.println(keeper);
+            return (keeper.getDexterity() + keeper.getHeader() + keeper.getThrust())/3 >= r;
         }
-        return true;
     }
 
     /**

@@ -19,6 +19,7 @@ public abstract class GamePlay {
      * Team where Player plays
      */
     private int team; // 0 - homeTeam; 1 - awayTeam
+    private boolean result = false;
 
     /**
      * Instantiate a GamePlay
@@ -39,6 +40,7 @@ public abstract class GamePlay {
         this.player = player;
         this.gameTime = gameTime;
         this.team = team;
+        this.result = result();
     }
 
     /**
@@ -49,6 +51,7 @@ public abstract class GamePlay {
         this.player = gamePlay.getPlayer();
         this.gameTime = gamePlay.getGameTime();
         this.team = gamePlay.getTeam();
+        this.result = gamePlay.getResult();
     }
 
     /**
@@ -105,6 +108,14 @@ public abstract class GamePlay {
         this.team = team;
     }
 
+    public boolean getResult() {
+        return this.result;
+    }
+
+    public void setResult(boolean result) {
+        this.result = result;
+    }
+
     /**
      * String representation of GamePlay's instance
      * @return String representation of the instance
@@ -136,15 +147,4 @@ public abstract class GamePlay {
      * @return GamePlay's cloned instance
      */
     public abstract GamePlay clone();
-
-    /**
-     * Type of plays
-     */
-    public enum Type{
-        HEADER,
-        CROSS,
-        JINK,
-        DEFEND,
-        FAULT
-    }
 }

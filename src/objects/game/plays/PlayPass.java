@@ -3,6 +3,9 @@ package objects.game.plays;
 import objects.game.GameConstants;
 import objects.player.MidFielder;
 import objects.player.Player;
+import utils.ColorUtils;
+import utils.DateUtils;
+import utils.Tuple;
 
 import java.util.Objects;
 import java.util.Random;
@@ -136,11 +139,8 @@ public class PlayPass extends GamePlay{
      */
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("PlayPass{");
-        sb.append("receiver=").append(receiver);
-        sb.append(", interceptor=").append(interceptor);
-        sb.append('}');
-        return sb.toString();
+        Tuple<Integer,Integer> time = DateUtils.secondsToTuple(getGameTime());
+        return ColorUtils.BLUE + "[" + time.getX() + ":" + time.getY() + "]" + ColorUtils.GREEN + " Goal by " + getPlayer().getName() + ColorUtils.RESET;
     }
 
     /**
