@@ -40,7 +40,6 @@ public abstract class GamePlay {
         this.player = player;
         this.gameTime = gameTime;
         this.team = team;
-        this.result = result();
     }
 
     /**

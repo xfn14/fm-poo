@@ -31,6 +31,7 @@ public class PlayFinish extends GamePlay{
     public PlayFinish(Player player, int gameTime, int team, Player keeper) {
         super(player, gameTime, team);
         this.keeper = keeper.clone();
+        this.setResult(this.result());
     }
 
     /**

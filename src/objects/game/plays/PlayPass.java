@@ -43,6 +43,7 @@ public class PlayPass extends GamePlay{
         this.receiver = receiver.clone();
         if(interceptor != null)
             this.interceptor = interceptor.clone();
+        this.setResult(this.result());
     }
 
     /**
@@ -113,6 +114,7 @@ public class PlayPass extends GamePlay{
      * @return Player who will try to cut the pass
      */
     public Player getInterceptor() {
+        if (this.interceptor == null) return null;
         return this.interceptor.clone();
     }
 
